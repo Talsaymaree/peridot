@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ChevronLeft, ChevronRight, ExternalLink, ImageIcon, Plus, Video } from 'lucide-react'
 import { darkenTint, getRegimenTint, tintRgba } from '@/lib/regimen-tints'
@@ -389,7 +389,7 @@ function TaskReference({ task }: { task: Task }) {
   )
 }
 
-export default function CalendarPage() {
+function CalendarPageContent() {
   const searchParams = useSearchParams()
   const requestedDate = searchParams.get('date')
   const targetRegimenId = searchParams.get('regimen')
@@ -1157,5 +1157,13 @@ export default function CalendarPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CalendarPage() {
+  return (
+    <Suspense fallback={<div className="lg:pl-80"><div className="peridot-app-page peridot-shell peridot-page-gutter py-6 sm:py-8"><div className="peridot-page-frame"><div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-5 py-10 text-center text-white/50">Loading calendar...</div></div></div></div>}>
+      <CalendarPageContent />
+    </Suspense>
   )
 }
