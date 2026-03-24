@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: peridot:latest
     ports:
       - "3010:3000"
     environment:
