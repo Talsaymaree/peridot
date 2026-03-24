@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma-runtime-v2"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  routines Routine[]
+
+  @@map("users")
+}
+
+model Routine {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  category    String   @default("CUSTOM")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  regimens Regimen[]
+
+  @@map("routines")
+}
+
+model Regimen {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  cadence     String   @default("CUSTOM")
+  recurrenceType String?
+  recurrenceDays String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  routineId String
+  routine   Routine @relation(fields: [routineId], references: [id], onDelete: Cascade)
+
+  tasks Task[]
+
+  @@map("regimens")
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  priority    String   @default("MEDIUM")
+  status      String   @default("TODO")
+  recurrenceType String?
+  recurrenceDays String?
+  dueDate     DateTime?
+  dueLabel    String?
+  dueBucket   String?
+  completedAt DateTime?
+  referenceUrl   String?
+  referenceLabel String?
+  referenceType  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  regimenId String
+  regimen   Regimen @relation(fields: [regimenId], references: [id], onDelete: Cascade)
+
+  @@map("tasks")
+}

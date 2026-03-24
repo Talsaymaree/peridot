@@ -1,0 +1,19 @@
+services:
+  peridot-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: peridot:latest
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3000
+      DATABASE_URL: file:/data/peridot.db
+    volumes:
+      - peridot-data:/data
+    restart: unless-stopped
+
+volumes:
+  peridot-data:

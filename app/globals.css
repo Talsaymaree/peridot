@@ -1,0 +1,701 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Peridot-inspired custom styles */
+@layer base {
+  :root {
+    --peridot-primary: #9fcc3b;
+    --peridot-primary-soft: #cfea7a;
+    --peridot-highlight: #e8f7a1;
+    --peridot-bg: #f7faef;
+    --peridot-surface: rgba(232, 247, 161, 0.42);
+    --peridot-surface-secondary: rgba(207, 234, 122, 0.26);
+    --peridot-text: #1f2a10;
+    --peridot-text-secondary: #5a6b2d;
+    --peridot-text-muted: #8a9b5a;
+    --peridot-active: #a4d65e;
+    --peridot-success: #7fbf3f;
+    --peridot-warning: #e6c84f;
+    --peridot-error: #d96b4a;
+    --peridot-border: rgba(159, 204, 59, 0.24);
+    --peridot-border-strong: rgba(159, 204, 59, 0.38);
+    --peridot-shadow: 0 24px 70px rgba(132, 150, 79, 0.16);
+    --peridot-shell-glow: rgba(232, 247, 161, 0.42);
+  }
+
+  .dark {
+    --peridot-primary: #9fcc3b;
+    --peridot-primary-soft: #cfea7a;
+    --peridot-highlight: #d9ee88;
+    --peridot-bg: #0f1408;
+    --peridot-surface: rgba(159, 204, 59, 0.16);
+    --peridot-surface-secondary: rgba(207, 234, 122, 0.12);
+    --peridot-text: #eef6da;
+    --peridot-text-secondary: #c8d7a0;
+    --peridot-text-muted: #95a76c;
+    --peridot-active: #a4d65e;
+    --peridot-success: #7fbf3f;
+    --peridot-warning: #e6c84f;
+    --peridot-error: #d96b4a;
+    --peridot-border: rgba(207, 234, 122, 0.22);
+    --peridot-border-strong: rgba(207, 234, 122, 0.34);
+    --peridot-shadow: 0 26px 70px rgba(0, 0, 0, 0.4);
+    --peridot-shell-glow: rgba(159, 204, 59, 0.28);
+  }
+
+  html,
+  body {
+    background: var(--peridot-bg);
+    color: var(--peridot-text);
+  }
+
+  body {
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    line-height: 1.12;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  dd,
+  dt,
+  blockquote {
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+
+  ::selection {
+    background: rgba(159, 204, 59, 0.28);
+    color: var(--peridot-text);
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+}
+
+@layer components {
+  .peridot-embed-frame iframe,
+  .peridot-embed-frame video {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    display: block;
+  }
+
+  .zune-bg {
+    background:
+      radial-gradient(circle at top left, rgba(232, 247, 161, 0.78), transparent 22%),
+      radial-gradient(circle at top right, rgba(159, 204, 59, 0.34), transparent 20%),
+      linear-gradient(180deg, #f8fbef 0%, #f0f8dc 46%, #e7f1ca 100%);
+    background-attachment: fixed;
+    color: var(--peridot-text);
+  }
+
+  .dark .zune-bg {
+    background:
+      radial-gradient(circle at top left, rgba(159, 204, 59, 0.18), transparent 24%),
+      radial-gradient(circle at top right, rgba(207, 234, 122, 0.12), transparent 20%),
+      linear-gradient(180deg, #0f1408 0%, #141b0c 46%, #101608 100%);
+  }
+
+  .zune-card,
+  .peridot-panel {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(232, 247, 161, 0.26)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(207, 234, 122, 0.12));
+    border: 1px solid var(--peridot-border);
+    border-radius: 1.5rem;
+    box-shadow: var(--peridot-shadow);
+    backdrop-filter: blur(22px) saturate(145%);
+    -webkit-backdrop-filter: blur(22px) saturate(145%);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .dark .zune-card,
+  .dark .peridot-panel {
+    background:
+      linear-gradient(180deg, rgba(159, 204, 59, 0.12), rgba(26, 34, 16, 0.82)),
+      linear-gradient(135deg, rgba(232, 247, 161, 0.06), rgba(207, 234, 122, 0.03));
+  }
+
+  .peridot-panel-soft {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(232, 247, 161, 0.18)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(207, 234, 122, 0.08));
+    border: 1px solid rgba(159, 204, 59, 0.14);
+    border-radius: 1.25rem;
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .dark .peridot-panel-soft {
+    background:
+      linear-gradient(180deg, rgba(159, 204, 59, 0.1), rgba(28, 36, 16, 0.78)),
+      linear-gradient(135deg, rgba(232, 247, 161, 0.04), rgba(207, 234, 122, 0.03));
+  }
+
+  .peridot-panel-deep {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(232, 247, 161, 0.24)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(207, 234, 122, 0.1));
+    border: 1px solid var(--peridot-border);
+    border-radius: 1.25rem;
+    box-shadow: var(--peridot-shadow);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .dark .peridot-panel-deep {
+    background:
+      linear-gradient(180deg, rgba(159, 204, 59, 0.12), rgba(20, 28, 13, 0.84)),
+      linear-gradient(135deg, rgba(232, 247, 161, 0.04), rgba(207, 234, 122, 0.03));
+  }
+
+  .zune-button {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(232, 247, 161, 0.24)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(207, 234, 122, 0.08));
+    border: 1px solid var(--peridot-border);
+    border-radius: 0.9rem;
+    transition: all 0.25s ease;
+    color: var(--peridot-text);
+    box-shadow: 0 12px 30px rgba(145, 169, 80, 0.1);
+    backdrop-filter: blur(16px) saturate(145%);
+    -webkit-backdrop-filter: blur(16px) saturate(145%);
+  }
+
+  .zune-button:hover {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(232, 247, 161, 0.3)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(207, 234, 122, 0.1));
+    border-color: var(--peridot-border-strong);
+    box-shadow: 0 16px 34px rgba(145, 169, 80, 0.14);
+    transform: translateY(-1px);
+  }
+
+  .dark .zune-button {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--peridot-text);
+  }
+
+  .zune-nav-item {
+    position: relative;
+    overflow: visible;
+    border-radius: 0.9rem;
+    transition: all 0.25s ease;
+  }
+
+  .zune-nav-item > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .zune-nav-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, transparent, rgba(232, 247, 161, 0.44), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    transform: translateX(-100%);
+  }
+
+  .zune-nav-item:hover::before {
+    opacity: 1;
+    transform: translateX(100%);
+  }
+
+  .zune-glow {
+    box-shadow: 0 0 0 1px rgba(159, 204, 59, 0.2), 0 18px 40px rgba(159, 204, 59, 0.14);
+  }
+
+  .zune-text-glow {
+    text-shadow: 0 10px 30px rgba(159, 204, 59, 0.14);
+  }
+
+  .zune-input,
+  .peridot-control {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 250, 239, 0.9)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(232, 247, 161, 0.22));
+    border: 1px solid rgba(145, 169, 80, 0.28);
+    color: var(--peridot-text);
+    border-radius: 1rem;
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: all 0.25s ease;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.78),
+      0 0 0 1px rgba(255, 255, 255, 0.4),
+      0 10px 24px rgba(145, 169, 80, 0.08);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  @media (min-width: 640px) {
+    .zune-input,
+    .peridot-control {
+      font-size: 0.875rem;
+    }
+  }
+
+  select.peridot-control {
+    color: var(--peridot-text);
+    background-color: rgba(255, 255, 255, 0.96);
+    min-height: 2.75rem;
+    padding-right: 2.75rem;
+  }
+
+  .dark select.peridot-control {
+    color: var(--peridot-text);
+    background-color: rgba(26, 34, 16, 0.92);
+  }
+
+  select.peridot-control option {
+    color: var(--peridot-text);
+    background: #f4f9e7;
+  }
+
+  .dark select.peridot-control option {
+    color: var(--peridot-text);
+    background: #1a2210;
+  }
+
+  .dark .zune-input,
+  .dark .peridot-control {
+    background: linear-gradient(180deg, rgba(37, 49, 25, 0.95), rgba(26, 34, 16, 0.94));
+    border-color: rgba(207, 234, 122, 0.18);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 0 0 1px rgba(0, 0, 0, 0.18);
+  }
+
+  .zune-input:focus,
+  .peridot-control:focus {
+    border-color: rgba(127, 191, 63, 0.52);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.86),
+      0 0 0 3px rgba(232, 247, 161, 0.5),
+      0 14px 28px rgba(145, 169, 80, 0.12);
+    outline: none;
+  }
+
+  .zune-input::placeholder,
+  .peridot-control::placeholder {
+    color: var(--peridot-text-muted);
+  }
+
+  .peridot-shell {
+    background:
+      radial-gradient(circle at top left, rgba(232, 247, 161, 0.82), transparent 22%),
+      radial-gradient(circle at 82% 16%, rgba(159, 204, 59, 0.3), transparent 18%),
+      radial-gradient(circle at 50% 100%, rgba(207, 234, 122, 0.26), transparent 24%),
+      linear-gradient(180deg, #f8fbef 0%, #f1f8de 38%, #e8f2cd 100%);
+    color: var(--peridot-text);
+  }
+
+  .peridot-page-gutter {
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+  }
+
+  .peridot-page-frame {
+    width: min(100%, 1680px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .peridot-app-page {
+    min-height: calc(100svh - 4.5rem);
+  }
+
+  @media (min-width: 640px) {
+    .peridot-page-gutter {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .peridot-page-gutter {
+      padding-left: 2.75rem;
+      padding-right: 2.75rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .peridot-page-gutter {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .peridot-app-page {
+      min-height: 100svh;
+    }
+  }
+
+  .dark .peridot-shell {
+    background:
+      radial-gradient(circle at top left, rgba(159, 204, 59, 0.18), transparent 24%),
+      radial-gradient(circle at top right, rgba(207, 234, 122, 0.1), transparent 20%),
+      linear-gradient(180deg, #0f1408 0%, #131a0b 40%, #101608 100%);
+  }
+
+  .peridot-chip {
+    border: 1px solid var(--peridot-border);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(232, 247, 161, 0.2)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(207, 234, 122, 0.08));
+    color: var(--peridot-text-secondary);
+    border-radius: 9999px;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  .peridot-chip-active {
+    border: 1px solid rgba(159, 204, 59, 0.24);
+    background: linear-gradient(90deg, rgba(159, 204, 59, 0.18), rgba(207, 234, 122, 0.42));
+    color: var(--peridot-text);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.38);
+  }
+
+  .peridot-shell :is(h1, h2, h3, h4, h5, h6),
+  .zune-bg :is(h1, h2, h3, h4, h5, h6) {
+    text-shadow: none;
+  }
+
+  .peridot-title-wrap {
+    text-wrap: balance;
+    line-height: 1.1;
+    padding-top: 0.06em;
+  }
+
+  .peridot-copy {
+    line-height: 1.62;
+    text-wrap: pretty;
+  }
+
+  .peridot-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+    padding: 0.16rem 0.35rem 0 0.08rem;
+    line-height: 1.42;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .peridot-section-label {
+    display: block;
+    max-width: 100%;
+    padding: 0.14rem 0.55rem 0 0.08rem;
+    line-height: 1.42;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .peridot-stat-card {
+    min-height: 6.3rem;
+    padding: 0.95rem 1rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.65rem;
+  }
+
+  @media (min-width: 640px) {
+    .peridot-stat-card {
+      min-height: 6.9rem;
+      padding: 1rem 1.05rem 0.95rem;
+    }
+  }
+
+  .peridot-stat-label {
+    display: block;
+    max-width: 100%;
+    padding: 0.08rem 0.55rem 0 0.08rem;
+    line-height: 1.38;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .peridot-stat-value {
+    line-height: 1;
+  }
+
+  .peridot-soft-inset {
+    border-radius: 1.3rem;
+    border: 1px solid rgba(159, 204, 59, 0.14);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(232, 247, 161, 0.18)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(207, 234, 122, 0.08));
+    padding: 1rem;
+  }
+
+  .peridot-chart-shell {
+    border-radius: 1.5rem;
+    border: 1px solid rgba(159, 204, 59, 0.16);
+    background:
+      radial-gradient(circle at top, rgba(232, 247, 161, 0.42), transparent 48%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(232, 247, 161, 0.14));
+    padding: 1rem;
+  }
+
+  .peridot-chart-grid {
+    stroke: rgba(90, 107, 45, 0.12);
+    stroke-width: 1;
+  }
+
+  .peridot-chart-area {
+    fill: url(#peridot-analytics-area);
+  }
+
+  .peridot-chart-line {
+    fill: none;
+    stroke: rgba(127, 191, 63, 0.95);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .peridot-chart-dot {
+    fill: #f7faef;
+    stroke: rgba(127, 191, 63, 0.95);
+    stroke-width: 3;
+  }
+
+  .peridot-shell :is([class*='text-xs'], [class*='text-[11px]']),
+  .zune-bg :is([class*='text-xs'], [class*='text-[11px]']) {
+    line-height: 1.5;
+  }
+
+  .peridot-progress-track {
+    background: var(--peridot-surface-secondary);
+  }
+
+  .peridot-progress-fill {
+    background: linear-gradient(90deg, #9fcc3b, #cfea7a);
+  }
+
+  .peridot-task-card {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(232, 247, 161, 0.2)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(207, 234, 122, 0.08));
+    border: 1px solid var(--peridot-border);
+    box-shadow: 0 14px 32px rgba(145, 169, 80, 0.08);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+  }
+
+  .peridot-task-complete {
+    background: linear-gradient(180deg, rgba(232, 247, 161, 0.96), rgba(239, 245, 194, 0.96));
+    border: 1px solid rgba(127, 191, 63, 0.28);
+    box-shadow:
+      0 0 0 1px rgba(232, 247, 161, 0.6),
+      0 20px 40px rgba(159, 204, 59, 0.14);
+    animation: peridot-complete-pulse 1s ease;
+  }
+
+  .dark .peridot-task-complete {
+    background: linear-gradient(180deg, rgba(127, 191, 63, 0.22), rgba(159, 204, 59, 0.18));
+  }
+
+  .peridot-shell input[type='checkbox'],
+  .zune-bg input[type='checkbox'] {
+    accent-color: var(--peridot-success);
+  }
+
+  .peridot-shell [class*='text-white/35'],
+  .peridot-shell [class*='text-white/38'],
+  .peridot-shell [class*='text-white/40'],
+  .peridot-shell [class*='text-white/45'],
+  .peridot-shell [class*='text-white/50'],
+  .peridot-shell [class*='text-white/55'],
+  .peridot-shell [class*='text-white/58'],
+  .peridot-shell [class*='text-white/60'],
+  .peridot-shell [class*='text-white/62'],
+  .zune-bg [class*='text-white/35'],
+  .zune-bg [class*='text-white/38'],
+  .zune-bg [class*='text-white/40'],
+  .zune-bg [class*='text-white/45'],
+  .zune-bg [class*='text-white/50'],
+  .zune-bg [class*='text-white/55'],
+  .zune-bg [class*='text-white/58'],
+  .zune-bg [class*='text-white/60'],
+  .zune-bg [class*='text-white/62'] {
+    color: var(--peridot-text-muted) !important;
+  }
+
+  .peridot-shell [class*='text-white/70'],
+  .peridot-shell [class*='text-white/72'],
+  .peridot-shell [class*='text-white/75'],
+  .peridot-shell [class*='text-white/76'],
+  .peridot-shell [class*='text-white/82'],
+  .peridot-shell [class*='text-white/88'],
+  .zune-bg [class*='text-white/70'],
+  .zune-bg [class*='text-white/72'],
+  .zune-bg [class*='text-white/75'],
+  .zune-bg [class*='text-white/76'],
+  .zune-bg [class*='text-white/82'],
+  .zune-bg [class*='text-white/88'] {
+    color: var(--peridot-text-secondary) !important;
+  }
+
+  .peridot-shell [class*='text-white']:not([class*='text-white/']),
+  .zune-bg [class*='text-white']:not([class*='text-white/']) {
+    color: var(--peridot-text) !important;
+  }
+
+  .peridot-shell [class*='text-emerald-'],
+  .peridot-shell [class*='text-lime-'],
+  .peridot-shell [class*='text-teal-'],
+  .peridot-shell [class*='text-cyan-'],
+  .zune-bg [class*='text-emerald-'],
+  .zune-bg [class*='text-lime-'],
+  .zune-bg [class*='text-teal-'],
+  .zune-bg [class*='text-cyan-'] {
+    color: var(--peridot-success) !important;
+  }
+
+  .peridot-shell [class*='border-white/'],
+  .peridot-shell [class*='border-emerald-'],
+  .peridot-shell [class*='border-lime-'],
+  .peridot-shell [class*='border-teal-'],
+  .peridot-shell [class*='border-cyan-'],
+  .zune-bg [class*='border-white/'],
+  .zune-bg [class*='border-emerald-'],
+  .zune-bg [class*='border-lime-'],
+  .zune-bg [class*='border-teal-'],
+  .zune-bg [class*='border-cyan-'] {
+    border-color: var(--peridot-border) !important;
+  }
+
+  .peridot-shell [class*='bg-white/'],
+  .peridot-shell [class*='bg-black/'],
+  .zune-bg [class*='bg-white/'],
+  .zune-bg [class*='bg-black/'] {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+  }
+
+  .dark .peridot-shell [class*='bg-white/'],
+  .dark .peridot-shell [class*='bg-black/'],
+  .dark .zune-bg [class*='bg-white/'],
+  .dark .zune-bg [class*='bg-black/'] {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .peridot-shell [class*='bg-emerald-300'],
+  .peridot-shell [class*='bg-lime-300'],
+  .peridot-shell [class*='bg-teal-300'],
+  .peridot-shell [class*='bg-cyan-300'],
+  .zune-bg [class*='bg-emerald-300'],
+  .zune-bg [class*='bg-lime-300'],
+  .zune-bg [class*='bg-teal-300'],
+  .zune-bg [class*='bg-cyan-300'] {
+    background: linear-gradient(90deg, var(--peridot-primary), var(--peridot-primary-soft)) !important;
+    color: var(--peridot-text) !important;
+  }
+}
+
+@layer utilities {
+  .peridot-title-wrap {
+    line-height: 1.12;
+    padding-top: 0.1em;
+    padding-left: 0.12rem;
+    padding-right: 0.12rem;
+  }
+
+  .peridot-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    overflow: visible;
+    padding: 0.3rem 0.4rem 0.08rem 0.12rem;
+    line-height: 1.52;
+  }
+
+  .peridot-section-label {
+    display: block;
+    overflow: visible;
+    padding: 0.28rem 0.6rem 0.08rem 0.12rem;
+    line-height: 1.52;
+  }
+
+  .peridot-stat-label {
+    display: block;
+    overflow: visible;
+    padding: 0.22rem 0.6rem 0.08rem 0.12rem;
+    line-height: 1.48;
+  }
+
+  .peridot-stat-value {
+    line-height: 1.06;
+    padding-top: 0.08rem;
+    padding-left: 0.12rem;
+    padding-right: 0.12rem;
+  }
+
+  .peridot-copy {
+    padding-left: 0.12rem;
+    padding-right: 0.12rem;
+  }
+
+  .peridot-panel-heading {
+    display: block;
+    max-width: 100%;
+    padding-left: 0.12rem;
+    padding-right: 0.12rem;
+  }
+
+  .peridot-panel-value {
+    display: block;
+    max-width: 100%;
+    line-height: 1.06;
+    padding-left: 0.12rem;
+    padding-right: 0.12rem;
+  }
+}
+
+@keyframes peridot-complete-pulse {
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(232, 247, 161, 0.72),
+      0 20px 40px rgba(159, 204, 59, 0.14);
+  }
+  70% {
+    box-shadow:
+      0 0 0 12px rgba(232, 247, 161, 0),
+      0 20px 40px rgba(159, 204, 59, 0.18);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(232, 247, 161, 0),
+      0 20px 40px rgba(159, 204, 59, 0.14);
+  }
+}
