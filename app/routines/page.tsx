@@ -446,10 +446,10 @@ export default function RoutinesPage() {
                     <div className="max-w-sm">
                       <label className="mb-2 block text-sm font-medium text-white/90">Category</label>
                       <select value={formData.category} onChange={(event) => setFormData((current) => ({ ...current, category: event.target.value }))} className="peridot-control h-11 w-full px-3 outline-none">{categories.map((category) => <option key={category} value={category}>{formatLabel(category)}</option>)}</select>
-                    </div>
-                  </div>
-                </div>
-              </div>
+        </div>
+        </div>
+        </div>
+      </div>
 
               <div className="space-y-5 px-4 pb-5 sm:px-8 sm:pb-8">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
@@ -611,7 +611,8 @@ export default function RoutinesPage() {
             </form>
           </section>
         ) : null}
-
+        {!showCreateForm ? (
+        <>
         <div className="order-1 mb-12 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <div className="peridot-panel-soft peridot-stat-card">
             <div className="mb-2 flex items-center justify-between">
@@ -794,6 +795,8 @@ export default function RoutinesPage() {
           </div>
         )}
         </div>
+        </>
+        ) : null}
         </div>
       </div>
     </div>
