@@ -56,8 +56,8 @@ export function Header() {
         <div className="flex h-full flex-col">
           <div className="flex h-20 shrink-0 items-center border-b border-black/5 px-7 dark:border-white/10">
             <div>
-              <div className="peridot-section-label text-[10px] text-white/45">Peridot</div>
-              <h1 className="mt-1 text-2xl font-semibold">Workspace</h1>
+              <div className="peridot-section-label peridot-meta text-[10px] text-white/45">Peridot</div>
+              <h1 className="peridot-display mt-1 text-[2rem] font-semibold tracking-[-0.04em]">Workspace</h1>
             </div>
           </div>
 
@@ -68,7 +68,7 @@ export function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`zune-nav-item flex items-center gap-3 px-4 py-3.5 text-sm font-medium transition-all duration-300 ${
+                  className={`zune-nav-item peridot-cinematic flex items-center gap-3 px-4 py-3.5 text-sm font-medium transition-all duration-300 ${
                     isActive
                       ? 'border border-white/20 bg-white/14 text-white'
                       : 'text-white/70 hover:bg-white/8 hover:text-white'
@@ -77,7 +77,7 @@ export function Header() {
                   <span className={`inline-flex h-9 w-9 items-center justify-center border ${isActive ? 'border-white/14 bg-white/10' : 'border-transparent bg-transparent'}`}>
                     <item.icon className="h-4 w-4" />
                   </span>
-                  <span className="flex-1">{item.name}</span>
+                  <span className="peridot-display flex-1 text-[1.05rem] leading-none tracking-[-0.03em]">{item.name}</span>
                 </Link>
               )
             })}
@@ -85,8 +85,8 @@ export function Header() {
 
           {/* Settings */}
           <div className="border-t border-white/10 p-6">
-            <div className="peridot-panel-soft p-4">
-              <div className="peridot-section-label text-xs text-white/45">Settings</div>
+            <div className="peridot-panel-soft peridot-tactical-card p-4">
+              <div className="peridot-section-label peridot-meta text-xs text-white/45">Settings</div>
               <p className="peridot-copy mt-3 text-sm text-white/58">
                 Manage profiles, backups, and your local workspace in one dedicated place.
               </p>
@@ -104,8 +104,8 @@ export function Header() {
       <div className="lg:hidden">
         <div className="sticky top-0 z-40 flex min-h-[4.5rem] items-center justify-between border-b border-white/10 bg-black/45 px-4 py-4 backdrop-blur-xl sm:px-6">
           <div className="min-w-0 pr-3">
-            <div className="text-[10px] uppercase tracking-[0.24em] leading-[1.5] text-white/45">Peridot</div>
-            <h1 className="text-base font-semibold leading-tight text-white sm:text-lg">{mobileTitle}</h1>
+            <div className="peridot-meta text-[10px] leading-[1.5] text-white/45">Peridot</div>
+            <h1 className="peridot-display text-[1.35rem] font-semibold leading-none text-white sm:text-[1.55rem]">{mobileTitle}</h1>
           </div>
           <Button
             variant="ghost"
@@ -118,48 +118,66 @@ export function Header() {
         </div>
 
         {isMenuOpen && (
-          <div className="fixed inset-0 z-50">
+          <div className="fixed inset-0 z-[70] lg:hidden">
             <button
               type="button"
               aria-label="Close menu"
               className="peridot-focus-scrim absolute inset-0"
               onClick={() => setIsMenuOpen(false)}
             />
-            <div className="absolute inset-x-0 top-[4.5rem] px-4 pb-4 sm:px-6">
-              <div className="peridot-mobile-nav-card overflow-hidden">
-                <div className="border-b border-white/10 px-4 py-3">
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-white/42">Navigation</div>
-                </div>
-                <nav className="grid gap-1 p-2">
-                  {navigation.map((item) => {
-                    const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setIsMenuOpen(false)}
-                        className={`peridot-mobile-nav-link flex min-h-[3.5rem] items-center gap-3 px-4 py-3 text-[15px] font-medium ${
-                          isActive
-                            ? 'border-white/16 bg-white/12 text-white'
-                            : 'bg-transparent text-white/72 hover:border-white/10 hover:bg-white/[0.05] hover:text-white'
-                        }`}
-                      >
-                        <span className={`inline-flex h-8 w-8 items-center justify-center border ${isActive ? 'border-white/14 bg-white/10' : 'border-transparent bg-transparent'}`}>
-                          <item.icon className="h-4 w-4 shrink-0" />
-                        </span>
-                        <span className="flex-1 leading-tight">{item.name}</span>
-                      </Link>
-                    )
-                  })}
-                </nav>
+            <div className="absolute inset-0 overflow-y-auto">
+              <div className="min-h-full px-4 pb-6 pt-4 sm:px-6">
+                <div className="peridot-mobile-nav-card peridot-tactical-card min-h-[calc(100svh-2rem)] overflow-hidden">
+                  <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+                    <div>
+                      <div className="peridot-meta text-[10px] text-white/42">Navigation</div>
+                      <div className="peridot-display mt-2 text-[1.65rem] font-semibold leading-none text-white">Peridot</div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsMenuOpen(false)}
+                      className="h-11 w-11 rounded-2xl border border-white/10 bg-white/[0.04] p-0 text-white hover:bg-white/[0.08]"
+                    >
+                      <X className="h-5 w-5" />
+                    </Button>
+                  </div>
 
-                <div className="border-t border-white/10 p-2">
-                  <Button asChild className="h-11 w-full border border-white/10 bg-white/[0.04] px-4 text-white hover:bg-white/[0.08]">
-                    <Link href="/settings" onClick={() => setIsMenuOpen(false)}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      Open Settings
-                    </Link>
-                  </Button>
+                  <div className="grid gap-5 p-3">
+                    <nav className="grid gap-2">
+                      {navigation.map((item) => {
+                        const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
+                        return (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => setIsMenuOpen(false)}
+                            className={`peridot-mobile-nav-link peridot-cinematic flex min-h-[4rem] items-center gap-3 px-4 py-3 text-[15px] font-medium ${
+                              isActive
+                                ? 'border-white/18 bg-white/14 text-white shadow-[0_14px_28px_rgba(0,0,0,0.14)]'
+                                : 'bg-transparent text-white/78 hover:border-white/10 hover:bg-white/[0.05] hover:text-white'
+                            }`}
+                          >
+                            <span className={`inline-flex h-10 w-10 items-center justify-center rounded-2xl border ${isActive ? 'border-white/14 bg-white/10' : 'border-white/8 bg-white/[0.02]'}`}>
+                              <item.icon className="h-4 w-4 shrink-0" />
+                            </span>
+                            <span className="peridot-display flex-1 text-[1.15rem] leading-none">{item.name}</span>
+                          </Link>
+                        )
+                      })}
+                    </nav>
+
+                    <div className="rounded-[1.25rem] border border-white/10 bg-black/10 p-3">
+                      <div className="peridot-meta text-[10px] text-white/42">Workspace</div>
+                      <p className="mt-2 text-sm leading-6 text-white/65">Profiles, imports, backups, and local settings live in one place.</p>
+                      <Button asChild className="mt-4 h-11 w-full border border-white/10 bg-white/[0.04] px-4 text-white hover:bg-white/[0.08]">
+                        <Link href="/settings" onClick={() => setIsMenuOpen(false)}>
+                          <Settings className="mr-2 h-4 w-4" />
+                          Open Settings
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
