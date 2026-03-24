@@ -125,9 +125,9 @@ export function Header() {
               className="peridot-focus-scrim absolute inset-0"
               onClick={() => setIsMenuOpen(false)}
             />
-            <div className="absolute inset-0 overflow-y-auto">
-              <div className="min-h-full px-4 pb-6 pt-4 sm:px-6">
-                <div className="peridot-mobile-nav-card peridot-tactical-card min-h-[calc(100svh-2rem)] overflow-hidden">
+            <div className="absolute inset-x-0 bottom-0 top-[4.5rem] overflow-y-auto">
+              <div className="min-h-full">
+                <div className="peridot-mobile-nav-card peridot-tactical-card min-h-full w-full overflow-hidden rounded-none border-x-0 border-b-0 border-t border-white/10">
                   <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
                     <div>
                       <div className="peridot-meta text-[10px] text-white/42">Navigation</div>
@@ -143,7 +143,7 @@ export function Header() {
                     </Button>
                   </div>
 
-                  <div className="grid gap-5 p-3">
+                  <div className="grid gap-5 p-4 sm:p-5">
                     <nav className="grid gap-2">
                       {navigation.map((item) => {
                         const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)

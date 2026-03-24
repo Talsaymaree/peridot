@@ -398,10 +398,10 @@
   .peridot-mobile-nav-card {
     border: 1px solid rgba(207, 234, 122, 0.12);
     background:
-      linear-gradient(180deg, rgba(20, 28, 12, 0.97), rgba(12, 18, 8, 0.985)),
-      radial-gradient(circle at top, rgba(207, 234, 122, 0.12), transparent 38%);
+      linear-gradient(180deg, rgba(16, 23, 10, 0.992), rgba(10, 15, 7, 0.998)),
+      radial-gradient(circle at top, rgba(207, 234, 122, 0.1), transparent 34%);
     border-radius: 1rem;
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
     backdrop-filter: blur(24px) saturate(130%);
     -webkit-backdrop-filter: blur(24px) saturate(130%);
   }
