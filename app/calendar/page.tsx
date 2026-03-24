@@ -595,12 +595,12 @@ export default function CalendarPage() {
 
   return (
     <div className="lg:pl-80">
-      <div className="peridot-app-page peridot-shell peridot-page-gutter py-4 sm:py-6">
+      <div className="peridot-app-page peridot-mock-shell peridot-page-gutter py-4 sm:py-6">
         <div className="peridot-page-frame">
           <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)] xl:gap-6">
-            <aside className="peridot-panel hidden overflow-hidden lg:block">
-              <div className="border-b border-white/10 px-5 py-4">
-                <Button type="button" asChild className="h-10 w-full justify-start rounded-xl border border-white/10 bg-white/5 px-4 text-white hover:bg-white/10">
+            <aside className="peridot-mock-card hidden overflow-hidden rounded-[1.1rem] lg:block">
+              <div className="border-b border-white/8 px-5 py-4">
+                <Button type="button" asChild className="h-10 w-full justify-start rounded-[0.85rem] border border-white/8 bg-white/[0.04] px-4 text-white hover:bg-white/[0.08]">
                   <a href="/routines">
                     <Plus className="mr-2 h-4 w-4" />
                     Create flow
@@ -618,14 +618,14 @@ export default function CalendarPage() {
                     <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showMonthPicker ? 'rotate-180' : ''}`} />
                   </button>
                   {showMonthPicker ? (
-                    <div className="mb-4 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+                    <div className="mb-4 rounded-[0.95rem] border border-white/8 bg-white/[0.03] p-3">
                       <div className="mb-3 grid grid-cols-3 gap-2">
                         {monthNames.map((monthName, monthIndex) => (
                           <button
                             key={`desktop-month-${monthName}`}
                             type="button"
                             onClick={() => updateMonth(monthIndex)}
-                            className={monthIndex === currentDate.getMonth() ? 'rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
+                            className={monthIndex === currentDate.getMonth() ? 'rounded-[0.8rem] border border-[#cfea7a]/60 bg-[#cfea7a]/18 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-[0.8rem] border border-white/8 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
                           >
                             {monthName.slice(0, 3)}
                           </button>
@@ -639,7 +639,7 @@ export default function CalendarPage() {
                               key={`desktop-year-${year}`}
                               type="button"
                               onClick={() => updateYear(year)}
-                              className={year === currentDate.getFullYear() ? 'rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
+                              className={year === currentDate.getFullYear() ? 'rounded-[0.8rem] border border-[#cfea7a]/60 bg-[#cfea7a]/18 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-[0.8rem] border border-white/8 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
                             >
                               {year}
                             </button>
@@ -661,7 +661,7 @@ export default function CalendarPage() {
                             key={`mini-date-${dateIso}`}
                             type="button"
                             onClick={() => setCurrentDate(date)}
-                            className={selected ? 'relative flex h-11 w-11 items-center justify-center rounded-full bg-white text-sm font-semibold text-[#0f1512]' : hasEntries ? 'relative flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-sm font-semibold text-white hover:bg-white/[0.1]' : isToday ? 'relative flex h-11 w-11 items-center justify-center rounded-full border border-emerald-300/30 text-sm font-semibold text-emerald-200' : 'relative flex h-11 w-11 items-center justify-center rounded-full text-sm text-white/70 hover:bg-white/5'}
+                            className={selected ? 'relative flex h-11 w-11 items-center justify-center rounded-[1rem] bg-[#ff816d] text-sm font-semibold text-white shadow-[0_16px_35px_rgba(255,129,109,0.25)]' : hasEntries ? 'relative flex h-11 w-11 items-center justify-center rounded-[1rem] border border-white/8 bg-white/[0.05] text-sm font-semibold text-white hover:bg-white/[0.08]' : isToday ? 'relative flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[#cfea7a]/30 text-sm font-semibold text-[#cfea7a]' : 'relative flex h-11 w-11 items-center justify-center rounded-[1rem] text-sm text-white/70 hover:bg-white/5'}
                           >
                             <span className={`${hasEntries ? '-translate-y-1' : ''}`}>{date.getDate()}</span>
                             {hasEntries ? (
@@ -680,13 +680,13 @@ export default function CalendarPage() {
                 <div>
                   <div className="mb-3 text-xs uppercase tracking-[0.18em] text-white/45">Flow Layers</div>
                   <div className="space-y-2">
-                    {currentDayRegimenLayers.length === 0 ? <div className="rounded-xl border border-dashed border-white/10 px-3 py-4 text-sm text-white/45">No flows scheduled for this day.</div> : null}
+                    {currentDayRegimenLayers.length === 0 ? <div className="rounded-[0.85rem] border border-dashed border-white/8 px-3 py-4 text-sm text-white/45">No flows scheduled for this day.</div> : null}
                     {currentDayRegimenLayers.map((layer) => {
                       const checked = visibleRegimens[layer.id] !== false
                       return (
                         <label
                           key={layer.id}
-                          className="flex items-center gap-3 rounded-xl border px-3 py-3 text-sm text-white"
+                          className="flex items-center gap-3 rounded-[0.85rem] border px-3 py-3 text-sm text-white"
                           style={{
                             borderColor: layer.color.border,
                             background: checked ? layer.color.softBg : layer.color.bg,
@@ -712,29 +712,33 @@ export default function CalendarPage() {
               </div>
             </aside>
 
-            <section className="peridot-panel overflow-hidden">
-              <div className="border-b border-white/10 bg-white/[0.02] px-2.5 py-3 sm:px-6">
+            <section className="peridot-mock-card overflow-hidden rounded-[1.1rem]">
+              <div className="border-b border-white/8 bg-white/[0.02] px-3 py-4 sm:px-6">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                  <div className="space-y-3 md:space-y-0">
+                  <div className="space-y-3">
+                    <div className="text-xs uppercase tracking-[0.18em] text-white/42">Today's Task</div>
+                    <div>
+                      <h2 className="text-[1.9rem] font-semibold leading-none text-white sm:text-[2.35rem]">{dayLabelFormatter.format(currentDate)}</h2>
+                      <p className="mt-2 text-sm text-white/55">{dayEntries.length} flows scheduled today</p>
+                    </div>
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <Button type="button" onClick={() => setCurrentDate(new Date())} className="h-10 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10">
+                      <Button type="button" onClick={() => setCurrentDate(new Date())} className="h-10 rounded-[0.85rem] border border-white/8 bg-white/[0.04] px-4 text-sm text-white hover:bg-white/[0.08]">
                         Today
                       </Button>
-                      <Button type="button" variant="ghost" size="icon" onClick={() => setCurrentDate((current) => addDays(current, -1))} className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 text-white hover:bg-white/10">
+                      <Button type="button" variant="ghost" size="icon" onClick={() => setCurrentDate((current) => addDays(current, -1))} className="h-10 w-10 rounded-[0.85rem] border border-white/8 bg-white/[0.04] text-white hover:bg-white/[0.08]">
                         <ChevronLeft className="h-4 w-4" />
                       </Button>
-                      <Button type="button" variant="ghost" size="icon" onClick={() => setCurrentDate((current) => addDays(current, 1))} className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 text-white hover:bg-white/10">
+                      <Button type="button" variant="ghost" size="icon" onClick={() => setCurrentDate((current) => addDays(current, 1))} className="h-10 w-10 rounded-[0.85rem] border border-white/8 bg-white/[0.04] text-white hover:bg-white/[0.08]">
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     </div>
-                    <h2 className="text-lg font-semibold text-white md:text-2xl">{dayLabelFormatter.format(currentDate)}</h2>
                   </div>
 
                   <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-                    <Button type="button" onClick={() => setShowMobileLayers((current) => !current)} className="h-10 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10 sm:w-auto lg:hidden">
+                    <Button type="button" onClick={() => setShowMobileLayers((current) => !current)} className="h-10 w-full rounded-[0.85rem] border border-white/8 bg-white/[0.04] px-4 text-sm text-white hover:bg-white/[0.08] sm:w-auto lg:hidden">
                       {showMobileLayers ? 'Hide Flows' : 'Show Flows'}
                     </Button>
-                    <Button type="button" asChild className="inline-flex h-10 w-full rounded-xl border border-emerald-300/25 bg-emerald-300 px-4 font-semibold text-emerald-950 hover:bg-emerald-200 sm:w-auto">
+                    <Button type="button" asChild className="inline-flex h-10 w-full rounded-full border border-[#ff816d]/30 bg-[#ff816d] px-4 font-semibold text-white shadow-[0_16px_35px_rgba(255,129,109,0.22)] hover:bg-[#ff927f] sm:w-auto">
                       <a href="/routines">
                         <Plus className="mr-2 h-4 w-4" />
                         Add Routine
@@ -747,8 +751,8 @@ export default function CalendarPage() {
               <div className="p-1.5 sm:p-4">
                 {showMobileLayers ? (
                   <div className="mb-3 space-y-3 lg:hidden">
-                    <div className="overflow-hidden rounded-[1.2rem] border border-white/10">
-                      <div className="border-b border-white/10 bg-white/[0.03] px-3 py-2.5">
+                    <div className="overflow-hidden rounded-[1rem] border border-white/8 bg-white/[0.015]">
+                      <div className="border-b border-white/8 bg-white/[0.03] px-3 py-2.5">
                         <button
                           type="button"
                           onClick={() => setShowMonthPicker((current) => !current)}
@@ -766,7 +770,7 @@ export default function CalendarPage() {
                                 key={`mobile-month-${monthName}`}
                                 type="button"
                                 onClick={() => updateMonth(monthIndex)}
-                                className={monthIndex === currentDate.getMonth() ? 'rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
+                                className={monthIndex === currentDate.getMonth() ? 'rounded-[0.8rem] border border-[#cfea7a]/60 bg-[#cfea7a]/18 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-[0.8rem] border border-white/8 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
                               >
                                 {monthName.slice(0, 3)}
                               </button>
@@ -778,7 +782,7 @@ export default function CalendarPage() {
                                 key={`mobile-year-${year}`}
                                 type="button"
                                 onClick={() => updateYear(year)}
-                                className={year === currentDate.getFullYear() ? 'rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
+                                className={year === currentDate.getFullYear() ? 'rounded-[0.8rem] border border-[#cfea7a]/60 bg-[#cfea7a]/18 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-[0.8rem] border border-white/8 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
                               >
                                 {year}
                               </button>
@@ -799,7 +803,7 @@ export default function CalendarPage() {
                               key={`mobile-mini-date-${dateIso}`}
                               type="button"
                               onClick={() => setCurrentDate(date)}
-                              className={selected ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-white text-sm font-semibold text-[#0f1512]' : hasEntries ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-sm font-semibold text-white hover:bg-white/[0.1]' : isToday ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-emerald-300/30 text-sm font-semibold text-emerald-200' : 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-full text-sm text-white/70 hover:bg-white/5'}
+                              className={selected ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-[1rem] bg-[#ff816d] text-sm font-semibold text-white shadow-[0_16px_35px_rgba(255,129,109,0.25)]' : hasEntries ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-[1rem] border border-white/8 bg-white/[0.05] text-sm font-semibold text-white hover:bg-white/[0.08]' : isToday ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[#cfea7a]/30 text-sm font-semibold text-[#cfea7a]' : 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-[1rem] text-sm text-white/70 hover:bg-white/5'}
                             >
                               <span className={`${hasEntries ? '-translate-y-1' : ''}`}>{date.getDate()}</span>
                               {hasEntries ? (
@@ -815,18 +819,18 @@ export default function CalendarPage() {
                       </div>
                     </div>
 
-                    <div className="overflow-hidden rounded-[1.2rem] border border-white/10">
-                      <div className="border-b border-white/10 bg-white/[0.03] px-3 py-2.5 text-xs uppercase tracking-[0.18em] text-white/45">
+                    <div className="overflow-hidden rounded-[1rem] border border-white/8 bg-white/[0.015]">
+                      <div className="border-b border-white/8 bg-white/[0.03] px-3 py-2.5 text-xs uppercase tracking-[0.18em] text-white/45">
                         Flow Layers
                       </div>
                       <div className="space-y-2 p-1.5">
-                        {currentDayRegimenLayers.length === 0 ? <div className="rounded-xl border border-dashed border-white/10 px-3 py-4 text-sm text-white/45">No flows scheduled for this day.</div> : null}
+                        {currentDayRegimenLayers.length === 0 ? <div className="rounded-[0.85rem] border border-dashed border-white/8 px-3 py-4 text-sm text-white/45">No flows scheduled for this day.</div> : null}
                         {currentDayRegimenLayers.map((layer) => {
                           const checked = visibleRegimens[layer.id] !== false
                           return (
                             <label
                               key={`mobile-layer-${layer.id}`}
-                              className="flex items-center gap-3 rounded-xl border px-2.5 py-2.5 text-sm text-white"
+                              className="flex items-center gap-3 rounded-[0.85rem] border px-2.5 py-2.5 text-sm text-white"
                               style={{
                                 borderColor: layer.color.border,
                                 background: checked ? layer.color.softBg : layer.color.bg,
@@ -862,7 +866,7 @@ export default function CalendarPage() {
 
                 {!statusBlock ? (
                   <div className="space-y-4">
-                    <div className="overflow-hidden rounded-[1.2rem] border border-white/10 md:hidden">
+                    <div className="overflow-hidden rounded-[1rem] border border-white/8 bg-white/[0.015] md:hidden">
                       <div className="max-h-[70vh] overflow-y-auto">
                         {hourSlots.map((slot, slotIndex) => {
                           const slotEntries = dayEntries.filter((entry) => entry.hourIndex === slotIndex)
@@ -883,7 +887,7 @@ export default function CalendarPage() {
                                       return (
                                         <div
                                           key={`mobile-${entry.id}`}
-                                          className="overflow-hidden rounded-[1rem] border"
+                                          className="overflow-hidden rounded-[0.95rem] border"
                                           style={{
                                             borderColor: regimenDone ? color.completeBorder : color.border,
                                             background: expanded ? color.softBg : regimenDone ? color.completeBg : color.bg,
@@ -936,7 +940,7 @@ export default function CalendarPage() {
                                                 return (
                                                   <div
                                                     key={task.id}
-                                                    className="rounded-2xl border p-4"
+                                                    className="rounded-[0.9rem] border p-4"
                                                     style={{
                                                       borderColor: done ? tintRgba(color.accent, 0.42) : tintRgba(color.accent, 0.28),
                                                       background: done ? color.taskDoneBg : color.taskBg,
@@ -954,7 +958,7 @@ export default function CalendarPage() {
                                                     </div>
                                                     {!done && task.description ? (
                                                       <div
-                                                        className="mt-3 rounded-xl border px-3 py-3"
+                                                        className="mt-3 rounded-[0.8rem] border px-3 py-3"
                                                         style={{
                                                           borderColor: tintRgba(color.accent, 0.18),
                                                           backgroundColor: color.taskPanelBg,
@@ -988,7 +992,7 @@ export default function CalendarPage() {
                       </div>
                     </div>
 
-                    <div ref={dayScrollRef} className="hidden max-h-[72vh] overflow-y-auto rounded-[1.2rem] border border-white/10 md:block">
+                    <div ref={dayScrollRef} className="hidden max-h-[72vh] overflow-y-auto rounded-[1rem] border border-white/8 bg-white/[0.015] md:block">
                       <div className="grid grid-cols-[78px_1fr]">
                         <div className="border-r border-white/10 bg-white/[0.015]">
                           {hourSlots.map((slot) => (
@@ -1013,7 +1017,7 @@ export default function CalendarPage() {
                                 return (
                                   <div
                                     key={entry.id}
-                                    className="absolute left-4 right-4 overflow-hidden rounded-2xl border"
+                                    className="absolute left-4 right-4 overflow-hidden rounded-[0.95rem] border"
                                     style={{
                                       top: `${entryTopOffset(entry, index)}px`,
                                       minHeight: `${blockHeight}px`,
@@ -1058,7 +1062,7 @@ export default function CalendarPage() {
                                           type="button"
                                           variant="ghost"
                                           onClick={() => setExpandedEntries((current) => ({ ...current, [entry.id]: !expanded }))}
-                                          className="h-9 rounded-xl border border-white/10 bg-black/15 px-3 text-white hover:bg-black/25"
+                                          className="h-9 rounded-[0.8rem] border border-white/8 bg-black/15 px-3 text-white hover:bg-black/25"
                                         >
                                           {expanded ? 'Collapse' : 'Expand'}
                                         </Button>
@@ -1071,7 +1075,7 @@ export default function CalendarPage() {
                                             return (
                                               <div
                                                 key={task.id}
-                                                className="rounded-2xl border p-5"
+                                                className="rounded-[0.9rem] border p-5"
                                                 style={{
                                                   borderColor: done ? tintRgba(color.accent, 0.42) : tintRgba(color.accent, 0.28),
                                                   background: done ? color.taskDoneBg : color.taskBg,

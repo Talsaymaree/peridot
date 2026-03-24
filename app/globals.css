@@ -442,6 +442,54 @@
     gap: 0.55rem;
   }
 
+  .peridot-mock-shell {
+    background:
+      radial-gradient(circle at top, rgba(207, 234, 122, 0.1), transparent 24%),
+      linear-gradient(180deg, #404755 0%, #39404d 100%);
+  }
+
+  .peridot-mock-card {
+    background: linear-gradient(180deg, rgba(42, 48, 61, 0.96), rgba(48, 55, 69, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 28px 80px rgba(18, 21, 28, 0.32);
+    color: #f8faf3;
+  }
+
+  .peridot-mock-subcard {
+    background: linear-gradient(180deg, rgba(57, 64, 80, 0.96), rgba(62, 70, 86, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    color: #f8faf3;
+  }
+
+  .peridot-mock-muted {
+    color: rgba(240, 244, 232, 0.62);
+  }
+
+  .peridot-mock-accent {
+    color: #ff7d67;
+  }
+
+  .peridot-mock-button {
+    background: linear-gradient(180deg, #ff816d, #ff6c63);
+    border: 1px solid rgba(255, 158, 133, 0.22);
+    color: #fff7f2;
+    box-shadow: 0 14px 34px rgba(255, 108, 99, 0.28);
+  }
+
+  .peridot-mock-button:hover {
+    filter: brightness(1.03);
+  }
+
+  .peridot-mock-green {
+    background: linear-gradient(180deg, #c9ec98, #b2df82);
+    color: #223011;
+  }
+
+  .peridot-mock-badge {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
   .dark .peridot-shell {
     background:
       radial-gradient(circle at top left, rgba(159, 204, 59, 0.18), transparent 24%),
