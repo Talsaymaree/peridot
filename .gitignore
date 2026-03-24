@@ -42,6 +42,9 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+/lib/generated/prisma-runtime
+/lib/generated/prisma-runtime-v2
+/lib/generated/prisma-runtime-v3
 /prisma/*.db
 /prisma/*.db-*
 /.vscode

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@/lib/generated/prisma-runtime-v3'
+import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as typeof globalThis & {
   prisma?: PrismaClient
