@@ -1,8 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
+import { getRegimenTintMeta, tintRgba } from '@/lib/regimen-tints'
 import {
   fetchAnalytics,
   fetchCompletions,
@@ -18,6 +20,7 @@ type Task = {
 type Regimen = {
   id: string
   title: string
+  colorTint: string | null
   recurrenceType: string | null
   recurrenceDays: string | null
   tasks: Task[]
@@ -102,7 +105,14 @@ export function DashboardOverview() {
       routines.flatMap((routine) =>
         routine.regimens.filter(runsToday).map((regimen) => {
           const remainingTaskCount = regimen.tasks.filter((task) => completedTaskKeys[`${regimen.id}:${task.id}`] !== true).length
-          return { id: regimen.id, title: regimen.title, routineTitle: routine.title, taskCount: regimen.tasks.length, remainingTaskCount }
+          return {
+            id: regimen.id,
+            title: regimen.title,
+            routineTitle: routine.title,
+            colorTint: regimen.colorTint,
+            taskCount: regimen.tasks.length,
+            remainingTaskCount,
+          }
         }),
       ),
     [completedTaskKeys, routines],
@@ -145,11 +155,7 @@ export function DashboardOverview() {
           <section className="peridot-panel peridot-tactical-card mb-8 overflow-hidden">
             <div className="grid gap-6 px-6 py-7 sm:px-8 sm:py-8 xl:grid-cols-[1.2fr_0.8fr]">
               <div className="max-w-2xl">
-                <div className="peridot-eyebrow peridot-meta text-xs text-emerald-200/55">Dashboard</div>
-                <h2 className="peridot-title-wrap peridot-display mt-3 text-3xl font-semibold tracking-tight text-white sm:text-[3.5rem]">Welcome back, {displayName}.</h2>
-                <p className="peridot-copy mt-4 max-w-xl text-sm text-white/62 sm:text-base">
-                  Today&apos;s view is trimmed down to what needs attention now, with the rest one tap away.
-                </p>
+                <h2 className="peridot-title-wrap peridot-display text-3xl font-semibold tracking-tight text-white sm:text-[3.5rem]">Welcome back, {displayName}.</h2>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Button asChild className="h-11 rounded-2xl border border-emerald-300/25 bg-emerald-300 px-5 font-semibold text-emerald-950 hover:bg-emerald-200">
                     <a href="/routines">Open Routines</a>
@@ -161,22 +167,22 @@ export function DashboardOverview() {
               </div>
 
               <section className="peridot-stat-board">
-                <div className="peridot-meta text-[11px] text-white/45">Team Information</div>
-                <h3 className="peridot-display mt-2 text-[2rem] leading-none text-white">Statistics</h3>
-                <div className="peridot-stat-rule mt-3" />
+                <div className="peridot-stat-rule" />
                 <div className="mt-5 space-y-4">
                   {summaryStats.map((stat) => {
                     const percent = isLoading ? '...' : String(Math.round(stat.ratio * 100)).padStart(3, '0')
                     const width = isLoading ? 0 : Math.max(0, Math.min(100, Math.round(stat.ratio * 100)))
+                    const isFull = width >= 100
+                    const isEmpty = width <= 0
                     return (
                       <div key={stat.label} className="peridot-stat-line">
                         <div className="flex items-center justify-between gap-3">
                           <div className="peridot-meta text-[10px] text-white/35">{stat.detail}</div>
                           <div className="peridot-display text-sm leading-none text-white/65">{percent}</div>
                         </div>
-                        <div className="peridot-stat-track mt-2">
-                          <div className="peridot-stat-fill" style={{ width: `${width}%` }} />
-                          <div className="peridot-stat-notch" style={{ left: `${width}%` }} />
+                        <div className={`peridot-stat-track mt-2 ${isFull ? 'peridot-stat-track-full' : ''}`}>
+                          <div className={`peridot-stat-fill ${isFull ? 'peridot-stat-fill-full' : ''}`} style={{ width: `${width}%` }} />
+                          {!isFull && !isEmpty ? <div className="peridot-stat-notch" style={{ left: `${width}%` }} /> : null}
                           <div className="peridot-stat-name peridot-display">{stat.label}</div>
                           <div className="peridot-stat-value-badge peridot-display">{isLoading ? '...' : stat.value}</div>
                         </div>
@@ -207,20 +213,42 @@ export function DashboardOverview() {
                   No flows are scheduled for today yet.
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="grid gap-3 sm:grid-cols-2">
                   {todayRegimens.map((regimen) => (
-                    <div key={regimen.id} className="peridot-panel-soft peridot-tactical-card peridot-cinematic px-5 py-4 sm:px-6">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="min-w-0">
-                          <div className="peridot-section-label peridot-meta text-xs text-white/45">{regimen.routineTitle}</div>
-                          <h4 className="peridot-panel-heading peridot-display mt-3 text-lg font-semibold leading-[1.18] text-white">{regimen.title}</h4>
-                        </div>
-                        <div className="peridot-meta rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-[10px] text-white/72">
-                          {regimen.remainingTaskCount} left
-                        </div>
-                      </div>
-                      <p className="peridot-copy mt-3 text-sm text-white/58">{regimen.taskCount} total task{regimen.taskCount === 1 ? '' : 's'} in this flow.</p>
-                    </div>
+                    (() => {
+                      const tint = getRegimenTintMeta(regimen.colorTint).value
+                      const scheduleHref = `/calendar?date=${isoDate(new Date())}&regimen=${regimen.id}`
+                      return (
+                        <Link
+                          key={regimen.id}
+                          href={scheduleHref}
+                          className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-3 py-3"
+                          style={{
+                            borderColor: tintRgba(tint, 0.36),
+                            background: `linear-gradient(180deg, ${tintRgba(tint, 0.16)}, rgba(255,255,255,0.04))`,
+                            boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.14)}`,
+                          }}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="inline-flex h-10 w-12 items-center justify-center rounded-sm border bg-white/[0.88] text-[1.05rem] font-semibold text-[#373737] shadow-[0_1px_0_rgba(0,0,0,0.08)]"
+                              style={{ borderColor: tintRgba(tint, 0.28) }}
+                            >
+                              L↣
+                            </span>
+                            <div className="min-w-0">
+                              <div className="peridot-display truncate text-[1rem] leading-none text-[#f4f4f4] transition group-hover:translate-x-0.5">{regimen.title}</div>
+                              <div className="peridot-meta mt-2 truncate text-[10px]" style={{ color: tintRgba(tint, 0.92) }}>{regimen.routineTitle}</div>
+                            </div>
+                          </div>
+                          <div className="mt-3 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-white/48">
+                            <span>{regimen.taskCount} task{regimen.taskCount === 1 ? '' : 's'}</span>
+                            <span>{regimen.remainingTaskCount} left</span>
+                          </div>
+                        </Link>
+                      )
+                    })()
+                    
                   ))}
                 </div>
               )}

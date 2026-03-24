@@ -1,5 +1,6 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ChevronLeft, ChevronRight, ExternalLink, ImageIcon, Plus, Video } from 'lucide-react'
@@ -389,7 +390,15 @@ function TaskReference({ task }: { task: Task }) {
 }
 
 export default function CalendarPage() {
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const searchParams = useSearchParams()
+  const requestedDate = searchParams.get('date')
+  const targetRegimenId = searchParams.get('regimen')
+  const initialDate = useMemo(() => {
+    if (!requestedDate) return new Date()
+    const parsed = new Date(`${requestedDate}T12:00:00`)
+    return Number.isNaN(parsed.getTime()) ? new Date() : parsed
+  }, [requestedDate])
+  const [currentDate, setCurrentDate] = useState(initialDate)
   const [routines, setRoutines] = useState<Routine[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -401,6 +410,10 @@ export default function CalendarPage() {
   const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({})
   const dayScrollRef = useRef<HTMLDivElement | null>(null)
   const lastAutoScrollDateRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    setCurrentDate(initialDate)
+  }, [initialDate])
 
   useEffect(() => {
     async function loadRoutines() {
@@ -416,6 +429,7 @@ export default function CalendarPage() {
               if (!(regimen.id in next)) next[regimen.id] = true
             }
           }
+          if (targetRegimenId) next[targetRegimenId] = true
           return next
         })
       } catch (loadError) {
@@ -433,7 +447,7 @@ export default function CalendarPage() {
 
       void loadRoutines()
     })
-  }, [])
+  }, [targetRegimenId])
 
   useEffect(() => {
     const dateIso = isoDate(currentDate)
@@ -470,6 +484,10 @@ export default function CalendarPage() {
     return map
   }, [filteredRoutines, miniMonthGrid])
   const dayEntries = entryMap[currentIso] ?? []
+  const highlightedEntryId = useMemo(
+    () => (targetRegimenId ? dayEntries.find((entry) => entry.regimenId === targetRegimenId)?.id ?? null : null),
+    [dayEntries, targetRegimenId],
+  )
   const regimenLayers = useMemo<RegimenLayer[]>(
     () =>
       routines.flatMap((routine) =>
@@ -530,6 +548,11 @@ export default function CalendarPage() {
     })
     return () => window.cancelAnimationFrame(frame)
   }, [currentIso, dayEntries])
+
+  useEffect(() => {
+    if (!highlightedEntryId) return
+    setExpandedEntries((current) => ({ ...current, [highlightedEntryId]: true }))
+  }, [highlightedEntryId])
 
   async function toggleTaskCompletion(regimenId: string, taskId: string) {
     const key = completionKey(currentIso, regimenId, taskId)
@@ -876,6 +899,7 @@ export default function CalendarPage() {
                                   <div className="space-y-3">
                                     {slotEntries.map((entry) => {
                                       const expanded = expandedEntries[entry.id] !== false
+                                      const isTargeted = highlightedEntryId === entry.id
                                       const color = regimenColorMap[entry.regimenId] ?? fallbackRegimenTheme
                                       const completeCount = completedCount(entry)
                                       const regimenDone = completeCount === entry.tasks.length && entry.tasks.length > 0
@@ -887,7 +911,9 @@ export default function CalendarPage() {
                                           style={{
                                             borderColor: regimenDone ? color.completeBorder : color.border,
                                             background: expanded ? color.softBg : regimenDone ? color.completeBg : color.bg,
-                                            boxShadow: `0 18px 40px ${color.accentGlow}`,
+                                            boxShadow: isTargeted
+                                              ? `0 0 0 2px ${tintRgba(color.accent, 0.92)}, 0 18px 40px ${color.accentGlow}`
+                                              : `0 18px 40px ${color.accentGlow}`,
                                           }}
                                         >
                                           <button
@@ -1005,6 +1031,7 @@ export default function CalendarPage() {
                             <div className="absolute inset-0 p-4">
                               {dayEntries.map((entry, index) => {
                                 const expanded = expandedEntries[entry.id] !== false
+                                const isTargeted = highlightedEntryId === entry.id
                                 const color = regimenColorMap[entry.regimenId] ?? fallbackRegimenTheme
                                 const completeCount = completedCount(entry)
                                 const regimenDone = completeCount === entry.tasks.length && entry.tasks.length > 0
@@ -1019,7 +1046,9 @@ export default function CalendarPage() {
                                       minHeight: `${blockHeight}px`,
                                       borderColor: regimenDone ? color.completeBorder : color.border,
                                       background: expanded ? color.softBg : regimenDone ? color.completeBg : color.bg,
-                                      boxShadow: `0 20px 45px ${color.accentGlow}`,
+                                      boxShadow: isTargeted
+                                        ? `0 0 0 2px ${tintRgba(color.accent, 0.92)}, 0 20px 45px ${color.accentGlow}`
+                                        : `0 20px 45px ${color.accentGlow}`,
                                     }}
                                   >
                                     <div
