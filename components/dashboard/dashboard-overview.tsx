@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Calendar, CheckSquare, Layers3 } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import {
   fetchAnalytics,
   fetchCompletions,
@@ -48,12 +48,6 @@ function runsToday(regimen: Regimen) {
 function clampRatio(value: number) {
   if (!Number.isFinite(value)) return 0
   return Math.max(0, Math.min(1, value))
-}
-
-function buildMeter(activeCount: number, totalCount: number) {
-  const total = 8
-  const fill = totalCount <= 0 ? 0 : Math.max(1, Math.round(clampRatio(activeCount / totalCount) * total))
-  return Array.from({ length: total }, (_, index) => index < fill)
 }
 
 export function DashboardOverview() {
@@ -117,46 +111,30 @@ export function DashboardOverview() {
   const totalTasksToday = useMemo(() => todayRegimens.reduce((sum, regimen) => sum + regimen.taskCount, 0), [todayRegimens])
   const completedShare = totalTasksToday > 0 ? completedToday / totalTasksToday : 0
   const remainingShare = totalTasksToday > 0 ? remainingTasksToday / totalTasksToday : 0
-  const summaryCards = [
+  const summaryStats = [
     {
       label: 'Active Routines',
-      value: isLoading ? '...' : String(activeRoutineCount),
-      hint: `${routines.length || 0} total`,
-      icon: Layers3,
-      iconClassName: 'text-emerald-200/80',
-      meter: buildMeter(activeRoutineCount, Math.max(routines.length, 1)),
-      accentClassName: 'bg-emerald-300',
-      meterClassName: 'bg-emerald-300/85',
+      value: activeRoutineCount,
+      detail: totalRegimens === 1 ? '1 flow built' : `${totalRegimens} flows built`,
+      ratio: clampRatio(activeRoutineCount / Math.max(routines.length || 1, 1)),
     },
     {
       label: 'Flows Today',
-      value: isLoading ? '...' : String(todayRegimens.length),
-      hint: todayRegimens.length === 1 ? '1 flow queued' : `${todayRegimens.length} queued`,
-      icon: Calendar,
-      iconClassName: 'text-lime-200/80',
-      meter: buildMeter(todayRegimens.length, Math.max(totalRegimens || todayRegimens.length || 1, 1)),
-      accentClassName: 'bg-lime-300',
-      meterClassName: 'bg-lime-300/85',
+      value: todayRegimens.length,
+      detail: totalTasksToday === 1 ? '1 task scheduled' : `${totalTasksToday} tasks scheduled`,
+      ratio: clampRatio(todayRegimens.length / Math.max(totalRegimens || 1, 1)),
     },
     {
       label: 'Remaining',
-      value: isLoading ? '...' : String(remainingTasksToday),
-      hint: remainingTasksToday === 0 ? 'All clear' : 'still open',
-      icon: CheckSquare,
-      iconClassName: 'text-amber-200/80',
-      meter: buildMeter(Math.max(0, 8 - Math.round(clampRatio(remainingShare) * 8)), 8),
-      accentClassName: 'bg-amber-300',
-      meterClassName: 'bg-amber-300/85',
+      value: remainingTasksToday,
+      detail: remainingTasksToday === 0 ? 'All clear' : 'still open',
+      ratio: remainingTasksToday === 0 ? 0 : clampRatio(remainingShare),
     },
     {
       label: 'Completed',
-      value: isLoading ? '...' : String(completedToday),
-      hint: totalTasksToday === 0 ? 'No tasks today' : `${Math.round(clampRatio(completedShare) * 100)}% cleared`,
-      icon: CheckSquare,
-      iconClassName: 'text-teal-200/80',
-      meter: buildMeter(Math.round(clampRatio(completedShare) * 8), 8),
-      accentClassName: 'bg-teal-300',
-      meterClassName: 'bg-teal-300/85',
+      value: completedToday,
+      detail: totalTasksToday === 0 ? 'No tasks today' : remainingTasksToday === 0 ? 'Day closed clean' : `${remainingTasksToday} still open`,
+      ratio: clampRatio(completedShare),
     },
   ]
 
@@ -182,39 +160,31 @@ export function DashboardOverview() {
                 </div>
               </div>
 
-              <div className="peridot-summary-grid">
-                {summaryCards.map((card) => {
-                  const Icon = card.icon
-                  return (
-                    <div key={card.label} className="peridot-panel-soft peridot-stat-card peridot-compact-card peridot-tactical-card peridot-cinematic overflow-hidden">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <div className="peridot-stat-label peridot-meta text-[11px] text-white/45">{card.label}</div>
-                          <div className="mt-2 flex items-end gap-2">
-                            <div className="peridot-stat-value peridot-display text-[2rem] font-semibold leading-none text-white">{card.value}</div>
-                            <span className="peridot-meta pb-1 text-[10px] text-white/45">{card.hint}</span>
-                          </div>
+              <section className="peridot-stat-board">
+                <div className="peridot-meta text-[11px] text-white/45">Team Information</div>
+                <h3 className="peridot-display mt-2 text-[2rem] leading-none text-white">Statistics</h3>
+                <div className="peridot-stat-rule mt-3" />
+                <div className="mt-5 space-y-4">
+                  {summaryStats.map((stat) => {
+                    const percent = isLoading ? '...' : String(Math.round(stat.ratio * 100)).padStart(3, '0')
+                    const width = isLoading ? 0 : Math.max(0, Math.min(100, Math.round(stat.ratio * 100)))
+                    return (
+                      <div key={stat.label} className="peridot-stat-line">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="peridot-meta text-[10px] text-white/35">{stat.detail}</div>
+                          <div className="peridot-display text-sm leading-none text-white/65">{percent}</div>
                         </div>
-                        <span className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] ${card.iconClassName}`}>
-                          <Icon className="h-4 w-4" />
-                        </span>
+                        <div className="peridot-stat-track mt-2">
+                          <div className="peridot-stat-fill" style={{ width: `${width}%` }} />
+                          <div className="peridot-stat-notch" style={{ left: `${width}%` }} />
+                          <div className="peridot-stat-name peridot-display">{stat.label}</div>
+                          <div className="peridot-stat-value-badge peridot-display">{isLoading ? '...' : stat.value}</div>
+                        </div>
                       </div>
-                      <div className="mt-1 flex items-center gap-1.5">
-                        {card.meter.map((filled, index) => (
-                          <span
-                            key={`${card.label}-${index}`}
-                            className={`h-2 flex-1 rounded-full ${filled ? card.meterClassName : 'bg-white/8'}`}
-                          />
-                        ))}
-                      </div>
-                      <div className="mt-2 flex items-center justify-between">
-                        <span className="peridot-meta text-[10px] text-white/38">Signal</span>
-                        <span className={`h-2.5 w-2.5 rounded-full ${card.accentClassName} shadow-[0_0_18px_currentColor]`} />
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+                    )
+                  })}
+                </div>
+              </section>
             </div>
           </section>
 
