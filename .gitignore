@@ -50,6 +50,6 @@ next-env.d.ts
 /.vscode
 /Tasks
 /tmp_*.py
-/({'
+/\(\{'
 /peridot
 /apps/mobile

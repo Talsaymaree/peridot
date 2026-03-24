@@ -166,39 +166,39 @@ export function LocalAnalyticsOverview() {
   return (
     <div className="lg:pl-80">
       <div className="peridot-app-page peridot-shell peridot-page-gutter py-6 sm:py-8">
-        <div className="peridot-page-frame space-y-6">
+        <div className="peridot-page-frame peridot-overview-grid">
           <section className="peridot-panel overflow-hidden">
-            <div className="grid gap-5 px-6 py-7 sm:px-8 sm:py-8 xl:grid-cols-[1.25fr_0.95fr]">
-              <div className="max-w-3xl">
+            <div className="grid gap-6 px-6 py-7 sm:px-8 sm:py-8 xl:grid-cols-[1.2fr_0.8fr]">
+              <div className="max-w-2xl">
                 <div className="peridot-eyebrow text-xs text-emerald-200/55">Analytics</div>
                 <p className="peridot-copy mt-3 max-w-2xl text-sm text-white/62 sm:text-base">
-                  Your completions now roll into momentum graphs, weekday rhythm, and flow rankings so you can actually see the habit building.
+                  A quieter read on your momentum, weekly rhythm, and strongest flows without turning the page into a wall of charts.
                 </p>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="peridot-panel-soft peridot-stat-card">
+              <div className="peridot-summary-grid">
+                <div className="peridot-panel-soft peridot-stat-card peridot-compact-card">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="peridot-stat-label text-xs text-white/45">Completed Today</span>
                     <CalendarCheck2 className="h-4 w-4 text-emerald-200/80" />
                   </div>
                   <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{isLoading ? '...' : analytics?.totals.completedToday ?? 0}</div>
                 </div>
-                <div className="peridot-panel-soft peridot-stat-card">
+                <div className="peridot-panel-soft peridot-stat-card peridot-compact-card">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="peridot-stat-label text-xs text-white/45">Current Streak</span>
                     <Flame className="h-4 w-4 text-lime-200/80" />
                   </div>
                   <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{isLoading ? '...' : analytics?.totals.currentStreak ?? 0}</div>
                 </div>
-                <div className="peridot-panel-soft peridot-stat-card">
+                <div className="peridot-panel-soft peridot-stat-card peridot-compact-card">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="peridot-stat-label text-xs text-white/45">This Week</span>
                     <Activity className="h-4 w-4 text-teal-200/80" />
                   </div>
                   <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{isLoading ? '...' : analytics?.totals.completedThisWeek ?? 0}</div>
                 </div>
-                <div className="peridot-panel-soft peridot-stat-card">
+                <div className="peridot-panel-soft peridot-stat-card peridot-compact-card">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="peridot-stat-label text-xs text-white/45">All-Time Completed</span>
                     <Layers3 className="h-4 w-4 text-cyan-200/80" />
@@ -214,15 +214,15 @@ export function LocalAnalyticsOverview() {
               {error}
             </div>
           ) : (
-            <section className="grid gap-4 xl:grid-cols-[1.12fr_0.88fr]">
+            <section className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
               <div className="space-y-4">
                 <div className="peridot-panel p-6 sm:p-7">
                   <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-2xl">
                       <div className="peridot-section-label text-xs text-white/45">Last 14 Days</div>
                       <h3 className="peridot-panel-heading mt-2 text-2xl font-semibold text-white">Momentum curve</h3>
-                      <p className="peridot-copy mt-3 text-sm text-white/58">
-                        A cleaner view of whether your routine activity is climbing, flattening, or bouncing back.
+                      <p className="peridot-copy mt-3 max-w-xl text-sm text-white/58">
+                        The trend line keeps the signal visible without forcing you to read a dense dashboard.
                       </p>
                     </div>
 

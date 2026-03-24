@@ -105,16 +105,16 @@ export function DashboardOverview() {
   return (
     <div className="lg:pl-80">
       <div className="peridot-app-page peridot-shell peridot-page-gutter py-6 sm:py-8">
-        <div className="peridot-page-frame">
+        <div className="peridot-page-frame peridot-overview-grid">
           <section className="peridot-panel mb-8 overflow-hidden">
-            <div className="grid gap-5 px-6 py-7 sm:px-8 sm:py-8 xl:grid-cols-[1.3fr_0.9fr]">
-              <div className="max-w-3xl">
-                <div className="peridot-eyebrow text-xs text-emerald-200/55">Peridot</div>
-                <h2 className="peridot-title-wrap mt-3 text-3xl font-semibold tracking-tight text-white sm:text-5xl">Welcome back, {displayName}.</h2>
-                <p className="peridot-copy mt-4 max-w-2xl text-sm text-white/62 sm:text-base">
-                  Keep your routines, flows, and task references in one place so you can follow the steps without guessing.
+            <div className="grid gap-6 px-6 py-7 sm:px-8 sm:py-8 xl:grid-cols-[1.2fr_0.8fr]">
+              <div className="max-w-2xl">
+                <div className="peridot-eyebrow text-xs text-emerald-200/55">Dashboard</div>
+                <h2 className="peridot-title-wrap mt-3 text-3xl font-semibold tracking-tight text-white sm:text-[3.5rem]">Welcome back, {displayName}.</h2>
+                <p className="peridot-copy mt-4 max-w-xl text-sm text-white/62 sm:text-base">
+                  Today&apos;s view is trimmed down to what needs attention now, with the rest one tap away.
                 </p>
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Button asChild className="h-11 rounded-2xl border border-emerald-300/25 bg-emerald-300 px-5 font-semibold text-emerald-950 hover:bg-emerald-200">
                     <a href="/routines">Open Routines</a>
                   </Button>
@@ -124,29 +124,29 @@ export function DashboardOverview() {
                 </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                <div className="peridot-panel-soft peridot-stat-card">
+              <div className="peridot-summary-grid">
+                <div className="peridot-panel-soft peridot-stat-card peridot-compact-card">
                   <div className="mb-2 flex items-center justify-between">
-                    <span className="peridot-stat-label text-xs text-white/45">Routines</span>
+                    <span className="peridot-stat-label text-xs text-white/45">Active Routines</span>
                     <Layers3 className="h-4 w-4 text-emerald-200/80" />
                   </div>
                   <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{isLoading ? '...' : routines.length}</div>
                 </div>
-                <div className="peridot-panel-soft peridot-stat-card">
+                <div className="peridot-panel-soft peridot-stat-card peridot-compact-card">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="peridot-stat-label text-xs text-white/45">Flows Today</span>
                     <Calendar className="h-4 w-4 text-lime-200/80" />
                   </div>
                   <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{isLoading ? '...' : todayRegimens.length}</div>
                 </div>
-                <div className="peridot-panel-soft peridot-stat-card">
+                <div className="peridot-panel-soft peridot-stat-card peridot-compact-card">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="peridot-stat-label text-xs text-white/45">Tasks Remaining Today</span>
                     <CheckSquare className="h-4 w-4 text-teal-200/80" />
                   </div>
                   <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{isLoading ? '...' : remainingTasksToday}</div>
                 </div>
-                <div className="peridot-panel-soft peridot-stat-card">
+                <div className="peridot-panel-soft peridot-stat-card peridot-compact-card">
                   <div className="mb-2 flex items-center justify-between">
                     <span className="peridot-stat-label text-xs text-white/45">Completed Today</span>
                     <CheckSquare className="h-4 w-4 text-emerald-200/80" />
@@ -157,11 +157,14 @@ export function DashboardOverview() {
             </div>
           </section>
 
-          <section className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+          <section className="grid gap-4 xl:grid-cols-[1.18fr_0.82fr]">
             <div className="peridot-panel p-6 sm:p-7">
               <div className="mb-5">
                 <div className="peridot-section-label text-xs text-white/45">Today</div>
                 <h3 className="peridot-panel-heading mt-2 text-2xl font-semibold text-white">Scheduled flows</h3>
+                <p className="peridot-copy mt-3 max-w-xl text-sm text-white/58">
+                  Keep this list narrow and scannable. Open the builder only when you need to edit structure.
+                </p>
               </div>
 
               {isLoading ? (
@@ -175,10 +178,17 @@ export function DashboardOverview() {
               ) : (
                 <div className="space-y-3">
                   {todayRegimens.map((regimen) => (
-                    <div key={regimen.id} className="peridot-panel-soft px-5 py-5 sm:px-6">
-                      <div className="peridot-section-label text-xs text-white/45">{regimen.routineTitle}</div>
-                      <h4 className="peridot-panel-heading mt-3 text-lg font-semibold leading-[1.18] text-white">{regimen.title}</h4>
-                      <p className="peridot-copy mt-3 text-sm text-white/58">{regimen.remainingTaskCount} remaining of {regimen.taskCount} task{regimen.taskCount === 1 ? '' : 's'} in this flow.</p>
+                    <div key={regimen.id} className="peridot-panel-soft px-5 py-4 sm:px-6">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="peridot-section-label text-xs text-white/45">{regimen.routineTitle}</div>
+                          <h4 className="peridot-panel-heading mt-3 text-lg font-semibold leading-[1.18] text-white">{regimen.title}</h4>
+                        </div>
+                        <div className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs uppercase tracking-[0.16em] text-white/72">
+                          {regimen.remainingTaskCount} left
+                        </div>
+                      </div>
+                      <p className="peridot-copy mt-3 text-sm text-white/58">{regimen.taskCount} total task{regimen.taskCount === 1 ? '' : 's'} in this flow.</p>
                     </div>
                   ))}
                 </div>
@@ -202,7 +212,7 @@ export function DashboardOverview() {
 
                 <div className="peridot-panel p-6">
                   <a href="/routines" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-white transition hover:bg-white/10">
-                    <span>Go to routine builder</span>
+                    <span>Refine routines when you&apos;re ready</span>
                     <ArrowRight className="h-4 w-4 text-white/55" />
                   </a>
                 </div>

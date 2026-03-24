@@ -322,13 +322,17 @@
   }
 
   .peridot-page-frame {
-    width: min(100%, 1680px);
+    width: min(100%, 1380px);
     margin-left: auto;
     margin-right: auto;
   }
 
   .peridot-app-page {
     min-height: calc(100svh - 4.5rem);
+  }
+
+  .peridot-app-page--with-mobile-nav {
+    padding-top: 0.5rem;
   }
 
   @media (min-width: 640px) {
@@ -356,6 +360,86 @@
     .peridot-app-page {
       min-height: 100svh;
     }
+
+    .peridot-app-page--with-mobile-nav {
+      padding-top: 0;
+    }
+  }
+
+  .peridot-focus-scrim {
+    background:
+      linear-gradient(180deg, rgba(10, 16, 8, 0.94), rgba(10, 16, 8, 0.92)),
+      radial-gradient(circle at top, rgba(207, 234, 122, 0.12), transparent 42%);
+    backdrop-filter: blur(22px) saturate(120%);
+    -webkit-backdrop-filter: blur(22px) saturate(120%);
+  }
+
+  .peridot-sidebar-shell {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(232, 247, 161, 0.18)),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(207, 234, 122, 0.08));
+    border-right: 1px solid rgba(159, 204, 59, 0.14);
+    backdrop-filter: blur(18px) saturate(135%);
+    -webkit-backdrop-filter: blur(18px) saturate(135%);
+  }
+
+  .dark .peridot-sidebar-shell {
+    background:
+      linear-gradient(180deg, rgba(19, 26, 11, 0.94), rgba(14, 20, 8, 0.98)),
+      linear-gradient(135deg, rgba(207, 234, 122, 0.04), rgba(159, 204, 59, 0.03));
+    border-right-color: rgba(207, 234, 122, 0.12);
+  }
+
+  .peridot-mobile-nav-card {
+    border: 1px solid rgba(207, 234, 122, 0.12);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+      linear-gradient(135deg, rgba(207, 234, 122, 0.08), rgba(159, 204, 59, 0.03));
+    border-radius: 1.35rem;
+  }
+
+  .peridot-mobile-nav-link {
+    border-radius: 1.1rem;
+    border: 1px solid transparent;
+    transition: transform 0.22s ease, background-color 0.22s ease, border-color 0.22s ease;
+  }
+
+  .peridot-mobile-nav-link:hover {
+    transform: translateY(-1px);
+  }
+
+  .peridot-overview-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (min-width: 1024px) {
+    .peridot-overview-grid {
+      gap: 1.25rem;
+    }
+  }
+
+  .peridot-summary-grid {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  @media (min-width: 640px) {
+    .peridot-summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .peridot-summary-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .peridot-compact-card {
+    min-height: 0;
+    padding: 0.9rem 1rem;
+    gap: 0.55rem;
   }
 
   .dark .peridot-shell {
