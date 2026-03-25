@@ -678,10 +678,9 @@ export default function RoutinesPage() {
                         <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] text-emerald-100/80">
                           {formatLabel(routine.category)}
                         </span>
-                      </div>
-                      <div className="mt-4 min-w-0 pt-0.5 text-white">
-                        <div className="peridot-meta text-[10px] text-white/35">Routine</div>
-                        <h4 className="peridot-display mt-1.5 text-[1.28rem] font-semibold leading-[1.02] tracking-tight sm:text-2xl">{routine.title}</h4>
+                        <h4 className="peridot-display min-w-0 text-[1.28rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-2xl">
+                          {routine.title}
+                        </h4>
                       </div>
                     </div>
 
