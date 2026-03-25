@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Calendar, CheckSquare, ChevronDown, ChevronUp, Copy, ExternalLink, Image as ImageIcon, Layers3, Link2, Pencil, PlayCircle, Plus, Trash2, X } from 'lucide-react'
+import { ChevronDown, ChevronUp, Copy, ExternalLink, Image as ImageIcon, Link2, Pencil, PlayCircle, Plus, Trash2, X } from 'lucide-react'
 import { DEFAULT_REGIMEN_TINT, REGIMEN_TINTS, getRegimenTint, getRegimenTintMeta, tintRgba } from '@/lib/regimen-tints'
 import {
   createRoutine,
@@ -615,32 +615,28 @@ export default function RoutinesPage() {
         <>
         <div className="order-1 mb-12 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <div className="peridot-panel-soft peridot-stat-card">
-            <div className="mb-2 flex items-center justify-between">
+            <div className="mb-2 flex items-start justify-between gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Total Routines</span>
-              <Layers3 className="h-4 w-4 text-emerald-200/80" />
+              <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{routines.length}</div>
             </div>
-            <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{routines.length}</div>
           </div>
           <div className="peridot-panel-soft peridot-stat-card">
-            <div className="mb-2 flex items-center justify-between">
+            <div className="mb-2 flex items-start justify-between gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Active Routines</span>
-              <PlayCircle className="h-4 w-4 text-emerald-200/80" />
+              <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{activeRoutines}</div>
             </div>
-            <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{activeRoutines}</div>
           </div>
           <div className="peridot-panel-soft peridot-stat-card">
-            <div className="mb-2 flex items-center justify-between">
+            <div className="mb-2 flex items-start justify-between gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Flows</span>
-              <Calendar className="h-4 w-4 text-lime-200/80" />
+              <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{totalRegimens}</div>
             </div>
-            <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{totalRegimens}</div>
           </div>
           <div className="peridot-panel-soft peridot-stat-card">
-            <div className="mb-2 flex items-center justify-between">
+            <div className="mb-2 flex items-start justify-between gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Total Tasks</span>
-              <CheckSquare className="h-4 w-4 text-teal-200/80" />
+              <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{totalTasks}</div>
             </div>
-            <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{totalTasks}</div>
           </div>
         </div>
 
