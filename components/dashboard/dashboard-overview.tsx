@@ -224,30 +224,28 @@ export function DashboardOverview() {
                       <Link
                         key={regimen.id}
                         href={scheduleHref}
-                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border p-[1.125rem] no-underline"
+                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-5 py-6 no-underline"
                         style={{
                           borderColor: tintRgba(tint, 0.44),
                           background: `linear-gradient(180deg, ${tintRgba(tint, 0.82)}, ${tintRgba(tint, 0.66)})`,
                           boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.12)}, 0 14px 28px ${tintRgba(tint, 0.16)}`,
                         }}
                       >
-                        <div className="rounded-[0.95rem] bg-white/[0.08] px-5 py-6">
-                          <div className="min-w-0">
-                            <div className="pl-5 pr-6 pt-3 text-[0.66rem] font-semibold uppercase tracking-[0.18em] leading-[1.8] text-[#4a621f] no-underline">Scheduled now</div>
-                            <div className="mt-2 break-words pl-5 pr-6 pt-2 text-[1rem] font-semibold leading-[1.22] text-[#17200e] no-underline transition group-hover:translate-x-0.5 sm:text-[1.05rem]">
-                              {regimen.title}
-                            </div>
-                            <div className="mt-3 break-words pl-5 pr-6 text-[0.88rem] leading-[1.35] text-[#39531e] no-underline">{regimen.routineTitle}</div>
+                        <div className="min-w-0">
+                          <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] leading-[1.8] text-[#4a621f] no-underline">Scheduled now</div>
+                          <div className="mt-2 break-words pr-4 pt-1 text-[1rem] font-semibold leading-[1.22] text-[#17200e] no-underline transition group-hover:translate-x-0.5 sm:text-[1.05rem]">
+                            {regimen.title}
                           </div>
-                          <div className="mt-5 grid grid-cols-1 gap-2 px-3 pb-4 min-[360px]:grid-cols-2">
-                            <div className="rounded-[0.8rem] border px-3.5 py-4.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
-                              <div className="pl-2 text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Tasks</div>
-                              <div className="mt-2 px-1 pb-1 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.taskCount}</div>
-                            </div>
-                            <div className="rounded-[0.8rem] border px-3.5 py-4.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
-                              <div className="pl-2 text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Left</div>
-                              <div className="mt-2 px-1 pb-1 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.remainingTaskCount}</div>
-                            </div>
+                          <div className="mt-2.5 break-words pr-4 text-[0.88rem] leading-[1.35] text-[#39531e] no-underline">{regimen.routineTitle}</div>
+                        </div>
+                        <div className="mt-5 grid grid-cols-1 gap-2 pb-1 min-[360px]:grid-cols-2">
+                          <div className="rounded-[0.8rem] border px-3.5 py-4" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                            <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Tasks</div>
+                            <div className="mt-2 px-0.5 pb-0.5 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.taskCount}</div>
+                          </div>
+                          <div className="rounded-[0.8rem] border px-3.5 py-4" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                            <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Left</div>
+                            <div className="mt-2 px-0.5 pb-0.5 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.remainingTaskCount}</div>
                           </div>
                         </div>
                       </Link>
