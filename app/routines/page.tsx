@@ -613,26 +613,26 @@ export default function RoutinesPage() {
         ) : null}
         {!showCreateForm ? (
         <>
-        <div className="order-1 mb-12 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <div className="peridot-panel-soft peridot-stat-card">
+        <div className="order-1 mb-8 grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="peridot-panel-soft min-h-[4.6rem] px-4 py-3 sm:min-h-[5rem] sm:px-5 sm:py-3.5">
             <div className="mb-2 flex items-start justify-between gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Total Routines</span>
               <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{routines.length}</div>
             </div>
           </div>
-          <div className="peridot-panel-soft peridot-stat-card">
+          <div className="peridot-panel-soft min-h-[4.6rem] px-4 py-3 sm:min-h-[5rem] sm:px-5 sm:py-3.5">
             <div className="mb-2 flex items-start justify-between gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Active Routines</span>
               <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{activeRoutines}</div>
             </div>
           </div>
-          <div className="peridot-panel-soft peridot-stat-card">
+          <div className="peridot-panel-soft min-h-[4.6rem] px-4 py-3 sm:min-h-[5rem] sm:px-5 sm:py-3.5">
             <div className="mb-2 flex items-start justify-between gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Flows</span>
               <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{totalRegimens}</div>
             </div>
           </div>
-          <div className="peridot-panel-soft peridot-stat-card">
+          <div className="peridot-panel-soft min-h-[4.6rem] px-4 py-3 sm:min-h-[5rem] sm:px-5 sm:py-3.5">
             <div className="mb-2 flex items-start justify-between gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Total Tasks</span>
               <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{totalTasks}</div>
@@ -640,8 +640,8 @@ export default function RoutinesPage() {
           </div>
         </div>
 
-        <div className="order-2 mb-8">
-          <Button onClick={openCreateRoutine} className="h-12 w-full justify-center rounded-2xl border border-emerald-300/25 bg-emerald-300 px-5 font-semibold text-emerald-950 shadow-[0_12px_36px_rgba(110,231,183,0.18)] hover:bg-emerald-200 sm:w-auto"><Plus className="mr-2 h-5 w-5" />Create Routine</Button>
+        <div className="order-2 mb-6">
+          <Button onClick={openCreateRoutine} className="h-11 w-full justify-center rounded-2xl border border-emerald-300/25 bg-emerald-300 px-5 font-semibold text-emerald-950 shadow-[0_12px_36px_rgba(110,231,183,0.18)] hover:bg-emerald-200 sm:w-auto"><Plus className="mr-2 h-5 w-5" />Create Routine</Button>
         </div>
 
         <div className="order-4">
@@ -665,24 +665,24 @@ export default function RoutinesPage() {
             </Button>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {routines.map((routine) => (
               <div key={routine.id} className="overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
-                <div className="border-b border-white/10 bg-white/5 px-6 py-5">
-                  <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                <div className="border-b border-white/10 bg-white/5 px-4 py-4 sm:px-6 sm:py-5">
+                  <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
                     <div className="min-w-0 flex-1">
                       <button
                         type="button"
                         onClick={() => setCollapsedRoutines((current) => ({ ...current, [routine.id]: !current[routine.id] }))}
-                        className="flex w-full items-start gap-4 text-left text-white"
+                        className="flex w-full items-start gap-3 text-left text-white"
                       >
                         <span className="mt-0.5 rounded-2xl border border-white/10 bg-white/5 p-2">
                           {collapsedRoutines[routine.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
                         </span>
-                        <div className="min-w-0 pt-1">
+                        <div className="min-w-0 pt-0.5">
                           <div className="peridot-meta text-[10px] text-white/35">Routine</div>
-                          <h4 className="peridot-display mt-2 text-[1.4rem] font-semibold leading-[1.02] tracking-tight sm:text-2xl">{routine.title}</h4>
-                          <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+                          <h4 className="peridot-display mt-1.5 text-[1.28rem] font-semibold leading-[1.02] tracking-tight sm:text-2xl">{routine.title}</h4>
+                          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
                             <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] text-emerald-100/80">
                               {formatLabel(routine.category)}
                             </span>
@@ -691,19 +691,19 @@ export default function RoutinesPage() {
                       </button>
                     </div>
 
-                    <div className="grid gap-3 xl:w-[28rem]">
+                    <div className="grid gap-2.5 xl:w-[26rem]">
                       <div className="grid grid-cols-2 gap-2">
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-left">
+                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-2.5 text-left">
                           <div className="peridot-meta text-[10px] text-white/45">Flows</div>
-                          <div className="peridot-display mt-2 text-[1.5rem] leading-none text-white">{routine.regimens.length}</div>
+                          <div className="peridot-display mt-1.5 text-[1.35rem] leading-none text-white">{routine.regimens.length}</div>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-left">
+                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-2.5 text-left">
                           <div className="peridot-meta text-[10px] text-white/45">Tasks</div>
-                          <div className="peridot-display mt-2 text-[1.5rem] leading-none text-white">{countTasks(routine.regimens)}</div>
+                          <div className="peridot-display mt-1.5 text-[1.35rem] leading-none text-white">{countTasks(routine.regimens)}</div>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-3">
+                      <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-2.5">
                         <Button type="button" variant="ghost" onClick={() => openEditRoutine(routine)} className="h-10 rounded-2xl border border-white/10 bg-white/5 px-2 text-white hover:bg-white/10">
                           <Pencil className="mr-1.5 h-4 w-4 shrink-0" />
                           Edit
@@ -722,7 +722,7 @@ export default function RoutinesPage() {
                 </div>
 
                 {!collapsedRoutines[routine.id] ? (
-                  <div className="space-y-5 p-6">
+                  <div className="space-y-4 p-4 sm:p-6">
                     {routine.regimens.map((regimen) => {
                       const tintMeta = getRegimenTintMeta(regimen.colorTint)
 
