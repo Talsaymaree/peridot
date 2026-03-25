@@ -224,28 +224,30 @@ export function DashboardOverview() {
                       <Link
                         key={regimen.id}
                         href={scheduleHref}
-                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-6 py-6"
+                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border p-3"
                         style={{
                           borderColor: tintRgba(tint, 0.44),
                           background: `linear-gradient(180deg, ${tintRgba(tint, 0.82)}, ${tintRgba(tint, 0.66)})`,
                           boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.12)}, 0 14px 28px ${tintRgba(tint, 0.16)}`,
                         }}
                       >
-                        <div className="min-w-0">
-                          <div className="peridot-meta px-2 text-[10px] text-[#2f4419]">Scheduled now</div>
-                          <div className="peridot-display mt-2 break-words px-2 pr-4 text-[0.95rem] leading-[1.15] text-[#17200e] transition group-hover:translate-x-0.5">
-                            {regimen.title}
+                        <div className="rounded-[0.95rem] bg-white/[0.08] px-3 py-3.5">
+                          <div className="min-w-0">
+                            <div className="peridot-meta px-1 text-[10px] text-[#2f4419]">Scheduled now</div>
+                            <div className="peridot-display mt-2 break-words px-1 pr-2 text-[0.88rem] leading-[1.18] text-[#17200e] transition group-hover:translate-x-0.5 sm:text-[0.95rem]">
+                              {regimen.title}
+                            </div>
+                            <div className="peridot-meta mt-3 break-words px-1 pr-2 text-[10px] leading-[1.45] text-[#39531e]">{regimen.routineTitle}</div>
                           </div>
-                          <div className="peridot-meta mt-3 break-words px-2 pr-4 text-[10px] leading-[1.45] text-[#39531e]">{regimen.routineTitle}</div>
-                        </div>
-                        <div className="mt-5 grid grid-cols-2 gap-3 px-2">
-                          <div className="rounded-[0.8rem] border px-3 py-2.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
-                            <div className="peridot-meta text-[10px] text-[#4a621f]">Tasks</div>
-                            <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.taskCount}</div>
-                          </div>
-                          <div className="rounded-[0.8rem] border px-3 py-2.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
-                            <div className="peridot-meta text-[10px] text-[#4a621f]">Left</div>
-                            <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.remainingTaskCount}</div>
+                          <div className="mt-4 grid grid-cols-2 gap-2 px-1">
+                            <div className="rounded-[0.8rem] border px-3 py-2.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                              <div className="peridot-meta text-[10px] text-[#4a621f]">Tasks</div>
+                              <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.taskCount}</div>
+                            </div>
+                            <div className="rounded-[0.8rem] border px-3 py-2.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                              <div className="peridot-meta text-[10px] text-[#4a621f]">Left</div>
+                              <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.remainingTaskCount}</div>
+                            </div>
                           </div>
                         </div>
                       </Link>
@@ -254,11 +256,11 @@ export function DashboardOverview() {
                 </div>
               )}
 
-              <div className="mt-5 flex flex-col gap-2 sm:flex-row">
-                <Button asChild className="peridot-display h-10 flex-1 rounded-xl border border-emerald-300/25 bg-emerald-300 px-4 text-sm font-semibold text-emerald-950 hover:bg-emerald-200">
+              <div className="mt-5 grid grid-cols-2 gap-2">
+                <Button asChild className="peridot-display h-9 rounded-xl border border-emerald-300/25 bg-emerald-300 px-3 text-[0.8rem] font-semibold text-emerald-950 hover:bg-emerald-200 sm:h-10 sm:px-4 sm:text-sm">
                   <a href="/routines">Open Routines</a>
                 </Button>
-                <Button variant="ghost" asChild className="peridot-display h-10 flex-1 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10">
+                <Button variant="ghost" asChild className="peridot-display h-9 rounded-xl border border-white/10 bg-white/5 px-3 text-[0.8rem] text-white hover:bg-white/10 sm:h-10 sm:px-4 sm:text-sm">
                   <a href="/calendar">Open Calendar</a>
                 </Button>
               </div>
