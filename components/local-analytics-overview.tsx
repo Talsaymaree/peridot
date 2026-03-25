@@ -237,9 +237,6 @@ export function LocalAnalyticsOverview() {
                     <div className="max-w-2xl">
                       <div className="peridot-section-label text-xs text-white/45">{selectedRange === 'all' ? 'All Time' : `Last ${rangeLabel}`}</div>
                       <h3 className="peridot-panel-heading mt-2 text-2xl font-semibold text-white">Momentum curve</h3>
-                      <p className="peridot-copy mt-3 max-w-xl text-sm text-white/58">
-                        The trend line keeps the signal visible without forcing you to read a dense dashboard.
-                      </p>
                     </div>
 
                     {!isLoading ? (
