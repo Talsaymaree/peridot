@@ -361,44 +361,44 @@ export function LocalAnalyticsOverview() {
 
                   <div className="space-y-3">
                     {isLoading ? (
-                      <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-5 text-sm text-white/50">
+                      <div className="rounded-[1.2rem] border border-[#d6ea9e]/30 bg-[rgba(233,241,201,0.14)] px-6 py-5 text-sm text-white/50">
                         Loading flow activity...
                       </div>
                     ) : hasFlowActivity ? (
                       topRegimens.map((regimen, index) => (
-                        <div key={regimen.regimenId} className="rounded-[1.1rem] border border-white/10 bg-white/[0.04] px-4 py-4">
+                        <div key={regimen.regimenId} className="rounded-[1.1rem] border border-[#d6ea9e]/30 bg-[rgba(233,241,201,0.14)] px-6 py-5">
                           <div className="flex items-start justify-between gap-4">
                             <div className="min-w-0 flex-1">
                               <div className="flex items-start gap-3">
-                                <span className="peridot-meta mt-0.5 shrink-0 rounded-full border border-white/10 bg-white/[0.05] px-2 py-1 text-[10px] text-white/55">
+                                <span className="peridot-meta mt-0.5 shrink-0 rounded-full border border-[#d6ea9e]/35 bg-[rgba(233,241,201,0.18)] px-2.5 py-1 text-[10px] text-[#6f8542]">
                                   {String(index + 1).padStart(2, '0')}
                                 </span>
                                 <div className="min-w-0">
-                                  <div className="peridot-display text-[1.02rem] leading-[1.08] text-white">
+                                  <div className="peridot-display text-[1.02rem] leading-[1.12] text-[#14200e]">
                                     {regimen.regimenTitle}
                                   </div>
-                                  <div className="peridot-meta mt-2 text-[10px] text-white/45">
+                                  <div className="peridot-meta mt-2 text-[10px] text-[#6f8542]">
                                     {regimen.routineTitle}
                                   </div>
                                 </div>
                               </div>
                             </div>
-                            <div className="min-w-[3rem] text-right">
-                              <div className="peridot-display text-[1.6rem] leading-none text-white">
+                            <div className="min-w-[4rem] pl-4 text-right">
+                              <div className="peridot-display text-[1.6rem] leading-none text-[#14200e]">
                                 {regimen.completedCount}
                               </div>
-                              <div className="peridot-meta mt-1 text-[10px] text-white/40">Done</div>
+                              <div className="peridot-meta mt-1 text-[10px] text-[#6f8542]">Done</div>
                             </div>
                           </div>
 
-                          <div className="mt-4 rounded-full bg-white/[0.05] p-[3px]">
+                          <div className="mt-4 rounded-full bg-[rgba(214,234,158,0.2)] p-[3px]">
                             <div
                               className="h-3 rounded-full bg-gradient-to-r from-emerald-300 via-lime-200 to-cyan-200"
                               style={{ width: `${Math.max((regimen.completedCount / peakRegimenValue) * 100, regimen.completedCount > 0 ? 16 : 0)}%` }}
                             />
                           </div>
 
-                          <div className="peridot-meta mt-3 text-[10px] text-white/38">
+                          <div className="peridot-meta mt-3 text-[10px] text-[#6f8542]">
                             {regimen.lastCompletedAt
                               ? `Last completed ${completedFormatter.format(new Date(regimen.lastCompletedAt))}`
                               : 'No completion date yet'}
@@ -406,7 +406,7 @@ export function LocalAnalyticsOverview() {
                         </div>
                       ))
                     ) : (
-                      <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-white/[0.03] px-4 py-5 text-sm text-white/50">
+                      <div className="rounded-[1.2rem] border border-dashed border-[#d6ea9e]/30 bg-[rgba(233,241,201,0.14)] px-6 py-5 text-sm text-white/50">
                         Flow rankings will appear once you start completing tasks.
                       </div>
                     )}

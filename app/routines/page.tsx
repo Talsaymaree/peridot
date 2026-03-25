@@ -77,8 +77,6 @@ type RoutineDraft = {
 
 const categories = ['WORKOUT', 'LEARNING', 'PRODUCTIVITY', 'HABITS', 'CUSTOM']
 const cadenceOptions = ['DAILY', 'WEEKLY', 'SEMI_WEEKLY', 'MONTHLY', 'CUSTOM']
-const priorityOptions = ['HIGH', 'MEDIUM', 'LOW']
-const statusOptions = ['TODO', 'IN_PROGRESS', 'COMPLETED']
 const recurrenceOptions = ['NONE', 'WEEKLY', 'SEMI_WEEKLY', 'MONTHLY']
 const weekdays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
 
@@ -589,16 +587,13 @@ export default function RoutinesPage() {
                               <h6 className="text-sm font-semibold text-white">Task {taskIndex + 1}</h6>
                               <p className="mt-1 text-sm text-white/55">{task.title.trim() || 'Select this task to add details and reference media.'}</p>
                             </button>
-                            {regimen.tasks.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeTaskFromRegimen(regimenIndex, taskIndex)} className="h-9 w-9 rounded-xl border border-emerald-200/30 bg-emerald-100/12 p-0 !text-[#f7faef] hover:bg-emerald-100/18 hover:!text-[#f7faef] [&_svg]:!text-[#f7faef]"><X className="h-4 w-4 !text-[#f7faef]" /></Button> : null}
+                            {regimen.tasks.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeTaskFromRegimen(regimenIndex, taskIndex)} className="h-9 w-9 rounded-xl border border-white/10 bg-black/10 p-0 !text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-white/10 hover:!text-white [&_svg]:!text-white"><X className="h-4 w-4 !text-white" /></Button> : null}
                           </div>
                           {taskIndex === activeTaskIndex ? <div className="grid gap-5 md:grid-cols-2">
                             <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Task Title</label><Input value={task.title} onChange={(event) => updateTask(regimenIndex, taskIndex, { title: event.target.value })} className="peridot-control h-11" /></div>
                             <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Task Description</label><Textarea value={task.description} onChange={(event) => updateTask(regimenIndex, taskIndex, { description: event.target.value })} className="peridot-control min-h-[120px]" rows={4} /></div>
-                            <div><label className="mb-2 block text-sm font-medium text-white/90">Priority</label><select value={task.priority} onChange={(event) => updateTask(regimenIndex, taskIndex, { priority: event.target.value })} className="peridot-control h-11 w-full px-3 outline-none">{priorityOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}</select></div>
-                            <div><label className="mb-2 block text-sm font-medium text-white/90">Status</label><select value={task.status} onChange={(event) => updateTask(regimenIndex, taskIndex, { status: event.target.value })} className="peridot-control h-11 w-full px-3 outline-none">{statusOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}</select></div>
-                            <div className="md:max-w-sm"><label className="mb-2 block text-sm font-medium text-white/90">Schedule Label</label><Input value={task.dueLabel} onChange={(event) => updateTask(regimenIndex, taskIndex, { dueLabel: event.target.value })} className="peridot-control h-11" /></div>
                             <div className="md:col-span-2 peridot-panel-deep p-4 sm:p-5"><div className="mb-4"><h6 className="text-sm font-semibold text-white">Reference Media</h6><p className="mt-1 text-sm leading-6 text-white/60">YouTube, image, or any supporting link.</p></div><div className="grid gap-5 md:grid-cols-2"><div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Reference URL</label><Input value={task.referenceUrl} onChange={(event) => updateTask(regimenIndex, taskIndex, { referenceUrl: event.target.value })} className="peridot-control h-11" /></div><div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Reference Label</label><Input value={task.referenceLabel} onChange={(event) => updateTask(regimenIndex, taskIndex, { referenceLabel: event.target.value })} className="peridot-control h-11" /></div></div>{task.referenceUrl.trim() ? <div className="mt-5"><ReferencePreview url={task.referenceUrl} label={task.referenceLabel} /></div> : null}</div>
-                          </div> : <div className="flex flex-wrap gap-x-3 gap-y-2 text-xs uppercase tracking-[0.16em] text-white/58"><span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1">{formatLabel(task.priority)}</span><span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1">{formatLabel(task.status)}</span>{task.dueLabel ? <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1">{task.dueLabel}</span> : null}</div>}
+                          </div> : null}
                         </div>
                       ))}
                     </div>
@@ -613,29 +608,29 @@ export default function RoutinesPage() {
         ) : null}
         {!showCreateForm ? (
         <>
-        <div className="order-1 mb-8 grid grid-cols-1 gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
-          <div className="peridot-panel-soft min-h-[4.6rem] px-4 py-3 sm:min-h-[5rem] sm:px-5 sm:py-3.5">
-            <div className="mb-2 flex items-start justify-between gap-3">
+        <div className="order-1 mb-6 grid grid-cols-2 gap-2.5 xl:grid-cols-4">
+          <div className="peridot-panel-soft min-h-[3.9rem] px-4 py-3 sm:min-h-[4.2rem] sm:px-5">
+            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Total Routines</span>
-              <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{routines.length}</div>
+              <div className="peridot-stat-value text-2xl font-semibold leading-none text-white sm:text-[2rem]">{routines.length}</div>
             </div>
           </div>
-          <div className="peridot-panel-soft min-h-[4.6rem] px-4 py-3 sm:min-h-[5rem] sm:px-5 sm:py-3.5">
-            <div className="mb-2 flex items-start justify-between gap-3">
+          <div className="peridot-panel-soft min-h-[3.9rem] px-4 py-3 sm:min-h-[4.2rem] sm:px-5">
+            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Active Routines</span>
-              <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{activeRoutines}</div>
+              <div className="peridot-stat-value text-2xl font-semibold leading-none text-white sm:text-[2rem]">{activeRoutines}</div>
             </div>
           </div>
-          <div className="peridot-panel-soft min-h-[4.6rem] px-4 py-3 sm:min-h-[5rem] sm:px-5 sm:py-3.5">
-            <div className="mb-2 flex items-start justify-between gap-3">
+          <div className="peridot-panel-soft min-h-[3.9rem] px-4 py-3 sm:min-h-[4.2rem] sm:px-5">
+            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Flows</span>
-              <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{totalRegimens}</div>
+              <div className="peridot-stat-value text-2xl font-semibold leading-none text-white sm:text-[2rem]">{totalRegimens}</div>
             </div>
           </div>
-          <div className="peridot-panel-soft min-h-[4.6rem] px-4 py-3 sm:min-h-[5rem] sm:px-5 sm:py-3.5">
-            <div className="mb-2 flex items-start justify-between gap-3">
+          <div className="peridot-panel-soft min-h-[3.9rem] px-4 py-3 sm:min-h-[4.2rem] sm:px-5">
+            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-3">
               <span className="peridot-stat-label text-xs text-white/45">Total Tasks</span>
-              <div className="peridot-stat-value text-2xl font-semibold text-white sm:text-3xl">{totalTasks}</div>
+              <div className="peridot-stat-value text-2xl font-semibold leading-none text-white sm:text-[2rem]">{totalTasks}</div>
             </div>
           </div>
         </div>
@@ -669,35 +664,34 @@ export default function RoutinesPage() {
             {routines.map((routine) => (
               <div key={routine.id} className="overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
                 <div className="border-b border-white/10 bg-white/5 px-4 py-4 sm:px-6 sm:py-5">
-                  <div className="flex flex-col gap-3 xl:flex-row xl:items-start xl:justify-between">
+                  <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                     <div className="min-w-0 flex-1">
-                      <button
-                        type="button"
-                        onClick={() => setCollapsedRoutines((current) => ({ ...current, [routine.id]: !current[routine.id] }))}
-                        className="flex w-full items-start gap-3 text-left text-white"
-                      >
-                        <span className="mt-0.5 rounded-2xl border border-white/10 bg-white/5 p-2">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setCollapsedRoutines((current) => ({ ...current, [routine.id]: !current[routine.id] }))}
+                          className="rounded-2xl border border-white/10 bg-white/5 p-2 text-white transition hover:bg-white/10"
+                          aria-label={collapsedRoutines[routine.id] ? `Expand ${routine.title}` : `Collapse ${routine.title}`}
+                        >
                           {collapsedRoutines[routine.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
+                        </button>
+                        <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] text-emerald-100/80">
+                          {formatLabel(routine.category)}
                         </span>
-                        <div className="min-w-0 pt-0.5">
-                          <div className="peridot-meta text-[10px] text-white/35">Routine</div>
-                          <h4 className="peridot-display mt-1.5 text-[1.28rem] font-semibold leading-[1.02] tracking-tight sm:text-2xl">{routine.title}</h4>
-                          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-                            <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] text-emerald-100/80">
-                              {formatLabel(routine.category)}
-                            </span>
-                          </div>
-                        </div>
-                      </button>
+                      </div>
+                      <div className="mt-4 min-w-0 pt-0.5 text-white">
+                        <div className="peridot-meta text-[10px] text-white/35">Routine</div>
+                        <h4 className="peridot-display mt-1.5 text-[1.28rem] font-semibold leading-[1.02] tracking-tight sm:text-2xl">{routine.title}</h4>
+                      </div>
                     </div>
 
                     <div className="grid gap-2.5 xl:w-[26rem]">
                       <div className="grid grid-cols-2 gap-2">
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-2.5 text-left">
+                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-center">
                           <div className="peridot-meta text-[10px] text-white/45">Flows</div>
                           <div className="peridot-display mt-1.5 text-[1.35rem] leading-none text-white">{routine.regimens.length}</div>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-2.5 text-left">
+                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-center">
                           <div className="peridot-meta text-[10px] text-white/45">Tasks</div>
                           <div className="peridot-display mt-1.5 text-[1.35rem] leading-none text-white">{countTasks(routine.regimens)}</div>
                         </div>

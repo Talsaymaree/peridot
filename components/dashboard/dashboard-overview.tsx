@@ -215,7 +215,7 @@ export function DashboardOverview() {
                   No flows are scheduled for today yet.
                 </div>
               ) : (
-                <div className="grid gap-3 lg:grid-cols-2">
+                <div className="grid gap-5 lg:grid-cols-2">
                   {todayRegimens.map((regimen) => {
                     const tint = getRegimenTintMeta(regimen.colorTint).value
                     const scheduleHref = `/calendar?date=${isoDate(new Date())}&regimen=${regimen.id}`
@@ -227,23 +227,23 @@ export function DashboardOverview() {
                         className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-5 py-6 no-underline"
                         style={{
                           borderColor: tintRgba(tint, 0.44),
-                          background: `linear-gradient(180deg, ${tintRgba(tint, 0.82)}, ${tintRgba(tint, 0.66)})`,
+                          background: `linear-gradient(180deg, ${tintRgba(tint, 0.34)}, ${tintRgba(tint, 0.22)})`,
                           boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.12)}, 0 14px 28px ${tintRgba(tint, 0.16)}`,
                         }}
                       >
-                        <div className="min-w-0">
+                        <div className="min-w-0 text-center">
                           <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] leading-[1.8] text-[#4a621f] no-underline">Scheduled now</div>
-                          <div className="mt-3 break-words pr-4 pt-1 text-[1rem] font-semibold leading-[1.22] text-[#17200e] no-underline transition group-hover:translate-x-0.5 sm:text-[1.05rem]">
+                          <div className="mt-3 break-words pt-1 text-[1rem] font-semibold leading-[1.22] text-[#17200e] no-underline transition group-hover:translate-y-0.5 sm:text-[1.05rem]">
                             {regimen.title}
                           </div>
-                          <div className="mt-3.5 break-words pr-4 text-[0.88rem] leading-[1.35] text-[#39531e] no-underline">{regimen.routineTitle}</div>
+                          <div className="mt-3.5 break-words text-[0.88rem] leading-[1.35] text-[#39531e] no-underline">{regimen.routineTitle}</div>
                         </div>
-                        <div className="mt-6 grid grid-cols-1 gap-2.5 pb-1 min-[360px]:grid-cols-2">
-                          <div className="rounded-[0.8rem] border px-3.5 py-4" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                        <div className="mt-7 grid grid-cols-1 gap-3 pb-2 min-[360px]:grid-cols-2">
+                          <div className="rounded-[0.8rem] border px-3.5 py-4 text-center" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: tintRgba(tint, 0.12) }}>
                             <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Tasks</div>
                             <div className="mt-2 px-0.5 pb-0.5 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.taskCount}</div>
                           </div>
-                          <div className="rounded-[0.8rem] border px-3.5 py-4" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                          <div className="rounded-[0.8rem] border px-3.5 py-4 text-center" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: tintRgba(tint, 0.12) }}>
                             <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Left</div>
                             <div className="mt-2 px-0.5 pb-0.5 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.remainingTaskCount}</div>
                           </div>
@@ -254,7 +254,7 @@ export function DashboardOverview() {
                 </div>
               )}
 
-              <div className="mt-5 grid grid-cols-2 gap-2">
+              <div className="mt-8 grid grid-cols-2 gap-2">
                 <Button asChild className="peridot-display h-9 rounded-xl border border-emerald-300/25 bg-emerald-300 px-3 text-[0.8rem] font-semibold text-emerald-950 hover:bg-emerald-200 sm:h-10 sm:px-4 sm:text-sm">
                   <a href="/routines">Open Routines</a>
                 </Button>
