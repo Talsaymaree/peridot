@@ -474,12 +474,12 @@ export default function RoutinesPage() {
                     }}
                   >
                     <div className="-mx-5 -mt-5 mb-5 border-b px-5 py-4 sm:-mx-6 sm:-mt-6 sm:px-6" style={{ borderColor: tintRgba(tintMeta.value, 0.16), backgroundColor: tintRgba(tintMeta.value, isActiveFlow ? 0.16 : 0.08) }}>
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="flex flex-col gap-4">
                       <button type="button" onClick={() => selectRegimen(regimenIndex)} className="min-w-0 flex-1 text-left">
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.18em]" style={{ borderColor: tintRgba(tintMeta.value, 0.28), backgroundColor: tintRgba(tintMeta.value, 0.18), color: '#f4f8ea' }}>Flow {regimenIndex + 1}</span>
-                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(tintMeta.value, 0.2), backgroundColor: tintRgba(tintMeta.value, 0.12), color: 'rgba(244,248,234,0.8)' }}>{formatLabel(regimen.cadence)}</span>
-                          <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] text-white/68">{titledTasks}/{regimen.tasks.length} titled tasks</span>
+                        <div className="flex flex-wrap items-center gap-2.5">
+                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.18em]" style={{ borderColor: tintRgba(tintMeta.value, 0.3), backgroundColor: tintRgba(tintMeta.value, 0.22), color: '#13200f' }}>Flow {regimenIndex + 1}</span>
+                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(tintMeta.value, 0.26), backgroundColor: tintRgba(tintMeta.value, 0.18), color: '#24361b' }}>{formatLabel(regimen.cadence)}</span>
+                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(tintMeta.value, 0.22), backgroundColor: 'rgba(8,12,10,0.18)', color: '#eef6dc' }}>{titledTasks}/{regimen.tasks.length} titled tasks</span>
                         </div>
                         <div className="mt-3 flex items-start gap-3">
                           <span className="mt-1 h-3.5 w-3.5 shrink-0 rounded-full ring-2 ring-black/10" style={{ backgroundColor: tintMeta.value }} />
@@ -489,18 +489,19 @@ export default function RoutinesPage() {
                           </div>
                         </div>
                       </button>
-                      <div className="flex items-center gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => duplicateRegimenAt(regimenIndex)}
-                          className="h-9 rounded-xl border border-emerald-200/30 bg-[#243126] px-3 !text-[#f7faef] hover:bg-[#2b392d] hover:!text-[#f7faef] [&_svg]:!text-[#f7faef]"
+                          className="h-10 w-full rounded-xl border px-3 !text-[#f7faef] [&_svg]:!text-[#f7faef]"
+                          style={{ borderColor: tintRgba(tintMeta.value, 0.28), backgroundColor: 'rgba(26,38,30,0.78)' }}
                         >
                           <Copy className="mr-2 h-4 w-4 !text-[#f7faef]" />
                           Duplicate
                         </Button>
-                        {formData.regimens.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeRegimenAt(regimenIndex)} className="h-9 w-9 rounded-xl border border-emerald-200/30 bg-emerald-100/12 p-0 !text-[#f7faef] hover:bg-emerald-100/18 hover:!text-[#f7faef] [&_svg]:!text-[#f7faef]"><X className="h-4 w-4 !text-[#f7faef]" /></Button> : null}
+                        {formData.regimens.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeRegimenAt(regimenIndex)} className="h-10 w-full rounded-xl border px-3 !text-[#f7faef] [&_svg]:!text-[#f7faef]" style={{ borderColor: tintRgba(tintMeta.value, 0.22), backgroundColor: 'rgba(255,255,255,0.12)' }}><X className="mr-2 h-4 w-4 !text-[#f7faef]" />Remove</Button> : <div />}
                       </div>
                     </div>
                     </div>
@@ -585,19 +586,21 @@ export default function RoutinesPage() {
                         <Button type="button" variant="ghost" size="sm" onClick={() => addTaskToRegimen(regimenIndex)} className="h-9 w-full rounded-xl border border-emerald-200/30 bg-[#243126] px-3 !text-[#f7faef] hover:bg-[#2b392d] hover:!text-[#f7faef] [&_svg]:!text-[#f7faef] sm:w-auto"><Plus className="mr-2 h-3 w-3 !text-[#f7faef]" />Add Task</Button>
                       </div>
                       {regimen.tasks.map((task, taskIndex) => (
-                        <div key={taskIndex} className={`peridot-panel-soft p-4 transition-colors sm:p-5 ${taskIndex === activeTaskIndex ? 'border-white/18 bg-black/20' : 'bg-black/10'}`}>
+                        <div key={taskIndex} className="flex items-stretch gap-3">
+                          <div className="peridot-panel-soft flex-1 p-4 transition-colors sm:p-5" style={{ borderColor: tintRgba(tintMeta.value, taskIndex === activeTaskIndex ? 0.3 : 0.2), background: `linear-gradient(180deg, ${tintRgba(tintMeta.value, taskIndex === activeTaskIndex ? 0.2 : 0.12)}, ${tintRgba(tintMeta.value, taskIndex === activeTaskIndex ? 0.1 : 0.06)})` }}>
                           <div className="mb-4 flex items-start justify-between gap-3">
                             <button type="button" onClick={() => setActiveTaskIndex(taskIndex)} className="min-w-0 flex-1 text-left">
                               <h6 className="text-sm font-semibold text-white">Task {taskIndex + 1}</h6>
                               <p className="mt-1 text-sm text-white/55">{task.title.trim() || 'Select this task to add details and reference media.'}</p>
                             </button>
-                            {regimen.tasks.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeTaskFromRegimen(regimenIndex, taskIndex)} className="h-9 w-9 rounded-xl border border-white/10 bg-black/10 p-0 !text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:bg-white/10 hover:!text-white [&_svg]:!text-white"><X className="h-4 w-4 !text-white" /></Button> : null}
                           </div>
                           {taskIndex === activeTaskIndex ? <div className="grid gap-5 md:grid-cols-2">
                             <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Task Title</label><Input value={task.title} onChange={(event) => updateTask(regimenIndex, taskIndex, { title: event.target.value })} className="peridot-control h-11" /></div>
                             <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Task Description</label><Textarea value={task.description} onChange={(event) => updateTask(regimenIndex, taskIndex, { description: event.target.value })} className="peridot-control min-h-[120px]" rows={4} /></div>
                             <div className="md:col-span-2 peridot-panel-deep p-4 sm:p-5"><div className="mb-4"><h6 className="text-sm font-semibold text-white">Reference Media</h6><p className="mt-1 text-sm leading-6 text-white/60">YouTube, image, or any supporting link.</p></div><div className="grid gap-5 md:grid-cols-2"><div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Reference URL</label><Input value={task.referenceUrl} onChange={(event) => updateTask(regimenIndex, taskIndex, { referenceUrl: event.target.value })} className="peridot-control h-11" /></div><div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Reference Label</label><Input value={task.referenceLabel} onChange={(event) => updateTask(regimenIndex, taskIndex, { referenceLabel: event.target.value })} className="peridot-control h-11" /></div></div>{task.referenceUrl.trim() ? <div className="mt-5"><ReferencePreview url={task.referenceUrl} label={task.referenceLabel} /></div> : null}</div>
                           </div> : null}
+                          </div>
+                          {regimen.tasks.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeTaskFromRegimen(regimenIndex, taskIndex)} className="self-stretch rounded-xl border p-0 !text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:!text-white [&_svg]:!text-white" style={{ width: '2.9rem', minHeight: taskIndex === activeTaskIndex ? '100%' : 'auto', borderColor: tintRgba(tintMeta.value, 0.24), backgroundColor: tintRgba(tintMeta.value, 0.14) }}><span className="flex h-full min-h-[4.5rem] items-center justify-center"><X className="h-4 w-4 !text-white" /></span></Button> : null}
                         </div>
                       ))}
                     </div>
@@ -670,7 +673,7 @@ export default function RoutinesPage() {
                 <div className="border-b border-white/10 bg-white/5 px-4 py-4 sm:px-6 sm:py-5">
                   <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                     <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-2.5">
                         <button
                           type="button"
                           onClick={() => setCollapsedRoutines((current) => ({ ...current, [routine.id]: !current[routine.id] }))}
@@ -679,15 +682,15 @@ export default function RoutinesPage() {
                         >
                           {collapsedRoutines[routine.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
                         </button>
-                        <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] text-emerald-100/80">
+                        <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3.5 py-1.5 text-[10px] leading-none text-emerald-100/85">
                           {formatLabel(routine.category)}
                         </span>
-                        <h4 className="peridot-display min-w-0 text-[1.28rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-2xl">
-                          {routine.title}
-                        </h4>
                       </div>
+                      <h4 className="peridot-display mt-3 min-w-0 text-[1.28rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-2xl">
+                        {routine.title}
+                      </h4>
                     </div>
-
+                    
                     <div className="grid gap-2.5 xl:w-[26rem]">
                       <div className="grid grid-cols-2 gap-2">
                         <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-center">
@@ -724,26 +727,28 @@ export default function RoutinesPage() {
                       const tintMeta = getRegimenTintMeta(regimen.colorTint)
 
                       return (
-                      <div key={regimen.id} className="overflow-hidden rounded-[26px] border border-white/10 bg-[#0f1714]">
+                      <div key={regimen.id} className="overflow-hidden rounded-[26px] border" style={{ borderColor: tintRgba(tintMeta.value, 0.3), background: `linear-gradient(180deg, ${tintRgba(tintMeta.value, 0.16)}, ${tintRgba(tintMeta.value, 0.07)})` }}>
                         <button
                           type="button"
                           onClick={() => setCollapsedRegimens((current) => ({ ...current, [regimen.id]: !current[regimen.id] }))}
-                          className="flex w-full items-start justify-between gap-4 border-b border-white/10 bg-white/5 px-5 py-4 text-left"
+                          className="flex w-full items-start justify-between gap-4 border-b px-5 py-4 text-left"
+                          style={{ borderColor: tintRgba(tintMeta.value, 0.24), backgroundColor: tintRgba(tintMeta.value, 0.12) }}
                         >
                           <div className="min-w-0 flex-1">
                             <div className="flex items-start gap-3">
-                              <span className="mt-1 h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: tintMeta.value }} />
+                              <span className="mt-1 h-3 w-3 shrink-0 rounded-full ring-2 ring-black/10" style={{ backgroundColor: tintMeta.value }} />
                               <div className="min-w-0">
                                 <h5 className="text-lg font-semibold text-white">{regimen.title}</h5>
-                                <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
-                                  <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/60">
+                                <div className="mt-3 flex flex-wrap items-center gap-2.5">
+                                  <span className="rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.18em]" style={{ borderColor: tintRgba(tintMeta.value, 0.28), backgroundColor: tintRgba(tintMeta.value, 0.22), color: '#13200f' }}>
                                     {formatLabel(regimen.cadence)}
                                   </span>
                                   <span
-                                    className="rounded-full border px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/85"
+                                    className="rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.18em]"
                                     style={{
-                                      borderColor: tintRgba(tintMeta.value, 0.32),
-                                      backgroundColor: tintRgba(tintMeta.value, 0.18),
+                                      borderColor: tintRgba(tintMeta.value, 0.3),
+                                      backgroundColor: tintRgba(tintMeta.value, 0.16),
+                                      color: '#22341b',
                                     }}
                                   >
                                     {regimen.recurrenceType && regimen.recurrenceType !== 'NONE'
@@ -754,7 +759,7 @@ export default function RoutinesPage() {
                               </div>
                             </div>
                           </div>
-                          <span className="rounded-2xl border border-white/10 bg-white/5 p-2">
+                          <span className="rounded-2xl border p-2" style={{ borderColor: tintRgba(tintMeta.value, 0.28), backgroundColor: tintRgba(tintMeta.value, 0.18) }}>
                             {collapsedRegimens[regimen.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
                           </span>
                         </button>
@@ -763,16 +768,11 @@ export default function RoutinesPage() {
                           <div className="space-y-4 p-5">
                             {regimen.description ? <p className="text-white/55">{regimen.description}</p> : null}
                             {regimen.tasks.map((task) => (
-                              <div key={task.id} className="rounded-[22px] border border-white/10 bg-white/[0.04] p-4">
-                                <div className="mb-4 flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                              <div key={task.id} className="rounded-[22px] border p-4" style={{ borderColor: tintRgba(tintMeta.value, 0.22), background: `linear-gradient(180deg, ${tintRgba(tintMeta.value, 0.12)}, ${tintRgba(tintMeta.value, 0.06)})` }}>
+                                <div className="flex flex-col gap-3">
                                   <div className="max-w-2xl">
                                     <h6 className="text-base font-semibold text-white">{task.title}</h6>
                                     <p className="mt-2 text-sm leading-6 text-white/60">{task.description || 'No task description yet.'}</p>
-                                  </div>
-                                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                                    <span className="rounded-full bg-teal-300/12 px-3 py-1 text-xs uppercase tracking-[0.16em] text-teal-100">{formatLabel(task.priority)}</span>
-                                    <span className="rounded-full bg-white/8 px-3 py-1 text-xs uppercase tracking-[0.16em] text-white/70">{formatLabel(task.status)}</span>
-                                    {task.dueLabel ? <span className="rounded-full bg-white/8 px-3 py-1 text-xs uppercase tracking-[0.16em] text-white/70">{task.dueLabel}</span> : null}
                                   </div>
                                 </div>
                                 {task.referenceUrl ? <div><ReferencePreview url={task.referenceUrl} label={task.referenceLabel} /></div> : null}
