@@ -215,7 +215,7 @@ export function DashboardOverview() {
                   No flows are scheduled for today yet.
                 </div>
               ) : (
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3 lg:grid-cols-2">
                   {todayRegimens.map((regimen) => {
                     const tint = getRegimenTintMeta(regimen.colorTint).value
                     const scheduleHref = `/calendar?date=${isoDate(new Date())}&regimen=${regimen.id}`
@@ -234,12 +234,12 @@ export function DashboardOverview() {
                         <div className="rounded-[0.95rem] bg-white/[0.08] px-3 py-3.5">
                           <div className="min-w-0">
                             <div className="peridot-meta px-1 text-[10px] text-[#2f4419]">Scheduled now</div>
-                            <div className="peridot-display mt-2 break-words px-1 pr-2 text-[0.88rem] leading-[1.18] text-[#17200e] transition group-hover:translate-x-0.5 sm:text-[0.95rem]">
+                            <div className="peridot-display mt-2 break-words px-1 pr-4 text-[0.76rem] leading-[1.22] text-[#17200e] transition group-hover:translate-x-0.5 sm:text-[0.9rem]">
                               {regimen.title}
                             </div>
-                            <div className="peridot-meta mt-3 break-words px-1 pr-2 text-[10px] leading-[1.45] text-[#39531e]">{regimen.routineTitle}</div>
+                            <div className="peridot-meta mt-3 break-words px-1 pr-4 text-[10px] leading-[1.45] text-[#39531e]">{regimen.routineTitle}</div>
                           </div>
-                          <div className="mt-4 grid grid-cols-2 gap-2 px-1">
+                          <div className="mt-4 grid grid-cols-1 gap-2 px-1 min-[360px]:grid-cols-2">
                             <div className="rounded-[0.8rem] border px-3 py-2.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
                               <div className="peridot-meta text-[10px] text-[#4a621f]">Tasks</div>
                               <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.taskCount}</div>
