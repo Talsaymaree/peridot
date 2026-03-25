@@ -673,20 +673,20 @@ export default function RoutinesPage() {
             {routines.map((routine) => (
               <div key={routine.id} className="overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
                 <div className="border-b border-white/10 bg-white/5 px-6 py-5">
-                  <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
+                  <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                     <div className="min-w-0 flex-1">
                       <button
                         type="button"
                         onClick={() => setCollapsedRoutines((current) => ({ ...current, [routine.id]: !current[routine.id] }))}
-                        className="flex w-full items-center gap-3 text-left text-white"
+                        className="flex w-full items-start gap-3 text-left text-white"
                       >
-                        <span className="rounded-2xl border border-white/10 bg-white/5 p-2">
+                        <span className="mt-0.5 rounded-2xl border border-white/10 bg-white/5 p-2">
                           {collapsedRoutines[routine.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
                         </span>
                         <div className="min-w-0">
-                          <h4 className="text-2xl font-semibold tracking-tight">{routine.title}</h4>
+                          <h4 className="peridot-display text-[1.4rem] font-semibold leading-tight tracking-tight sm:text-2xl">{routine.title}</h4>
                           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-                            <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-xs uppercase tracking-[0.18em] text-emerald-100/80">
+                            <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] text-emerald-100/80">
                               {formatLabel(routine.category)}
                             </span>
                           </div>
@@ -694,29 +694,29 @@ export default function RoutinesPage() {
                       </button>
                     </div>
 
-                    <div className="flex flex-col gap-3 xl:items-end">
-                      <div className="grid grid-cols-1 gap-3 text-center sm:grid-cols-2">
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3">
-                          <div className="text-lg font-semibold text-white">{routine.regimens.length}</div>
-                          <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">Flows</div>
+                    <div className="grid gap-3 xl:w-[28rem]">
+                      <div className="grid grid-cols-2 gap-2 text-center">
+                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-2.5">
+                          <div className="peridot-display text-[1.35rem] leading-none text-white">{routine.regimens.length}</div>
+                          <div className="peridot-meta mt-2 text-[10px] text-white/45">Flows</div>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3">
-                          <div className="text-lg font-semibold text-white">{countTasks(routine.regimens)}</div>
-                          <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">Tasks</div>
+                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-2.5">
+                          <div className="peridot-display text-[1.35rem] leading-none text-white">{countTasks(routine.regimens)}</div>
+                          <div className="peridot-meta mt-2 text-[10px] text-white/45">Tasks</div>
                         </div>
                       </div>
 
-                      <div className="grid w-full gap-2 sm:grid-cols-3 xl:w-[26rem]">
-                        <Button type="button" variant="ghost" onClick={() => openEditRoutine(routine)} className="h-10 flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 text-white hover:bg-white/10">
-                          <Pencil className="mr-2 h-4 w-4" />
+                      <div className="grid grid-cols-3 gap-2">
+                        <Button type="button" variant="ghost" onClick={() => openEditRoutine(routine)} className="h-10 rounded-2xl border border-white/10 bg-white/5 px-2 text-white hover:bg-white/10">
+                          <Pencil className="mr-1.5 h-4 w-4 shrink-0" />
                           Edit
                         </Button>
-                        <Button type="button" variant="ghost" onClick={() => void duplicateRoutine(routine)} disabled={duplicatingRoutineId === routine.id} className="h-10 flex-1 rounded-2xl border border-white/10 bg-white/5 px-4 text-white hover:bg-white/10">
-                          <Copy className="mr-2 h-4 w-4" />
+                        <Button type="button" variant="ghost" onClick={() => void duplicateRoutine(routine)} disabled={duplicatingRoutineId === routine.id} className="h-10 rounded-2xl border border-white/10 bg-white/5 px-2 text-white hover:bg-white/10">
+                          <Copy className="mr-1.5 h-4 w-4 shrink-0" />
                           {duplicatingRoutineId === routine.id ? 'Duplicating...' : 'Duplicate'}
                         </Button>
-                        <Button type="button" variant="ghost" onClick={() => void deleteRoutine(routine.id)} disabled={deletingRoutineId === routine.id} className="h-10 flex-1 rounded-2xl border border-red-400/20 bg-red-400/10 px-4 text-red-100 hover:bg-red-400/15">
-                          <Trash2 className="mr-2 h-4 w-4" />
+                        <Button type="button" variant="ghost" onClick={() => void deleteRoutine(routine.id)} disabled={deletingRoutineId === routine.id} className="h-10 rounded-2xl border border-red-400/20 bg-red-400/10 px-2 text-red-100 hover:bg-red-400/15">
+                          <Trash2 className="mr-1.5 h-4 w-4 shrink-0" />
                           {deletingRoutineId === routine.id ? 'Deleting...' : 'Delete'}
                         </Button>
                       </div>
