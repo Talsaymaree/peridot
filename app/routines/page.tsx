@@ -741,7 +741,7 @@ export default function RoutinesPage() {
                               <span className="mt-1 h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: tintMeta.value }} />
                               <div className="min-w-0">
                                 <h5 className="text-lg font-semibold text-white">{regimen.title}</h5>
-                                <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+                                <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-3">
                                   <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.18em] text-white/60">
                                     {formatLabel(regimen.cadence)}
                                   </span>
