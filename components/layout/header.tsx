@@ -102,75 +102,80 @@ export function Header() {
       </div>
 
       <div className="lg:hidden">
-        <div className="sticky top-0 z-40 flex min-h-[4.5rem] items-center justify-between border-b border-white/10 bg-black/45 px-4 py-4 backdrop-blur-xl sm:px-6">
-          <div className="min-w-0 pr-3">
-            <div className="peridot-meta text-[10px] leading-[1.5] text-white/45">Peridot</div>
-            <h1 className="peridot-display text-[1.35rem] font-semibold leading-none text-white sm:text-[1.55rem]">{mobileTitle}</h1>
+        {!isMenuOpen && (
+          <div className="sticky top-0 z-40 flex min-h-[4.5rem] items-center justify-between border-b border-white/10 bg-black/45 px-4 py-4 backdrop-blur-xl sm:px-6">
+            <div className="min-w-0 pr-3">
+              <div className="peridot-meta text-[10px] leading-[1.5] text-white/45">Peridot</div>
+              <h1 className="peridot-display text-[1.35rem] font-semibold leading-none text-white sm:text-[1.55rem]">{mobileTitle}</h1>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMenuOpen(true)}
+              className="zune-button h-10 w-10 p-0"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="zune-button h-10 w-10 p-0"
-          >
-            {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
-        </div>
+        )}
 
         {isMenuOpen && (
-          <div className="fixed inset-0 z-[70] lg:hidden">
+          <div className="fixed inset-0 z-[80] lg:hidden">
             <div className="peridot-focus-scrim absolute inset-0" />
-            <div className="absolute inset-0 overflow-y-auto">
-              <div className="peridot-mobile-nav-card peridot-tactical-card min-h-screen w-screen overflow-hidden rounded-none border-0">
-                <div className="flex min-h-[4.5rem] items-center justify-between border-b border-white/10 px-4 py-4 sm:px-6">
-                  <div className="min-w-0 pr-3">
-                    <div className="peridot-meta text-[10px] text-white/42">Navigation</div>
-                    <div className="peridot-display mt-2 text-[1.65rem] font-semibold leading-none text-white">Peridot</div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="h-11 w-11 shrink-0 rounded-2xl border border-white/10 bg-white/[0.04] p-0 text-white hover:bg-white/[0.08]"
-                  >
-                    <X className="h-5 w-5" />
-                  </Button>
+            <div className="peridot-mobile-nav-card absolute inset-0 flex min-h-screen flex-col overflow-y-auto">
+              <div className="flex min-h-[4.75rem] items-start justify-between border-b border-white/10 px-5 pb-5 pt-6">
+                <div className="min-w-0 pr-4">
+                  <div className="peridot-meta text-[10px] text-white/42">Navigation</div>
+                  <div className="peridot-display mt-2 text-[1.9rem] font-semibold leading-none text-white">Peridot</div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="h-11 w-11 shrink-0 rounded-full border border-white/10 bg-white/[0.04] p-0 text-white hover:bg-white/[0.08]"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
+
+              <div className="flex flex-1 flex-col px-5 pb-8 pt-5">
+                <div className="mb-5 border-b border-white/8 pb-4">
+                  <div className="peridot-meta text-[10px] text-white/35">Current</div>
+                  <div className="peridot-display mt-2 text-[1.55rem] leading-none text-white">{mobileTitle}</div>
                 </div>
 
-                <div className="grid gap-5 p-4 pb-8 sm:p-6">
-                  <nav className="grid gap-2">
-                    {navigation.map((item) => {
-                      const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
-                      return (
-                        <Link
-                          key={item.name}
-                          href={item.href}
-                          onClick={() => setIsMenuOpen(false)}
-                          className={`peridot-mobile-nav-link peridot-cinematic flex min-h-[4rem] w-full items-center gap-3 px-4 py-3 text-[15px] font-medium ${
-                            isActive
-                              ? 'border-white/18 bg-white/14 text-white shadow-[0_14px_28px_rgba(0,0,0,0.14)]'
-                              : 'bg-transparent text-white/78 hover:border-white/10 hover:bg-white/[0.05] hover:text-white'
-                          }`}
-                        >
-                          <span className={`inline-flex h-10 w-10 items-center justify-center rounded-2xl border ${isActive ? 'border-white/14 bg-white/10' : 'border-white/8 bg-white/[0.02]'}`}>
-                            <item.icon className="h-4 w-4 shrink-0" />
-                          </span>
-                          <span className="peridot-display flex-1 text-[1.15rem] leading-none">{item.name}</span>
-                        </Link>
-                      )
-                    })}
-                  </nav>
-
-                  <div className="rounded-[1.25rem] border border-white/10 bg-black/10 p-4">
-                    <div className="peridot-meta text-[10px] text-white/42">Workspace</div>
-                    <p className="mt-2 text-sm leading-6 text-white/65">Profiles, imports, backups, and local settings live in one place.</p>
-                    <Button asChild className="mt-4 h-11 w-full border border-white/10 bg-white/[0.04] px-4 text-white hover:bg-white/[0.08]">
-                      <Link href="/settings" onClick={() => setIsMenuOpen(false)}>
-                        <Settings className="mr-2 h-4 w-4" />
-                        Open Settings
+                <nav className="grid gap-2">
+                  {navigation.map((item) => {
+                    const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`peridot-mobile-nav-link peridot-cinematic flex min-h-[4.25rem] w-full items-center gap-4 px-4 py-3 ${
+                          isActive ? 'is-active' : ''
+                        }`}
+                      >
+                        <span className="peridot-mobile-nav-icon inline-flex h-10 w-10 shrink-0 items-center justify-center">
+                          <item.icon className="h-5 w-5 shrink-0" />
+                        </span>
+                        <span className="peridot-display flex-1 text-[1.18rem] leading-none">{item.name}</span>
                       </Link>
-                    </Button>
-                  </div>
+                    )
+                  })}
+                </nav>
+
+                <div className="mt-6 border-t border-white/8 pt-5">
+                  <div className="peridot-meta text-[10px] text-white/35">Workspace</div>
+                  <p className="mt-3 max-w-[22rem] text-sm leading-6 text-white/62">
+                    Profiles, imports, backups, and local settings live in one place.
+                  </p>
+                  <Button asChild className="mt-5 h-11 w-full border border-white/10 bg-white/[0.04] px-4 text-white hover:bg-white/[0.08]">
+                    <Link href="/settings" onClick={() => setIsMenuOpen(false)}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      Open Settings
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>

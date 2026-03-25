@@ -68,7 +68,7 @@ export function DashboardOverview() {
 
       try {
         const todayIso = isoDate(new Date())
-        const [workspace, analytics, completions] = await Promise.all([
+        const [workspace, analyticsResult, completions] = await Promise.all([
           fetchWorkspace(),
           fetchAnalytics(),
           fetchCompletions(todayIso),
@@ -79,7 +79,7 @@ export function DashboardOverview() {
         setCompletedTaskKeys(
           Object.fromEntries(completions.map((item) => [`${item.regimenId}:${item.taskId}`, true])),
         )
-        setAnalytics(analytics)
+        setAnalytics(analyticsResult)
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Failed to load routines')
       } finally {
@@ -96,8 +96,6 @@ export function DashboardOverview() {
 
   const displayName = username || 'there'
   const completedToday = useMemo(() => Object.keys(completedTaskKeys).length, [completedTaskKeys])
-  const totalCompleted = analytics?.totals.totalCompleted ?? 0
-  const currentStreak = analytics?.totals.currentStreak ?? 0
   const activeRoutineCount = useMemo(() => routines.filter((routine) => routine.regimens.length > 0).length, [routines])
   const totalRegimens = useMemo(() => routines.reduce((sum, routine) => sum + routine.regimens.length, 0), [routines])
   const todayRegimens = useMemo(
@@ -174,6 +172,7 @@ export function DashboardOverview() {
                     const width = isLoading ? 0 : Math.max(0, Math.min(100, Math.round(stat.ratio * 100)))
                     const isFull = width >= 100
                     const isEmpty = width <= 0
+
                     return (
                       <div key={stat.label} className="peridot-stat-line">
                         <div className="flex items-center justify-between gap-3">
@@ -199,9 +198,6 @@ export function DashboardOverview() {
               <div className="mb-5">
                 <div className="peridot-section-label peridot-meta text-xs text-white/45">Today</div>
                 <h3 className="peridot-panel-heading peridot-display mt-2 text-2xl font-semibold text-white">Scheduled flows</h3>
-                <p className="peridot-copy mt-3 max-w-xl text-sm text-white/58">
-                  Keep this list narrow and scannable. Open the builder only when you need to edit structure.
-                </p>
               </div>
 
               {isLoading ? (
@@ -214,68 +210,52 @@ export function DashboardOverview() {
                 </div>
               ) : (
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {todayRegimens.map((regimen) => (
-                    (() => {
-                      const tint = getRegimenTintMeta(regimen.colorTint).value
-                      const scheduleHref = `/calendar?date=${isoDate(new Date())}&regimen=${regimen.id}`
-                      return (
-                        <Link
-                          key={regimen.id}
-                          href={scheduleHref}
-                          className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-3 py-3"
-                          style={{
-                            borderColor: tintRgba(tint, 0.36),
-                            background: `linear-gradient(180deg, ${tintRgba(tint, 0.16)}, rgba(255,255,255,0.04))`,
-                            boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.14)}`,
-                          }}
-                        >
-                          <div className="flex items-center gap-2">
-                            <span
-                              className="inline-flex h-10 w-12 items-center justify-center rounded-sm border bg-white/[0.88] text-[1.05rem] font-semibold text-[#373737] shadow-[0_1px_0_rgba(0,0,0,0.08)]"
-                              style={{ borderColor: tintRgba(tint, 0.28) }}
-                            >
-                              L↣
-                            </span>
-                            <div className="min-w-0">
-                              <div className="peridot-display truncate text-[1rem] leading-none text-[#f4f4f4] transition group-hover:translate-x-0.5">{regimen.title}</div>
-                              <div className="peridot-meta mt-2 truncate text-[10px]" style={{ color: tintRgba(tint, 0.92) }}>{regimen.routineTitle}</div>
-                            </div>
+                  {todayRegimens.map((regimen) => {
+                    const tint = getRegimenTintMeta(regimen.colorTint).value
+                    const scheduleHref = `/calendar?date=${isoDate(new Date())}&regimen=${regimen.id}`
+
+                    return (
+                      <Link
+                        key={regimen.id}
+                        href={scheduleHref}
+                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-4 py-4"
+                        style={{
+                          borderColor: tintRgba(tint, 0.36),
+                          background: 'linear-gradient(180deg, rgba(20,24,21,0.96), rgba(30,34,31,0.94))',
+                          boxShadow: `inset 4px 0 0 ${tint}, inset 0 0 0 1px ${tintRgba(tint, 0.12)}`,
+                        }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span
+                            className="inline-flex h-10 w-12 shrink-0 items-center justify-center rounded-sm border text-[0.9rem] font-semibold text-white"
+                            style={{ borderColor: tintRgba(tint, 0.28), backgroundColor: tintRgba(tint, 0.16) }}
+                          >
+                            -&gt;
+                          </span>
+                          <div className="min-w-0">
+                            <div className="peridot-display truncate text-[0.98rem] leading-none text-white transition group-hover:translate-x-0.5">{regimen.title}</div>
+                            <div className="peridot-meta mt-2 truncate text-[10px] text-white/56">{regimen.routineTitle}</div>
                           </div>
-                          <div className="mt-3 flex items-center justify-between text-[10px] uppercase tracking-[0.18em] text-white/48">
-                            <span>{regimen.taskCount} task{regimen.taskCount === 1 ? '' : 's'}</span>
-                            <span>{regimen.remainingTaskCount} left</span>
-                          </div>
-                        </Link>
-                      )
-                    })()
-                    
-                  ))}
+                        </div>
+                        <div className="mt-3 flex items-center justify-between text-[10px] uppercase tracking-[0.16em]">
+                          <span className="text-white/62">{regimen.taskCount} tasks</span>
+                          <span style={{ color: tintRgba(tint, 0.96) }}>{regimen.remainingTaskCount} left</span>
+                        </div>
+                      </Link>
+                    )
+                  })}
                 </div>
               )}
             </div>
 
-              <div className="space-y-4">
-                <div className="peridot-panel peridot-tactical-card p-6">
-                  <div className="peridot-section-label peridot-meta text-xs text-white/45">Momentum</div>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                    <div className="peridot-soft-inset peridot-tactical-card">
-                      <div className="peridot-panel-value peridot-display text-3xl font-semibold text-white">{isLoading ? '...' : currentStreak}</div>
-                      <p className="peridot-copy mt-2 text-sm text-white/58">Current completion streak in days.</p>
-                    </div>
-                    <div className="peridot-soft-inset peridot-tactical-card">
-                      <div className="peridot-panel-value peridot-display text-3xl font-semibold text-white">{isLoading ? '...' : totalCompleted}</div>
-                      <p className="peridot-copy mt-2 text-sm text-white/58">Tasks completed and saved to analytics.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="peridot-panel peridot-tactical-card p-6">
-                  <a href="/routines" className="peridot-cinematic flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-white transition hover:bg-white/10">
-                    <span className="peridot-display text-[1.05rem] leading-none">Refine routines when you&apos;re ready</span>
-                    <ArrowRight className="h-4 w-4 text-white/55" />
-                  </a>
-                </div>
+            <div className="space-y-4">
+              <div className="peridot-panel peridot-tactical-card p-6">
+                <a href="/routines" className="peridot-cinematic flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-white transition hover:bg-white/10">
+                  <span className="peridot-display text-[1.05rem] leading-none">Refine routines when you&apos;re ready</span>
+                  <ArrowRight className="h-4 w-4 text-white/55" />
+                </a>
               </div>
+            </div>
           </section>
         </div>
       </div>

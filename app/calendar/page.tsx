@@ -108,11 +108,11 @@ function makeRegimenTheme(colorTint: string | null | undefined) {
     accent: tint,
     accentGlow: tintRgba(tint, 0.34),
     layerBg: `linear-gradient(135deg, ${tintRgba(tint, 0.44)}, ${tintRgba(darkerTint, 0.28)})`,
-    accentText: tintRgba(tint, 0.98),
-    accentSoft: tintRgba(tint, 0.18),
-    taskBg: `linear-gradient(180deg, ${tintRgba(tint, 0.18)}, ${tintRgba(darkerTint, 0.14)})`,
-    taskDoneBg: `linear-gradient(180deg, ${tintRgba(tint, 0.3)}, ${tintRgba(darkerTint, 0.24)})`,
-    taskPanelBg: tintRgba(tint, 0.1),
+    accentText: '#30451B',
+    accentSoft: tintRgba(darkerTint, 0.14),
+    taskBg: `linear-gradient(180deg, ${tintRgba(tint, 0.14)}, ${tintRgba(darkerTint, 0.1)})`,
+    taskDoneBg: `linear-gradient(180deg, ${tintRgba(tint, 0.22)}, ${tintRgba(darkerTint, 0.18)})`,
+    taskPanelBg: tintRgba(darkerTint, 0.08),
   }
 }
 
@@ -942,14 +942,13 @@ function CalendarPageContent() {
                                                 </span>
                                               </div>
                                               <div className="flex items-center gap-2">
-                                                <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: color.accent }} />
-                                                <div className="text-base font-semibold text-white">{entry.title}</div>
+                                                <div className="text-base font-semibold text-[#18200f]">{entry.title}</div>
                                               </div>
                                               <div className="mt-1 text-sm font-medium" style={{ color: color.accentText }}>{entry.routineTitle}</div>
-                                              {entry.detail ? <div className="mt-3 text-sm leading-6 text-white/72">{entry.detail}</div> : null}
+                                              {entry.detail ? <div className="mt-3 text-sm leading-6 text-[#31421d]">{entry.detail}</div> : null}
                                               {regimenDone ? <div className="mt-3 inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(color.accent, 0.34), backgroundColor: color.accentSoft, color: color.accentText }}>Flow complete for today.</div> : null}
                                             </div>
-                                            <ChevronDown className={`mt-1 h-5 w-5 shrink-0 text-white/55 transition-transform ${expanded ? 'rotate-180' : ''}`} />
+                                            <ChevronDown className={`mt-1 h-5 w-5 shrink-0 text-[#32441d] transition-transform ${expanded ? 'rotate-180' : ''}`} />
                                           </button>
 
                                           {expanded ? (
@@ -976,7 +975,7 @@ function CalendarPageContent() {
                                                         onChange={() => toggleTaskCompletion(entry.regimenId, task.id)}
                                                         className="mt-1 h-4 w-4 shrink-0 rounded border-white/20 bg-transparent accent-emerald-300"
                                                       />
-                                                      <div className={`min-w-0 flex-1 text-base font-semibold leading-6 ${done ? 'text-white/45 line-through' : 'text-white/95'}`}>{task.title}</div>
+                                                      <div className={`min-w-0 flex-1 text-base font-semibold leading-6 ${done ? 'text-[#587040] line-through' : 'text-[#18200f]'}`}>{task.title}</div>
                                                     </div>
                                                     {!done && task.description ? (
                                                       <div
@@ -986,10 +985,10 @@ function CalendarPageContent() {
                                                           backgroundColor: color.taskPanelBg,
                                                         }}
                                                       >
-                                                        <div className="mb-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: tintRgba(color.accent, 0.72) }}>Instructions</div>
+                                                        <div className="mb-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: color.accentText }}>Instructions</div>
                                                         <div className="space-y-2">
                                                           {descriptionLines(task.description).map((line, index) => (
-                                                            <p key={`${task.id}-mobile-line-${index}`} className="text-[15px] leading-7 text-white/82">
+                                                            <p key={`${task.id}-mobile-line-${index}`} className="text-[15px] leading-7 text-[#31421d]">
                                                               {line}
                                                             </p>
                                                           ))}
@@ -1062,8 +1061,7 @@ function CalendarPageContent() {
                                         <div className="min-w-0 flex-1">
                                           <div className="flex flex-wrap items-center gap-3">
                                             <div className="inline-flex items-center gap-2">
-                                              <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: color.accent }} />
-                                              <div className="text-base font-semibold text-white">{entry.title}</div>
+                                              <div className="text-base font-semibold text-[#18200f]">{entry.title}</div>
                                             </div>
                                             <span
                                               className="rounded-full px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]"
@@ -1081,13 +1079,13 @@ function CalendarPageContent() {
                                             {regimenDone ? <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(color.accent, 0.34), backgroundColor: color.accentSoft, color: color.accentText }}>Complete</span> : null}
                                           </div>
                                           <div className="mt-1 text-sm font-medium" style={{ color: color.accentText }}>{entry.routineTitle}</div>
-                                          {entry.detail ? <div className="mt-3 max-w-3xl text-sm leading-6 text-white/70">{entry.detail}</div> : null}
+                                          {entry.detail ? <div className="mt-3 max-w-3xl text-sm leading-6 text-[#31421d]">{entry.detail}</div> : null}
                                         </div>
                                         <Button
                                           type="button"
                                           variant="ghost"
                                           onClick={() => setExpandedEntries((current) => ({ ...current, [entry.id]: !expanded }))}
-                                          className="h-9 rounded-xl border border-white/10 bg-black/15 px-3 text-white hover:bg-black/25"
+                                          className="h-9 rounded-xl border border-black/10 bg-black/10 px-3 text-[#18200f] hover:bg-black/15"
                                         >
                                           {expanded ? 'Collapse' : 'Expand'}
                                         </Button>
@@ -1114,7 +1112,7 @@ function CalendarPageContent() {
                                                     onChange={() => toggleTaskCompletion(entry.regimenId, task.id)}
                                                     className="mt-1 h-4 w-4 shrink-0 rounded border-white/20 bg-transparent accent-emerald-300"
                                                   />
-                                                  <div className={`min-w-0 flex-1 text-base font-semibold leading-7 ${done ? 'text-white/45 line-through' : 'text-white'}`}>{task.title}</div>
+                                                  <div className={`min-w-0 flex-1 text-base font-semibold leading-7 ${done ? 'text-[#587040] line-through' : 'text-[#18200f]'}`}>{task.title}</div>
                                                 </div>
                                                 {!done && task.description ? (
                                                   <div
@@ -1124,10 +1122,10 @@ function CalendarPageContent() {
                                                       backgroundColor: color.taskPanelBg,
                                                     }}
                                                   >
-                                                    <div className="mb-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: tintRgba(color.accent, 0.72) }}>Instructions</div>
+                                                    <div className="mb-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: color.accentText }}>Instructions</div>
                                                     <div className="space-y-2">
                                                       {descriptionLines(task.description).map((line, index) => (
-                                                        <p key={`${task.id}-desktop-line-${index}`} className="text-[15px] leading-7 text-white/82">
+                                                        <p key={`${task.id}-desktop-line-${index}`} className="text-[15px] leading-7 text-[#31421d]">
                                                           {line}
                                                         </p>
                                                       ))}

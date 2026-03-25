@@ -396,24 +396,56 @@
   }
 
   .peridot-mobile-nav-card {
-    border: 1px solid rgba(207, 234, 122, 0.12);
     background:
-      linear-gradient(180deg, rgba(16, 23, 10, 0.992), rgba(10, 15, 7, 0.998)),
-      radial-gradient(circle at top, rgba(207, 234, 122, 0.1), transparent 34%);
-    border-radius: 1rem;
+      linear-gradient(180deg, rgba(13, 19, 8, 0.995), rgba(10, 14, 7, 1)),
+      radial-gradient(circle at top, rgba(207, 234, 122, 0.08), transparent 30%);
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
     backdrop-filter: blur(24px) saturate(130%);
     -webkit-backdrop-filter: blur(24px) saturate(130%);
   }
 
   .peridot-mobile-nav-link {
-    border-radius: 0.5rem;
-    border: 1px solid transparent;
-    transition: transform 0.22s ease, background-color 0.22s ease, border-color 0.22s ease;
+    border: 1px solid rgba(207, 234, 122, 0.08);
+    border-radius: 0.75rem;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.018)),
+      rgba(255, 255, 255, 0.012);
+    color: rgba(238, 246, 218, 0.82);
+    transition:
+      transform 0.22s ease,
+      background-color 0.22s ease,
+      border-color 0.22s ease,
+      color 0.22s ease;
   }
 
   .peridot-mobile-nav-link:hover {
     transform: translateY(-1px);
+    border-color: rgba(207, 234, 122, 0.16);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.024)),
+      rgba(255, 255, 255, 0.02);
+    color: #f2f7e3;
+  }
+
+  .peridot-mobile-nav-link.is-active {
+    border-color: rgba(207, 234, 122, 0.24);
+    background:
+      linear-gradient(90deg, rgba(159, 204, 59, 0.16), rgba(159, 204, 59, 0.05) 45%, rgba(255, 255, 255, 0.03)),
+      rgba(255, 255, 255, 0.018);
+    color: #f6fbec;
+  }
+
+  .peridot-mobile-nav-icon {
+    border: 1px solid rgba(207, 234, 122, 0.1);
+    border-radius: 0.6rem;
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(207, 234, 122, 0.92);
+  }
+
+  .peridot-mobile-nav-link.is-active .peridot-mobile-nav-icon {
+    border-color: rgba(207, 234, 122, 0.18);
+    background: rgba(159, 204, 59, 0.12);
+    color: #eef6da;
   }
 
   .peridot-overview-grid {
@@ -690,7 +722,7 @@
     bottom: 0;
     width: 1.1rem;
     transform: translateX(-100%);
-    background: linear-gradient(45deg, transparent 0.72rem, rgba(43, 43, 43, 0.98) 0);
+    background: linear-gradient(135deg, transparent 0.72rem, rgba(43, 43, 43, 0.98) 0);
     pointer-events: none;
   }
 
