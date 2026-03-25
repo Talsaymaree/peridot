@@ -191,9 +191,6 @@ export function LocalAnalyticsOverview() {
             <div className="grid gap-6 px-6 py-7 sm:px-8 sm:py-8 xl:grid-cols-[1.2fr_0.8fr]">
               <div className="max-w-2xl">
                 <div className="peridot-eyebrow text-xs text-emerald-200/55">Analytics</div>
-                <p className="peridot-copy mt-3 max-w-2xl text-sm text-white/62 sm:text-base">
-                  A quieter read on your momentum, weekly rhythm, and strongest flows without turning the page into a wall of charts.
-                </p>
               </div>
 
               <div className="peridot-summary-grid">
