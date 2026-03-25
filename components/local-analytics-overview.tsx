@@ -362,11 +362,8 @@ export function LocalAnalyticsOverview() {
               <div className="space-y-4">
                 <div className="peridot-panel p-6">
                   <div className="mb-5">
-                    <div className="peridot-section-label text-xs text-white/45">Flow Momentum</div>
-                    <h3 className="peridot-panel-heading mt-2 text-2xl font-semibold text-white">Top flows</h3>
-                    <p className="peridot-copy mt-3 text-sm text-white/58">
-                      The flows below are carrying the most repeated action, which makes them your strongest habit anchors.
-                    </p>
+                    <div className="peridot-section-label peridot-meta text-xs text-white/45">Flow Momentum</div>
+                    <h3 className="peridot-panel-heading peridot-display mt-2 text-2xl font-semibold text-white">Top Flows</h3>
                   </div>
 
                   <div className="space-y-3">
@@ -376,19 +373,28 @@ export function LocalAnalyticsOverview() {
                       </div>
                     ) : hasFlowActivity ? (
                       topRegimens.map((regimen, index) => (
-                        <div key={regimen.regimenId} className="peridot-soft-inset">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="min-w-0">
-                              <div className="flex items-center gap-3">
-                                <span className="rounded-full border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] text-white/60">
-                                  #{index + 1}
+                        <div key={regimen.regimenId} className="rounded-[1.1rem] border border-white/10 bg-white/[0.04] px-4 py-4">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-start gap-3">
+                                <span className="peridot-meta mt-0.5 shrink-0 rounded-full border border-white/10 bg-white/[0.05] px-2 py-1 text-[10px] text-white/55">
+                                  {String(index + 1).padStart(2, '0')}
                                 </span>
-                                <div className="peridot-panel-heading text-base font-semibold leading-[1.18] text-white">{regimen.regimenTitle}</div>
+                                <div className="min-w-0">
+                                  <div className="peridot-display text-[1.02rem] leading-[1.08] text-white">
+                                    {regimen.regimenTitle}
+                                  </div>
+                                  <div className="peridot-meta mt-2 text-[10px] text-white/45">
+                                    {regimen.routineTitle}
+                                  </div>
+                                </div>
                               </div>
-                              <div className="peridot-copy mt-2 text-sm text-white/50">{regimen.routineTitle}</div>
                             </div>
-                            <div className="rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-[0.16em] text-white/75">
-                              {regimen.completedCount}
+                            <div className="min-w-[3rem] text-right">
+                              <div className="peridot-display text-[1.6rem] leading-none text-white">
+                                {regimen.completedCount}
+                              </div>
+                              <div className="peridot-meta mt-1 text-[10px] text-white/40">Done</div>
                             </div>
                           </div>
 
@@ -399,7 +405,7 @@ export function LocalAnalyticsOverview() {
                             />
                           </div>
 
-                          <div className="peridot-copy mt-3 text-xs text-white/38">
+                          <div className="peridot-meta mt-3 text-[10px] text-white/38">
                             {regimen.lastCompletedAt
                               ? `Last completed ${completedFormatter.format(new Date(regimen.lastCompletedAt))}`
                               : 'No completion date yet'}
