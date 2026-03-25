@@ -623,7 +623,7 @@ function CalendarPageContent() {
           <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)] xl:gap-6">
             <aside className="peridot-panel hidden overflow-hidden lg:block">
               <div className="border-b border-white/10 px-5 py-4">
-                <Button type="button" asChild className="h-10 w-full justify-start rounded-xl border border-white/10 bg-white/5 px-4 text-white hover:bg-white/10">
+                <Button type="button" asChild className="peridot-display h-10 w-full justify-start rounded-xl border border-white/10 bg-white/5 px-4 text-white hover:bg-white/10">
                   <a href="/routines">
                     <Plus className="mr-2 h-4 w-4" />
                     Create flow
@@ -635,7 +635,7 @@ function CalendarPageContent() {
                   <button
                     type="button"
                     onClick={() => setShowMonthPicker((current) => !current)}
-                    className="mb-3 flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/45 hover:text-white/75"
+                    className="peridot-meta mb-3 flex items-center gap-2 text-xs text-white/45 hover:text-white/75"
                   >
                     {monthLabelFormatter.format(currentDate)}
                     <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showMonthPicker ? 'rotate-180' : ''}`} />
@@ -648,21 +648,21 @@ function CalendarPageContent() {
                             key={`desktop-month-${monthName}`}
                             type="button"
                             onClick={() => updateMonth(monthIndex)}
-                            className={monthIndex === currentDate.getMonth() ? 'rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
+                            className={monthIndex === currentDate.getMonth() ? 'peridot-meta rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'peridot-meta rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
                           >
                             {monthName.slice(0, 3)}
                           </button>
                         ))}
                       </div>
                       <div>
-                        <div className="mb-2 text-[11px] uppercase tracking-[0.16em] text-white/35">Year</div>
+                        <div className="peridot-meta mb-2 text-[11px] text-white/35">Year</div>
                         <div className="grid grid-cols-3 gap-2">
                           {yearOptions.map((year) => (
                             <button
                               key={`desktop-year-${year}`}
                               type="button"
                               onClick={() => updateYear(year)}
-                              className={year === currentDate.getFullYear() ? 'rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
+                              className={year === currentDate.getFullYear() ? 'peridot-meta rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'peridot-meta rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
                             >
                               {year}
                             </button>
@@ -671,7 +671,7 @@ function CalendarPageContent() {
                       </div>
                     </div>
                   ) : null}
-                  <div className="grid grid-cols-7 gap-1 text-center text-[11px] text-white/35">
+                  <div className="peridot-meta grid grid-cols-7 gap-1 text-center text-[11px] text-white/35">
                     {dayNames.map((day) => <div key={`mini-${day}`}>{day.slice(0, 1)}</div>)}
                       {miniMonthGrid.map((date) => {
                         const dateIso = isoDate(date)
@@ -740,7 +740,7 @@ function CalendarPageContent() {
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="space-y-3 md:space-y-0">
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <Button type="button" onClick={() => setCurrentDate(new Date())} className="h-10 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10">
+                      <Button type="button" onClick={() => setCurrentDate(new Date())} className="peridot-display h-10 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10">
                         Today
                       </Button>
                       <Button type="button" variant="ghost" size="icon" onClick={() => setCurrentDate((current) => addDays(current, -1))} className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 text-white hover:bg-white/10">
@@ -750,14 +750,14 @@ function CalendarPageContent() {
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     </div>
-                    <h2 className="text-lg font-semibold text-white md:text-2xl">{dayLabelFormatter.format(currentDate)}</h2>
+                    <h2 className="peridot-display text-lg font-semibold text-white md:text-2xl">{dayLabelFormatter.format(currentDate)}</h2>
                   </div>
 
                   <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-                    <Button type="button" onClick={() => setShowMobileLayers((current) => !current)} className="h-10 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10 sm:w-auto lg:hidden">
+                    <Button type="button" onClick={() => setShowMobileLayers((current) => !current)} className="peridot-display h-10 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10 sm:w-auto lg:hidden">
                       {showMobileLayers ? 'Hide Flows' : 'Show Flows'}
                     </Button>
-                    <Button type="button" asChild className="inline-flex h-10 w-full rounded-xl border border-emerald-300/25 bg-emerald-300 px-4 font-semibold text-emerald-950 hover:bg-emerald-200 sm:w-auto">
+                    <Button type="button" asChild className="peridot-display inline-flex h-10 w-full rounded-xl border border-emerald-300/25 bg-emerald-300 px-4 font-semibold text-emerald-950 hover:bg-emerald-200 sm:w-auto">
                       <a href="/routines">
                         <Plus className="mr-2 h-4 w-4" />
                         Add Routine
@@ -775,7 +775,7 @@ function CalendarPageContent() {
                         <button
                           type="button"
                           onClick={() => setShowMonthPicker((current) => !current)}
-                          className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/45 hover:text-white/75"
+                          className="peridot-meta flex items-center gap-2 text-xs text-white/45 hover:text-white/75"
                         >
                           {monthLabelFormatter.format(currentDate)}
                           <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showMonthPicker ? 'rotate-180' : ''}`} />
@@ -789,7 +789,7 @@ function CalendarPageContent() {
                                 key={`mobile-month-${monthName}`}
                                 type="button"
                                 onClick={() => updateMonth(monthIndex)}
-                                className={monthIndex === currentDate.getMonth() ? 'rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
+                                className={monthIndex === currentDate.getMonth() ? 'peridot-meta rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'peridot-meta rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
                               >
                                 {monthName.slice(0, 3)}
                               </button>
@@ -801,7 +801,7 @@ function CalendarPageContent() {
                                 key={`mobile-year-${year}`}
                                 type="button"
                                 onClick={() => updateYear(year)}
-                                className={year === currentDate.getFullYear() ? 'rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
+                                className={year === currentDate.getFullYear() ? 'peridot-meta rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'peridot-meta rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
                               >
                                 {year}
                               </button>
@@ -809,7 +809,7 @@ function CalendarPageContent() {
                           </div>
                         </div>
                       ) : null}
-                      <div className="grid grid-cols-7 gap-1 p-1.5 text-center text-[11px] text-white/35">
+                      <div className="peridot-meta grid grid-cols-7 gap-1 p-1.5 text-center text-[11px] text-white/35">
                         {dayNames.map((day) => <div key={`mobile-mini-${day}`}>{day.slice(0, 1)}</div>)}
                         {miniMonthGrid.map((date) => {
                           const dateIso = isoDate(date)
@@ -891,7 +891,7 @@ function CalendarPageContent() {
                           const slotEntries = dayEntries.filter((entry) => entry.hourIndex === slotIndex)
                           return (
                             <div key={`mobile-slot-${slot}`} className="grid grid-cols-[44px_1fr] border-b border-white/5 last:border-b-0 sm:grid-cols-[64px_1fr]">
-                              <div className="border-r border-white/10 bg-white/[0.02] px-1 py-2 text-right text-[10px] font-medium text-white/45 sm:px-2 sm:py-3 sm:text-[11px]">
+                              <div className="peridot-meta border-r border-white/10 bg-white/[0.02] px-1 py-2 text-right text-[10px] font-medium text-white/45 sm:px-2 sm:py-3 sm:text-[11px]">
                                 {slot}
                               </div>
                               <div className="min-h-[52px] bg-[#141a17] px-1.5 py-2 sm:min-h-[72px] sm:px-3 sm:py-3">
@@ -1017,7 +1017,7 @@ function CalendarPageContent() {
                       <div className="grid grid-cols-[78px_1fr]">
                         <div className="border-r border-white/10 bg-white/[0.015]">
                           {hourSlots.map((slot) => (
-                            <div key={slot} className="flex items-start justify-end border-b border-white/5 pr-3 pt-1 text-[11px] text-white/35" style={{ height: `${hourHeight}px` }}>
+                            <div key={slot} className="peridot-meta flex items-start justify-end border-b border-white/5 pr-3 pt-1 text-[11px] text-white/35" style={{ height: `${hourHeight}px` }}>
                               {slot}
                             </div>
                           ))}
