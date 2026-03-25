@@ -312,9 +312,15 @@ export async function getAnalyticsSummary(userId: string): Promise<AnalyticsSumm
     }
   }
 
-  const labelFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'short' })
-  const series = Array.from({ length: 14 }, (_, index) => {
-    const date = addDays(today, index - 13)
+  const sortedDates = Array.from(dailyTotals.keys()).sort((left, right) => left.localeCompare(right))
+  const earliestSeriesDate = sortedDates.length > 0 ? new Date(`${sortedDates[0]}T12:00:00`) : addDays(today, -13)
+  const totalDays = Math.max(
+    Math.round((today.getTime() - earliestSeriesDate.getTime()) / (24 * 60 * 60 * 1000)) + 1,
+    14,
+  )
+  const labelFormatter = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' })
+  const series = Array.from({ length: totalDays }, (_, index) => {
+    const date = addDays(earliestSeriesDate, index)
     const dateIso = localIsoDate(date)
     return {
       date: dateIso,

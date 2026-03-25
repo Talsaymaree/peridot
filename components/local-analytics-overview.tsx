@@ -24,6 +24,15 @@ const LINE_CHART_PADDING = {
   left: 18,
 }
 
+const RANGE_OPTIONS = [
+  { id: 'week', label: 'Week', days: 7 },
+  { id: 'month', label: 'Month', days: 30 },
+  { id: 'year', label: 'Year', days: 365 },
+  { id: 'all', label: 'All', days: null },
+] as const
+
+type RangeOption = (typeof RANGE_OPTIONS)[number]['id']
+
 function formatAverage(value: number) {
   if (!Number.isFinite(value)) {
     return '0.0'
@@ -80,6 +89,7 @@ export function LocalAnalyticsOverview() {
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [selectedRange, setSelectedRange] = useState<RangeOption>('month')
 
   useEffect(() => {
     async function loadAnalytics() {
@@ -101,7 +111,15 @@ export function LocalAnalyticsOverview() {
     })
   }, [])
 
-  const recentSeries = analytics?.series ?? []
+  const fullSeries = analytics?.series ?? []
+  const recentSeries = useMemo(() => {
+    const selected = RANGE_OPTIONS.find((option) => option.id === selectedRange)
+    if (!selected || selected.days === null || fullSeries.length <= selected.days) {
+      return fullSeries
+    }
+
+    return fullSeries.slice(-selected.days)
+  }, [fullSeries, selectedRange])
   const weekdayBreakdown = analytics?.weekdayBreakdown ?? []
   const topRegimens = analytics?.topRegimens ?? []
   const peakSeriesValue = useMemo(
@@ -162,6 +180,8 @@ export function LocalAnalyticsOverview() {
     recentSeries.length > 0
       ? chartLabelFormatter.format(new Date(`${recentSeries[recentSeries.length - 1].date}T12:00:00`))
       : ''
+  const selectedRangeMeta = RANGE_OPTIONS.find((option) => option.id === selectedRange) ?? RANGE_OPTIONS[1]
+  const rangeLabel = selectedRangeMeta.label
 
   return (
     <div className="lg:pl-80">
@@ -219,7 +239,7 @@ export function LocalAnalyticsOverview() {
                 <div className="peridot-panel p-6 sm:p-7">
                   <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                     <div className="max-w-2xl">
-                      <div className="peridot-section-label text-xs text-white/45">Last 14 Days</div>
+                      <div className="peridot-section-label text-xs text-white/45">{selectedRange === 'all' ? 'All Time' : `Last ${rangeLabel}`}</div>
                       <h3 className="peridot-panel-heading mt-2 text-2xl font-semibold text-white">Momentum curve</h3>
                       <p className="peridot-copy mt-3 max-w-xl text-sm text-white/58">
                         The trend line keeps the signal visible without forcing you to read a dense dashboard.
@@ -229,17 +249,34 @@ export function LocalAnalyticsOverview() {
                     {!isLoading ? (
                       <div className="grid gap-3 sm:grid-cols-2 lg:min-w-[20rem]">
                         <div className="peridot-soft-inset">
-                          <div className="peridot-section-label text-[11px] text-white/40">14-Day Volume</div>
+                          <div className="peridot-section-label text-[11px] text-white/40">{selectedRange === 'all' ? 'All-Time Volume' : `${rangeLabel} Volume`}</div>
                           <div className="peridot-panel-value mt-3 text-2xl font-semibold text-white">{recentCompleted}</div>
-                          <p className="peridot-copy mt-2 text-xs text-white/45">Tasks completed in your recent window.</p>
+                          <p className="peridot-copy mt-2 text-xs text-white/45">Tasks completed in this selected window.</p>
                         </div>
                         <div className="peridot-soft-inset">
                           <div className="peridot-section-label text-[11px] text-white/40">Active Days</div>
                           <div className="peridot-panel-value mt-3 text-2xl font-semibold text-white">{recentActiveDays}</div>
-                          <p className="peridot-copy mt-2 text-xs text-white/45">Days in that window with at least one completion.</p>
+                          <p className="peridot-copy mt-2 text-xs text-white/45">Days in this window with at least one completion.</p>
                         </div>
                       </div>
                     ) : null}
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {RANGE_OPTIONS.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() => setSelectedRange(option.id)}
+                        className={`peridot-meta rounded-full border px-3 py-1.5 text-[10px] ${
+                          selectedRange === option.id
+                            ? 'border-emerald-200/24 bg-emerald-200/12 text-emerald-100/85'
+                            : 'border-white/10 bg-white/[0.03] text-white/55'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
                   </div>
 
                   {isLoading ? (
