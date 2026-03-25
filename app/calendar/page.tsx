@@ -894,7 +894,7 @@ function CalendarPageContent() {
                               <div className="peridot-meta border-r border-white/10 bg-white/[0.02] px-1 py-2 text-right text-[10px] font-medium text-white/45 sm:px-2 sm:py-3 sm:text-[11px]">
                                 {slot}
                               </div>
-                              <div className="min-h-[52px] bg-[#141a17] px-1.5 py-2 sm:min-h-[72px] sm:px-3 sm:py-3">
+                              <div className="min-h-[34px] bg-[#141a17] px-1.5 py-1.5 sm:min-h-[56px] sm:px-3 sm:py-2.5">
                                 {slotEntries.length === 0 ? null : (
                                   <div className="space-y-3">
                                     {slotEntries.map((entry) => {
