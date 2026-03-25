@@ -224,29 +224,29 @@ export function DashboardOverview() {
                       <Link
                         key={regimen.id}
                         href={scheduleHref}
-                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border p-3.5"
+                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border p-4"
                         style={{
                           borderColor: tintRgba(tint, 0.44),
                           background: `linear-gradient(180deg, ${tintRgba(tint, 0.82)}, ${tintRgba(tint, 0.66)})`,
                           boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.12)}, 0 14px 28px ${tintRgba(tint, 0.16)}`,
                         }}
                       >
-                        <div className="rounded-[0.95rem] bg-white/[0.08] px-4 py-4.5">
+                        <div className="rounded-[0.95rem] bg-white/[0.08] px-5 py-5">
                           <div className="min-w-0">
-                            <div className="peridot-meta px-2 pt-1.5 text-[10px] text-[#2f4419]">Scheduled now</div>
-                            <div className="peridot-display mt-2 break-words px-2 pr-5 pt-1 text-[0.76rem] leading-[1.24] text-[#17200e] transition group-hover:translate-x-0.5 sm:text-[0.9rem]">
+                            <div className="peridot-meta px-3 pt-2 text-[10px] leading-[1.7] text-[#2f4419]">Scheduled now</div>
+                            <div className="peridot-display mt-2 break-words px-3 pr-6 pt-1.5 text-[0.76rem] leading-[1.32] text-[#17200e] transition group-hover:translate-x-0.5 sm:text-[0.9rem]">
                               {regimen.title}
                             </div>
-                            <div className="peridot-meta mt-3 break-words px-2 pr-5 text-[10px] leading-[1.5] text-[#39531e]">{regimen.routineTitle}</div>
+                            <div className="peridot-meta mt-3 break-words px-3 pr-6 text-[10px] leading-[1.65] text-[#39531e]">{regimen.routineTitle}</div>
                           </div>
-                          <div className="mt-4 grid grid-cols-1 gap-2 px-2 pb-2 min-[360px]:grid-cols-2">
-                            <div className="rounded-[0.8rem] border px-3 py-3.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
-                              <div className="peridot-meta text-[10px] text-[#4a621f]">Tasks</div>
-                              <div className="peridot-display mt-2 px-0.5 text-lg leading-none text-[#17200e]">{regimen.taskCount}</div>
+                          <div className="mt-4 grid grid-cols-1 gap-2 px-3 pb-3 min-[360px]:grid-cols-2">
+                            <div className="rounded-[0.8rem] border px-3.5 py-4" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                              <div className="peridot-meta text-[10px] leading-[1.65] text-[#4a621f]">Tasks</div>
+                              <div className="peridot-display mt-2 px-1 text-lg leading-[1.05] text-[#17200e]">{regimen.taskCount}</div>
                             </div>
-                            <div className="rounded-[0.8rem] border px-3 py-3.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
-                              <div className="peridot-meta text-[10px] text-[#4a621f]">Left</div>
-                              <div className="peridot-display mt-2 px-0.5 text-lg leading-none text-[#17200e]">{regimen.remainingTaskCount}</div>
+                            <div className="rounded-[0.8rem] border px-3.5 py-4" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                              <div className="peridot-meta text-[10px] leading-[1.65] text-[#4a621f]">Left</div>
+                              <div className="peridot-display mt-2 px-1 text-lg leading-[1.05] text-[#17200e]">{regimen.remainingTaskCount}</div>
                             </div>
                           </div>
                         </div>
