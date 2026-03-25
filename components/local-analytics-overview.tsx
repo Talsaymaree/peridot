@@ -357,50 +357,6 @@ export function LocalAnalyticsOverview() {
                   )}
                 </div>
 
-                <div className="peridot-panel p-6">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                    <div>
-                      <div className="peridot-section-label peridot-meta text-xs text-white/45">By Weekday</div>
-                      <h3 className="peridot-panel-heading peridot-display mt-2 text-2xl font-semibold text-white">Weekly rhythm</h3>
-                    </div>
-                    {!isLoading ? (
-                      <div className="peridot-meta rounded-full border border-emerald-200/20 bg-emerald-200/10 px-3 py-1 text-[10px] text-emerald-100/80">
-                        {strongestDay.total > 0 ? `${strongestDay.label} is strongest` : 'Waiting on activity'}
-                      </div>
-                    ) : null}
-                  </div>
-
-                  {isLoading ? (
-                    <div className="mt-5 rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-4 py-8 text-sm text-white/50">
-                      Loading weekday rhythm...
-                    </div>
-                  ) : hasWeekdayActivity ? (
-                    <div className="mt-5 rounded-[1.4rem] border border-white/10 bg-black/[0.08] p-4 sm:p-5">
-                      <div className="peridot-meta mb-4 text-[10px] text-white/35">Completion Density</div>
-                      <div className="space-y-3">
-                      {weekdayBreakdown.map((item) => (
-                        <div key={item.day} className="grid grid-cols-[56px_1fr_48px] items-center gap-3">
-                          <div className="peridot-display rounded-md border border-white/10 bg-white/[0.05] px-2 py-2 text-center text-[0.95rem] leading-none text-white/78">
-                            {item.label.slice(0, 3).toUpperCase()}
-                          </div>
-                          <div className="relative overflow-hidden rounded-none border border-white/10 bg-[#2d2d2d]/90">
-                            <div
-                              className="h-8 bg-[linear-gradient(90deg,rgba(125,125,125,0.96),rgba(103,103,103,0.96))] transition-[width]"
-                              style={{ width: `${Math.max((item.total / peakWeekdayValue) * 100, item.total > 0 ? 10 : 0)}%` }}
-                            />
-                            <div className="pointer-events-none absolute inset-y-0 left-0 w-full bg-[linear-gradient(90deg,transparent_0,transparent_calc(100%-14px),rgba(35,35,35,0.95)_calc(100%-14px),rgba(35,35,35,0.95)_100%)]" />
-                          </div>
-                          <div className="peridot-display pr-2 text-right text-[1.05rem] leading-none text-white/78">{item.total}</div>
-                        </div>
-                      ))}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="mt-5 rounded-[1.2rem] border border-dashed border-white/10 bg-white/[0.03] px-4 py-8 text-sm text-white/50">
-                      Your weekday pattern will show once completions start stacking up.
-                    </div>
-                  )}
-                </div>
               </div>
 
               <div className="space-y-4">
