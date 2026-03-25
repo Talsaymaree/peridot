@@ -76,7 +76,6 @@ type RoutineDraft = {
 }
 
 const categories = ['WORKOUT', 'LEARNING', 'PRODUCTIVITY', 'HABITS', 'CUSTOM']
-const cadenceOptions = ['DAILY', 'WEEKLY', 'SEMI_WEEKLY', 'MONTHLY', 'CUSTOM']
 const recurrenceOptions = ['NONE', 'WEEKLY', 'SEMI_WEEKLY', 'MONTHLY']
 const weekdays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']
 
@@ -98,6 +97,7 @@ const countTasks = (regimens: Regimen[]) => regimens.reduce((sum, regimen) => su
 const parseRecurrenceDays = (days: string | null) => days?.split(',').map((day) => day.trim()).filter(Boolean) ?? []
 const countFilledDraftTasks = (tasks: TaskDraft[]) => tasks.filter((task) => task.title.trim()).length
 const getDraftRegimenTitle = (regimen: RegimenDraft, index: number) => regimen.title.trim() || `Untitled flow ${index + 1}`
+const cadenceFromRepeat = (repeat: string) => repeat === 'NONE' ? 'CUSTOM' : repeat
 const getDraftRegimenDaySummary = (regimen: RegimenDraft) => {
   if (regimen.recurrenceDays.length === 0) return 'Pick the days this flow should appear.'
   const days = regimen.recurrenceDays.map(formatWeekday)
@@ -503,8 +503,7 @@ export default function RoutinesPage() {
                     <div className="grid gap-5 md:grid-cols-2">
                       <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Flow Title</label><Input value={regimen.title} onChange={(event) => updateRegimen(regimenIndex, { title: event.target.value })} className="peridot-control h-11" /></div>
                       <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Flow Description</label><Textarea value={regimen.description} onChange={(event) => updateRegimen(regimenIndex, { description: event.target.value })} className="peridot-control min-h-[110px]" rows={3} /></div>
-                      <div><label className="mb-2 block text-sm font-medium text-white/90">Cadence</label><select value={regimen.cadence} onChange={(event) => updateRegimen(regimenIndex, { cadence: event.target.value })} className="peridot-control h-11 w-full px-3 outline-none">{cadenceOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}</select></div>
-                      <div><label className="mb-2 block text-sm font-medium text-white/90">Repeat</label><select value={regimen.recurrenceType} onChange={(event) => updateRegimen(regimenIndex, { recurrenceType: event.target.value })} className="peridot-control h-11 w-full px-3 outline-none">{recurrenceOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}</select></div>
+                      <div><label className="mb-2 block text-sm font-medium text-white/90">Repeat</label><select value={regimen.recurrenceType} onChange={(event) => updateRegimen(regimenIndex, { recurrenceType: event.target.value, cadence: cadenceFromRepeat(event.target.value) })} className="peridot-control h-11 w-full px-3 outline-none">{recurrenceOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}</select></div>
                       <div className="md:col-span-2">
                         <label className="mb-3 block text-sm font-medium text-white/90">Flow Tint</label>
                         <div className="flex flex-wrap gap-2">

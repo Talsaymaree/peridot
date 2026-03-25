@@ -231,14 +231,14 @@ export function DashboardOverview() {
                           boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.12)}, 0 14px 28px ${tintRgba(tint, 0.16)}`,
                         }}
                       >
-                        <div className="min-w-0 text-center">
+                        <div className="min-w-0 space-y-4 text-center">
                           <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] leading-[1.8] text-[#4a621f] no-underline">Scheduled now</div>
-                          <div className="mt-3 break-words pt-1 text-[1rem] font-semibold leading-[1.22] text-[#17200e] no-underline transition group-hover:translate-y-0.5 sm:text-[1.05rem]">
+                          <div className="break-words pt-1 text-[1rem] font-semibold leading-[1.22] text-[#17200e] no-underline transition group-hover:translate-y-0.5 sm:text-[1.05rem]">
                             {regimen.title}
                           </div>
-                          <div className="mt-3.5 break-words text-[0.88rem] leading-[1.35] text-[#39531e] no-underline">{regimen.routineTitle}</div>
+                          <div className="break-words text-[0.88rem] leading-[1.35] text-[#39531e] no-underline">{regimen.routineTitle}</div>
                         </div>
-                        <div className="mt-7 grid grid-cols-1 gap-3 pb-2 min-[360px]:grid-cols-2">
+                        <div className="mt-8 grid grid-cols-1 gap-4 pb-3 min-[360px]:grid-cols-2">
                           <div className="rounded-[0.8rem] border px-3.5 py-4 text-center" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: tintRgba(tint, 0.12) }}>
                             <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Tasks</div>
                             <div className="mt-2 px-0.5 pb-0.5 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.taskCount}</div>
@@ -254,7 +254,7 @@ export function DashboardOverview() {
                 </div>
               )}
 
-              <div className="mt-8 grid grid-cols-2 gap-2">
+              <div className="mt-10 grid grid-cols-2 gap-3">
                 <Button asChild className="peridot-display h-9 rounded-xl border border-emerald-300/25 bg-emerald-300 px-3 text-[0.8rem] font-semibold text-emerald-950 hover:bg-emerald-200 sm:h-10 sm:px-4 sm:text-sm">
                   <a href="/routines">Open Routines</a>
                 </Button>
