@@ -467,18 +467,22 @@ export default function RoutinesPage() {
                   return (
                   <div
                     key={regimenIndex}
-                    className={`peridot-panel p-5 transition-colors sm:p-6 ${isActiveFlow ? 'border-white/20 bg-white/[0.06]' : 'bg-white/[0.03]'}`}
-                    style={isActiveFlow ? { boxShadow: `0 0 0 1px ${tintRgba(tintMeta.value, 0.22)} inset` } : undefined}
+                    className="peridot-panel overflow-hidden p-5 transition-colors sm:p-6"
+                    style={{
+                      background: `linear-gradient(180deg, ${tintRgba(tintMeta.value, isActiveFlow ? 0.18 : 0.1)}, ${tintRgba(tintMeta.value, isActiveFlow ? 0.08 : 0.04)})`,
+                      boxShadow: `0 0 0 1px ${tintRgba(tintMeta.value, isActiveFlow ? 0.24 : 0.14)} inset`,
+                    }}
                   >
-                    <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                    <div className="-mx-5 -mt-5 mb-5 border-b px-5 py-4 sm:-mx-6 sm:-mt-6 sm:px-6" style={{ borderColor: tintRgba(tintMeta.value, 0.16), backgroundColor: tintRgba(tintMeta.value, isActiveFlow ? 0.16 : 0.08) }}>
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                       <button type="button" onClick={() => selectRegimen(regimenIndex)} className="min-w-0 flex-1 text-left">
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                          <span className="rounded-full border border-white/10 bg-white/6 px-2.5 py-1 text-[11px] uppercase tracking-[0.18em] text-white/70">Flow {regimenIndex + 1}</span>
-                          <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] text-white/68">{formatLabel(regimen.cadence)}</span>
+                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.18em]" style={{ borderColor: tintRgba(tintMeta.value, 0.28), backgroundColor: tintRgba(tintMeta.value, 0.18), color: '#f4f8ea' }}>Flow {regimenIndex + 1}</span>
+                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(tintMeta.value, 0.2), backgroundColor: tintRgba(tintMeta.value, 0.12), color: 'rgba(244,248,234,0.8)' }}>{formatLabel(regimen.cadence)}</span>
                           <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] text-white/68">{titledTasks}/{regimen.tasks.length} titled tasks</span>
                         </div>
                         <div className="mt-3 flex items-start gap-3">
-                          <span className="mt-1 h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: tintMeta.value }} />
+                          <span className="mt-1 h-3.5 w-3.5 shrink-0 rounded-full ring-2 ring-black/10" style={{ backgroundColor: tintMeta.value }} />
                           <div className="min-w-0">
                             <h4 className="text-base font-semibold text-white">{getDraftRegimenTitle(regimen, regimenIndex)}</h4>
                             <p className="mt-2 text-sm text-white/55">{isActiveFlow ? 'Editing this flow now.' : getDraftRegimenDaySummary(regimen)}</p>
@@ -498,6 +502,7 @@ export default function RoutinesPage() {
                         </Button>
                         {formData.regimens.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeRegimenAt(regimenIndex)} className="h-9 w-9 rounded-xl border border-emerald-200/30 bg-emerald-100/12 p-0 !text-[#f7faef] hover:bg-emerald-100/18 hover:!text-[#f7faef] [&_svg]:!text-[#f7faef]"><X className="h-4 w-4 !text-[#f7faef]" /></Button> : null}
                       </div>
+                    </div>
                     </div>
                     {isActiveFlow ? (<>
                     <div className="grid gap-5 md:grid-cols-2">
@@ -580,7 +585,7 @@ export default function RoutinesPage() {
                         <Button type="button" variant="ghost" size="sm" onClick={() => addTaskToRegimen(regimenIndex)} className="h-9 w-full rounded-xl border border-emerald-200/30 bg-[#243126] px-3 !text-[#f7faef] hover:bg-[#2b392d] hover:!text-[#f7faef] [&_svg]:!text-[#f7faef] sm:w-auto"><Plus className="mr-2 h-3 w-3 !text-[#f7faef]" />Add Task</Button>
                       </div>
                       {regimen.tasks.map((task, taskIndex) => (
-                        <div key={taskIndex} className={`peridot-panel-soft p-4 transition-colors sm:p-5 ${taskIndex === activeTaskIndex ? 'border-white/18 bg-white/[0.08]' : 'bg-white/[0.04]'}`}>
+                        <div key={taskIndex} className={`peridot-panel-soft p-4 transition-colors sm:p-5 ${taskIndex === activeTaskIndex ? 'border-white/18 bg-black/20' : 'bg-black/10'}`}>
                           <div className="mb-4 flex items-start justify-between gap-3">
                             <button type="button" onClick={() => setActiveTaskIndex(taskIndex)} className="min-w-0 flex-1 text-left">
                               <h6 className="text-sm font-semibold text-white">Task {taskIndex + 1}</h6>
