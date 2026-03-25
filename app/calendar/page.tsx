@@ -754,10 +754,10 @@ function CalendarPageContent() {
                   </div>
 
                   <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-                    <Button type="button" onClick={() => setShowMobileLayers((current) => !current)} className="peridot-display h-10 w-full rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10 sm:w-auto lg:hidden">
+                    <Button type="button" onClick={() => setShowMobileLayers((current) => !current)} className="peridot-display h-9 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-[0.8rem] text-white hover:bg-white/10 sm:h-10 sm:w-auto sm:px-4 sm:text-sm lg:hidden">
                       {showMobileLayers ? 'Hide Flows' : 'Show Flows'}
                     </Button>
-                    <Button type="button" asChild className="peridot-display inline-flex h-10 w-full rounded-xl border border-emerald-300/25 bg-emerald-300 px-4 font-semibold text-emerald-950 hover:bg-emerald-200 sm:w-auto">
+                    <Button type="button" asChild className="peridot-display inline-flex h-9 w-full rounded-xl border border-emerald-300/25 bg-emerald-300 px-3 text-[0.8rem] font-semibold text-emerald-950 hover:bg-emerald-200 sm:h-10 sm:w-auto sm:px-4 sm:text-sm">
                       <a href="/routines">
                         <Plus className="mr-2 h-4 w-4" />
                         Add Routine
