@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { Activity, CalendarCheck2, Flame, Layers3, Sparkles } from 'lucide-react'
+import { Activity, CalendarCheck2, Flame, Layers3 } from 'lucide-react'
 import { fetchAnalytics, subscribeToWorkspaceChanges } from '@/lib/workspace-client'
 import type { AnalyticsSummary } from '@/lib/workspace-types'
 
@@ -367,36 +367,6 @@ export function LocalAnalyticsOverview() {
               </div>
 
               <div className="space-y-4">
-                <div className="peridot-panel p-6">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-emerald-200/80" />
-                    <div className="peridot-section-label text-xs text-white/45">Motivation Snapshot</div>
-                  </div>
-                  <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
-                    <div className="peridot-soft-inset">
-                      <div className="peridot-section-label text-[11px] text-white/40">Active Days</div>
-                      <div className="peridot-panel-value mt-3 text-3xl font-semibold text-white">{isLoading ? '...' : analytics?.totals.activeDays ?? 0}</div>
-                      <p className="peridot-copy mt-2 text-sm text-white/50">Days where you got at least one task over the line.</p>
-                    </div>
-                    <div className="peridot-soft-inset">
-                      <div className="peridot-section-label text-[11px] text-white/40">Average Active Day</div>
-                      <div className="peridot-panel-value mt-3 text-3xl font-semibold text-white">{isLoading ? '...' : formatAverage(averagePerActiveDay)}</div>
-                      <p className="peridot-copy mt-2 text-sm text-white/50">Average tasks completed on the days you showed up.</p>
-                    </div>
-                    <div className="peridot-soft-inset">
-                      <div className="peridot-section-label text-[11px] text-white/40">Strongest Day</div>
-                      <div className="peridot-panel-value mt-3 text-3xl font-semibold text-white">{isLoading ? '...' : strongestDay.label}</div>
-                      <p className="peridot-copy mt-2 text-sm text-white/50">
-                        {isLoading
-                          ? 'Loading your best rhythm...'
-                          : strongestDay.total > 0
-                            ? `${strongestDay.total} completions have landed here so far.`
-                            : 'No standout day yet.'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
                 <div className="peridot-panel p-6">
                   <div className="mb-5">
                     <div className="peridot-section-label text-xs text-white/45">Flow Momentum</div>
