@@ -674,14 +674,15 @@ export default function RoutinesPage() {
                       <button
                         type="button"
                         onClick={() => setCollapsedRoutines((current) => ({ ...current, [routine.id]: !current[routine.id] }))}
-                        className="flex w-full items-start gap-3 text-left text-white"
+                        className="flex w-full items-start gap-4 text-left text-white"
                       >
                         <span className="mt-0.5 rounded-2xl border border-white/10 bg-white/5 p-2">
                           {collapsedRoutines[routine.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
                         </span>
-                        <div className="min-w-0">
-                          <h4 className="peridot-display text-[1.4rem] font-semibold leading-tight tracking-tight sm:text-2xl">{routine.title}</h4>
-                          <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+                        <div className="min-w-0 pt-1">
+                          <div className="peridot-meta text-[10px] text-white/35">Routine</div>
+                          <h4 className="peridot-display mt-2 text-[1.4rem] font-semibold leading-[1.02] tracking-tight sm:text-2xl">{routine.title}</h4>
+                          <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
                             <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3 py-1 text-[11px] text-emerald-100/80">
                               {formatLabel(routine.category)}
                             </span>
@@ -691,18 +692,18 @@ export default function RoutinesPage() {
                     </div>
 
                     <div className="grid gap-3 xl:w-[28rem]">
-                      <div className="grid grid-cols-2 gap-2 text-center">
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-2.5">
-                          <div className="peridot-display text-[1.35rem] leading-none text-white">{routine.regimens.length}</div>
-                          <div className="peridot-meta mt-2 text-[10px] text-white/45">Flows</div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-left">
+                          <div className="peridot-meta text-[10px] text-white/45">Flows</div>
+                          <div className="peridot-display mt-2 text-[1.5rem] leading-none text-white">{routine.regimens.length}</div>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-2.5">
-                          <div className="peridot-display text-[1.35rem] leading-none text-white">{countTasks(routine.regimens)}</div>
-                          <div className="peridot-meta mt-2 text-[10px] text-white/45">Tasks</div>
+                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-left">
+                          <div className="peridot-meta text-[10px] text-white/45">Tasks</div>
+                          <div className="peridot-display mt-2 text-[1.5rem] leading-none text-white">{countTasks(routine.regimens)}</div>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-3">
                         <Button type="button" variant="ghost" onClick={() => openEditRoutine(routine)} className="h-10 rounded-2xl border border-white/10 bg-white/5 px-2 text-white hover:bg-white/10">
                           <Pencil className="mr-1.5 h-4 w-4 shrink-0" />
                           Edit
