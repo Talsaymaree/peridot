@@ -120,28 +120,26 @@ export function Header() {
         )}
 
         {isMenuOpen && (
-          <div className="fixed inset-0 z-[80] lg:hidden">
-            <div className="peridot-focus-scrim absolute inset-0" />
-            <div className="peridot-mobile-nav-card absolute inset-0 flex min-h-screen flex-col overflow-y-auto">
-              <div className="flex min-h-[4.75rem] items-start justify-between border-b border-white/10 px-5 pb-5 pt-6">
+          <div className="peridot-mobile-nav-card fixed inset-0 z-[120] flex h-dvh w-screen flex-col overflow-y-auto lg:hidden">
+              <div className="flex min-h-[4.75rem] items-start justify-between border-b border-black/10 px-5 pb-5 pt-6">
                 <div className="min-w-0 pr-4">
-                  <div className="peridot-meta text-[10px] text-white/42">Navigation</div>
-                  <div className="peridot-display mt-2 text-[1.9rem] font-semibold leading-none text-white">Peridot</div>
+                  <div className="peridot-meta text-[10px] text-[#81944d]">Navigation</div>
+                  <div className="peridot-display mt-2 text-[1.9rem] font-semibold leading-none text-[#21300f]">Peridot</div>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setIsMenuOpen(false)}
-                  className="h-11 w-11 shrink-0 rounded-full border border-white/10 bg-white/[0.04] p-0 text-white hover:bg-white/[0.08]"
+                  className="h-11 w-11 shrink-0 rounded-full border border-black/10 bg-white/50 p-0 text-[#21300f] hover:bg-white/75"
                 >
                   <X className="h-5 w-5" />
                 </Button>
               </div>
 
               <div className="flex flex-1 flex-col px-5 pb-8 pt-5">
-                <div className="mb-5 border-b border-white/8 pb-4">
-                  <div className="peridot-meta text-[10px] text-white/35">Current</div>
-                  <div className="peridot-display mt-2 text-[1.55rem] leading-none text-white">{mobileTitle}</div>
+                <div className="mb-5 border-b border-black/8 pb-4">
+                  <div className="peridot-meta text-[10px] text-[#8a9b5a]">Current</div>
+                  <div className="peridot-display mt-2 text-[1.55rem] leading-none text-[#21300f]">{mobileTitle}</div>
                 </div>
 
                 <nav className="grid gap-2">
@@ -164,21 +162,7 @@ export function Header() {
                     )
                   })}
                 </nav>
-
-                <div className="mt-6 border-t border-white/8 pt-5">
-                  <div className="peridot-meta text-[10px] text-white/35">Workspace</div>
-                  <p className="mt-3 max-w-[22rem] text-sm leading-6 text-white/62">
-                    Profiles, imports, backups, and local settings live in one place.
-                  </p>
-                  <Button asChild className="mt-5 h-11 w-full border border-white/10 bg-white/[0.04] px-4 text-white hover:bg-white/[0.08]">
-                    <Link href="/settings" onClick={() => setIsMenuOpen(false)}>
-                      <Settings className="mr-2 h-4 w-4" />
-                      Open Settings
-                    </Link>
-                  </Button>
-                </div>
               </div>
-            </div>
           </div>
         )}
       </div>

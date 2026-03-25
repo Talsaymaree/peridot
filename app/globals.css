@@ -397,20 +397,23 @@
 
   .peridot-mobile-nav-card {
     background:
-      linear-gradient(180deg, rgba(13, 19, 8, 0.995), rgba(10, 14, 7, 1)),
-      radial-gradient(circle at top, rgba(207, 234, 122, 0.08), transparent 30%);
-    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
-    backdrop-filter: blur(24px) saturate(130%);
-    -webkit-backdrop-filter: blur(24px) saturate(130%);
+      radial-gradient(circle at top left, rgba(232, 247, 161, 0.88), transparent 28%),
+      radial-gradient(circle at top right, rgba(159, 204, 59, 0.22), transparent 24%),
+      linear-gradient(180deg, #f8fbef 0%, #eef7d6 52%, #e4f0c1 100%);
+    width: 100vw;
+    min-height: 100dvh;
+    box-shadow: none;
+    backdrop-filter: blur(18px) saturate(120%);
+    -webkit-backdrop-filter: blur(18px) saturate(120%);
   }
 
   .peridot-mobile-nav-link {
-    border: 1px solid rgba(207, 234, 122, 0.08);
+    border: 1px solid rgba(159, 204, 59, 0.16);
     border-radius: 0.75rem;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.018)),
-      rgba(255, 255, 255, 0.012);
-    color: rgba(238, 246, 218, 0.82);
+      linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(232, 247, 161, 0.34)),
+      rgba(255, 255, 255, 0.3);
+    color: #21300f;
     transition:
       transform 0.22s ease,
       background-color 0.22s ease,
@@ -420,32 +423,32 @@
 
   .peridot-mobile-nav-link:hover {
     transform: translateY(-1px);
-    border-color: rgba(207, 234, 122, 0.16);
+    border-color: rgba(159, 204, 59, 0.28);
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.024)),
-      rgba(255, 255, 255, 0.02);
-    color: #f2f7e3;
+      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(232, 247, 161, 0.4)),
+      rgba(255, 255, 255, 0.36);
+    color: #17210b;
   }
 
   .peridot-mobile-nav-link.is-active {
-    border-color: rgba(207, 234, 122, 0.24);
+    border-color: rgba(127, 191, 63, 0.34);
     background:
-      linear-gradient(90deg, rgba(159, 204, 59, 0.16), rgba(159, 204, 59, 0.05) 45%, rgba(255, 255, 255, 0.03)),
-      rgba(255, 255, 255, 0.018);
-    color: #f6fbec;
+      linear-gradient(90deg, rgba(159, 204, 59, 0.42), rgba(207, 234, 122, 0.24)),
+      rgba(255, 255, 255, 0.3);
+    color: #17210b;
   }
 
   .peridot-mobile-nav-icon {
-    border: 1px solid rgba(207, 234, 122, 0.1);
+    border: 1px solid rgba(159, 204, 59, 0.18);
     border-radius: 0.6rem;
-    background: rgba(255, 255, 255, 0.02);
-    color: rgba(207, 234, 122, 0.92);
+    background: rgba(255, 255, 255, 0.34);
+    color: #6d9424;
   }
 
   .peridot-mobile-nav-link.is-active .peridot-mobile-nav-icon {
-    border-color: rgba(207, 234, 122, 0.18);
-    background: rgba(159, 204, 59, 0.12);
-    color: #eef6da;
+    border-color: rgba(127, 191, 63, 0.24);
+    background: rgba(255, 255, 255, 0.44);
+    color: #4e6d17;
   }
 
   .peridot-overview-grid {
