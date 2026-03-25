@@ -231,20 +231,20 @@ export function DashboardOverview() {
                           boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.12)}, 0 14px 28px ${tintRgba(tint, 0.16)}`,
                         }}
                       >
-                        <div className="rounded-[0.95rem] bg-white/[0.08] px-3 py-3.5">
+                        <div className="rounded-[0.95rem] bg-white/[0.08] px-3 py-4">
                           <div className="min-w-0">
-                            <div className="peridot-meta px-1 text-[10px] text-[#2f4419]">Scheduled now</div>
-                            <div className="peridot-display mt-2 break-words px-1 pr-4 text-[0.76rem] leading-[1.22] text-[#17200e] transition group-hover:translate-x-0.5 sm:text-[0.9rem]">
+                            <div className="peridot-meta px-1 pt-1 text-[10px] text-[#2f4419]">Scheduled now</div>
+                            <div className="peridot-display mt-2 break-words px-1 pr-4 pt-0.5 text-[0.76rem] leading-[1.22] text-[#17200e] transition group-hover:translate-x-0.5 sm:text-[0.9rem]">
                               {regimen.title}
                             </div>
                             <div className="peridot-meta mt-3 break-words px-1 pr-4 text-[10px] leading-[1.45] text-[#39531e]">{regimen.routineTitle}</div>
                           </div>
-                          <div className="mt-4 grid grid-cols-1 gap-2 px-1 min-[360px]:grid-cols-2">
-                            <div className="rounded-[0.8rem] border px-3 py-2.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                          <div className="mt-4 grid grid-cols-1 gap-2 px-1 pb-1 min-[360px]:grid-cols-2">
+                            <div className="rounded-[0.8rem] border px-3 py-3" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
                               <div className="peridot-meta text-[10px] text-[#4a621f]">Tasks</div>
                               <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.taskCount}</div>
                             </div>
-                            <div className="rounded-[0.8rem] border px-3 py-2.5" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                            <div className="rounded-[0.8rem] border px-3 py-3" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
                               <div className="peridot-meta text-[10px] text-[#4a621f]">Left</div>
                               <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.remainingTaskCount}</div>
                             </div>
