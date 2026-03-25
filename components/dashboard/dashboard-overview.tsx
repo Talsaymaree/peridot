@@ -125,24 +125,28 @@ export function DashboardOverview() {
       value: activeRoutineCount,
       detail: totalRegimens === 1 ? '1 flow built' : `${totalRegimens} flows built`,
       ratio: clampRatio(activeRoutineCount / Math.max(routines.length || 1, 1)),
+      tone: 'rgba(32, 42, 18, 0.92)',
     },
     {
       label: 'Flows Today',
       value: todayRegimens.length,
       detail: totalTasksToday === 1 ? '1 task scheduled' : `${totalTasksToday} tasks scheduled`,
       ratio: clampRatio(todayRegimens.length / Math.max(totalRegimens || 1, 1)),
+      tone: 'rgba(45, 56, 24, 0.92)',
     },
     {
       label: 'Remaining',
       value: remainingTasksToday,
       detail: remainingTasksToday === 0 ? 'All clear' : 'still open',
       ratio: remainingTasksToday === 0 ? 0 : clampRatio(remainingShare),
+      tone: 'rgba(58, 66, 28, 0.92)',
     },
     {
       label: 'Completed',
       value: completedToday,
       detail: totalTasksToday === 0 ? 'No tasks today' : remainingTasksToday === 0 ? 'Day closed clean' : `${remainingTasksToday} still open`,
       ratio: clampRatio(completedShare),
+      tone: 'rgba(72, 82, 34, 0.92)',
     },
   ]
 
@@ -166,25 +170,41 @@ export function DashboardOverview() {
 
               <section className="peridot-stat-board">
                 <div className="peridot-stat-rule" />
-                <div className="mt-5 space-y-4">
+                <div className="peridot-summary-grid mt-5">
                   {summaryStats.map((stat) => {
                     const percent = isLoading ? '...' : String(Math.round(stat.ratio * 100)).padStart(3, '0')
-                    const width = isLoading ? 0 : Math.max(0, Math.min(100, Math.round(stat.ratio * 100)))
-                    const isFull = width >= 100
-                    const isEmpty = width <= 0
 
                     return (
-                      <div key={stat.label} className="peridot-stat-line">
-                        <div className="flex items-center justify-between gap-3">
-                          <div className="peridot-meta text-[10px] text-white/35">{stat.detail}</div>
-                          <div className="peridot-display text-sm leading-none text-white/65">{percent}</div>
+                      <div
+                        key={stat.label}
+                        className="peridot-compact-card rounded-[1rem] border"
+                        style={{
+                          borderColor: 'rgba(159, 204, 59, 0.18)',
+                          background:
+                            'linear-gradient(180deg, rgba(255,255,255,0.18), rgba(232,247,161,0.12)), linear-gradient(135deg, rgba(255,255,255,0.16), rgba(207,234,122,0.08))',
+                        }}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0 pr-2">
+                            <div className="peridot-meta text-[10px] text-[#7d8d4d]">{stat.label}</div>
+                            <div className="peridot-display mt-3 text-[2.3rem] leading-none text-[#1d2710]">
+                              {isLoading ? '...' : stat.value}
+                            </div>
+                          </div>
+                          <div className="rounded-full border px-2.5 py-1 text-[11px] leading-none text-[#304117]" style={{ borderColor: 'rgba(159, 204, 59, 0.24)', backgroundColor: 'rgba(255,255,255,0.34)' }}>
+                            {percent}
+                          </div>
                         </div>
-                        <div className={`peridot-stat-track mt-2 ${isFull ? 'peridot-stat-track-full' : ''}`}>
-                          <div className={`peridot-stat-fill ${isFull ? 'peridot-stat-fill-full' : ''}`} style={{ width: `${width}%` }} />
-                          {!isFull && !isEmpty ? <div className="peridot-stat-notch" style={{ left: `${width}%` }} /> : null}
-                          <div className="peridot-stat-name peridot-display">{stat.label}</div>
-                          <div className="peridot-stat-value-badge peridot-display">{isLoading ? '...' : stat.value}</div>
+                        <div className="mt-4 overflow-hidden rounded-full" style={{ backgroundColor: 'rgba(31, 42, 16, 0.12)' }}>
+                          <div
+                            className="h-2.5 rounded-full"
+                            style={{
+                              width: `${Math.max(8, Math.round(stat.ratio * 100))}%`,
+                              background: `linear-gradient(90deg, ${stat.tone}, rgba(159, 204, 59, 0.86))`,
+                            }}
+                          />
                         </div>
+                        <div className="mt-3 px-1 text-[11px] uppercase tracking-[0.16em] text-[#6d7f3d]">{stat.detail}</div>
                       </div>
                     )
                   })}
@@ -218,28 +238,29 @@ export function DashboardOverview() {
                       <Link
                         key={regimen.id}
                         href={scheduleHref}
-                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-4 py-4"
+                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-5 py-5"
                         style={{
-                          borderColor: tintRgba(tint, 0.36),
-                          background: 'linear-gradient(180deg, rgba(20,24,21,0.96), rgba(30,34,31,0.94))',
-                          boxShadow: `inset 4px 0 0 ${tint}, inset 0 0 0 1px ${tintRgba(tint, 0.12)}`,
+                          borderColor: tintRgba(tint, 0.44),
+                          background: `linear-gradient(180deg, ${tintRgba(tint, 0.82)}, ${tintRgba(tint, 0.66)})`,
+                          boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.12)}, 0 14px 28px ${tintRgba(tint, 0.16)}`,
                         }}
                       >
-                        <div className="flex items-center gap-3">
-                          <span
-                            className="inline-flex h-10 w-12 shrink-0 items-center justify-center rounded-sm border text-[0.9rem] font-semibold text-white"
-                            style={{ borderColor: tintRgba(tint, 0.28), backgroundColor: tintRgba(tint, 0.16) }}
-                          >
-                            -&gt;
-                          </span>
-                          <div className="min-w-0">
-                            <div className="peridot-display truncate text-[0.98rem] leading-none text-white transition group-hover:translate-x-0.5">{regimen.title}</div>
-                            <div className="peridot-meta mt-2 truncate text-[10px] text-white/56">{regimen.routineTitle}</div>
+                        <div className="min-w-0">
+                          <div className="peridot-meta px-1 text-[10px] text-[#2f4419]">Scheduled now</div>
+                          <div className="peridot-display mt-2 px-1 text-[1rem] leading-tight text-[#17200e] transition group-hover:translate-x-0.5">
+                            {regimen.title}
                           </div>
+                          <div className="peridot-meta mt-3 px-1 text-[10px] text-[#39531e]">{regimen.routineTitle}</div>
                         </div>
-                        <div className="mt-3 flex items-center justify-between text-[10px] uppercase tracking-[0.16em]">
-                          <span className="text-white/62">{regimen.taskCount} tasks</span>
-                          <span style={{ color: tintRgba(tint, 0.96) }}>{regimen.remainingTaskCount} left</span>
+                        <div className="mt-4 grid grid-cols-2 gap-2">
+                          <div className="rounded-[0.8rem] border px-3 py-2" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                            <div className="peridot-meta text-[10px] text-[#4a621f]">Tasks</div>
+                            <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.taskCount}</div>
+                          </div>
+                          <div className="rounded-[0.8rem] border px-3 py-2" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: 'rgba(255,255,255,0.18)' }}>
+                            <div className="peridot-meta text-[10px] text-[#4a621f]">Left</div>
+                            <div className="peridot-display mt-2 text-lg leading-none text-[#17200e]">{regimen.remainingTaskCount}</div>
+                          </div>
                         </div>
                       </Link>
                     )
