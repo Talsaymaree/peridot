@@ -673,7 +673,7 @@ export default function RoutinesPage() {
                 <div className="border-b border-white/10 bg-white/5 px-4 py-4 sm:px-6 sm:py-5">
                   <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                     <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2.5">
+                      <div className="flex items-center">
                         <button
                           type="button"
                           onClick={() => setCollapsedRoutines((current) => ({ ...current, [routine.id]: !current[routine.id] }))}
@@ -682,13 +682,13 @@ export default function RoutinesPage() {
                         >
                           {collapsedRoutines[routine.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
                         </button>
-                        <span className="peridot-meta rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3.5 py-1.5 text-[10px] leading-none text-emerald-100/85">
-                          {formatLabel(routine.category)}
-                        </span>
                       </div>
-                      <h4 className="peridot-display mt-3 min-w-0 text-[1.28rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-2xl">
+                      <h4 className="peridot-display mt-2.5 min-w-0 text-[1.28rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-2xl">
                         {routine.title}
                       </h4>
+                      <span className="peridot-meta mt-2 inline-flex rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3.5 py-1.5 text-[10px] leading-none text-emerald-100/85">
+                        {formatLabel(routine.category)}
+                      </span>
                     </div>
                     
                     <div className="grid gap-2.5 xl:w-[26rem]">

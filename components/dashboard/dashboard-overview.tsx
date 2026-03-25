@@ -215,7 +215,7 @@ export function DashboardOverview() {
                   No flows are scheduled for today yet.
                 </div>
               ) : (
-                <div className="grid gap-5 lg:grid-cols-2">
+                <div className="grid gap-7 lg:grid-cols-2">
                   {todayRegimens.map((regimen) => {
                     const tint = getRegimenTintMeta(regimen.colorTint).value
                     const scheduleHref = `/calendar?date=${isoDate(new Date())}&regimen=${regimen.id}`
@@ -254,7 +254,7 @@ export function DashboardOverview() {
                 </div>
               )}
 
-              <div className="mt-10 grid grid-cols-2 gap-3">
+              <div className="mt-14 grid grid-cols-2 gap-3">
                 <Button asChild className="peridot-display h-9 rounded-xl border border-emerald-300/25 bg-emerald-300 px-3 text-[0.8rem] font-semibold text-emerald-950 hover:bg-emerald-200 sm:h-10 sm:px-4 sm:text-sm">
                   <a href="/routines">Open Routines</a>
                 </Button>
