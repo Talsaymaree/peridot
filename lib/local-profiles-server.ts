@@ -141,6 +141,43 @@ export async function createLocalProfileServer(name: string) {
   return toProfileSummary(profile)
 }
 
+export async function deleteLocalProfileServer(profileId: string) {
+  await ensureLocalProfilesExist()
+
+  const profiles = await listLocalProfilesServer()
+
+  if (profiles.length <= 1) {
+    throw new Error('At least one profile must remain.')
+  }
+
+  const existing = await prisma.user.findUnique({
+    where: { id: profileId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  })
+
+  if (!existing) {
+    throw new Error('Profile not found.')
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.taskCompletion.deleteMany({
+      where: { userId: profileId },
+    })
+
+    await tx.user.delete({
+      where: { id: profileId },
+    })
+  })
+
+  return toProfileSummary(existing)
+}
+
 export function applyLocalProfileCookie(response: { cookies: { set: (name: string, value: string, options: typeof LOCAL_PROFILE_COOKIE_OPTIONS) => void } }, profileId: string) {
   response.cookies.set(LOCAL_PROFILE_COOKIE, profileId, LOCAL_PROFILE_COOKIE_OPTIONS)
 }

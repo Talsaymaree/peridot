@@ -50,6 +50,15 @@ export type CompletionRecord = {
   completedAt: string
 }
 
+export type InboxTaskRecord = {
+  id: string
+  title: string
+  description: string | null
+  completedAt: string | null
+  createdAt: string
+  updatedAt: string
+}
+
 export type CompletionItem = {
   regimenId: string
   taskId: string
@@ -65,6 +74,16 @@ export type AnalyticsSummary = {
     currentStreak: number
   }
   series: Array<{
+    date: string
+    label: string
+    total: number
+  }>
+  flowSeries: Array<{
+    date: string
+    label: string
+    total: number
+  }>
+  routineSeries: Array<{
     date: string
     label: string
     total: number
@@ -89,6 +108,7 @@ export type LocalWorkspace = {
     username: string
   }
   routines: RoutineRecord[]
+  inboxTasks: InboxTaskRecord[]
   completions: CompletionRecord[]
 }
 
@@ -97,6 +117,7 @@ export type WorkspaceSnapshot = {
     username: string
   }
   routines: RoutineRecord[]
+  inboxTasks: InboxTaskRecord[]
 }
 
 export type WorkspaceProfileSummary = {
@@ -133,4 +154,10 @@ export type RoutineInput = {
       referenceType?: string
     }>
   }>
+}
+
+export type InboxTaskInput = {
+  title?: string
+  description?: string
+  completed?: boolean
 }

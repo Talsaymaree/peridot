@@ -6,44 +6,49 @@
 @layer base {
   :root {
     --font-body: ui-sans-serif, system-ui, sans-serif;
-    --font-display: ui-sans-serif, system-ui, sans-serif;
-    --peridot-primary: #9fcc3b;
-    --peridot-primary-soft: #cfea7a;
-    --peridot-highlight: #e8f7a1;
-    --peridot-bg: #f7faef;
-    --peridot-surface: rgba(232, 247, 161, 0.42);
-    --peridot-surface-secondary: rgba(207, 234, 122, 0.26);
-    --peridot-text: #1f2a10;
-    --peridot-text-secondary: #5a6b2d;
-    --peridot-text-muted: #8a9b5a;
-    --peridot-active: #a4d65e;
-    --peridot-success: #7fbf3f;
-    --peridot-warning: #e6c84f;
-    --peridot-error: #d96b4a;
-    --peridot-border: rgba(159, 204, 59, 0.24);
-    --peridot-border-strong: rgba(159, 204, 59, 0.38);
-    --peridot-shadow: 0 24px 70px rgba(132, 150, 79, 0.16);
-    --peridot-shell-glow: rgba(232, 247, 161, 0.42);
+    --font-display: "Satoshi", var(--font-body), ui-sans-serif, system-ui, sans-serif;
+    --peridot-palette-yellow: #ffdf33;
+    --peridot-palette-green: #66ff99;
+    --peridot-palette-blue: #33b7db;
+    --peridot-palette-red: #bd0000;
+    --peridot-palette-black: #000000;
+    --peridot-primary: #66ff99;
+    --peridot-primary-soft: #33b7db;
+    --peridot-highlight: #ffdf33;
+    --peridot-bg: #000000;
+    --peridot-surface: rgba(51, 183, 219, 0.12);
+    --peridot-surface-secondary: rgba(102, 255, 153, 0.08);
+    --peridot-text: #ffdf33;
+    --peridot-text-secondary: rgba(255, 223, 51, 0.78);
+    --peridot-text-muted: rgba(255, 223, 51, 0.48);
+    --peridot-active: #66ff99;
+    --peridot-success: #66ff99;
+    --peridot-warning: #ffdf33;
+    --peridot-error: #bd0000;
+    --peridot-border: rgba(102, 255, 153, 0.18);
+    --peridot-border-strong: rgba(102, 255, 153, 0.34);
+    --peridot-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+    --peridot-shell-glow: rgba(51, 183, 219, 0.18);
   }
 
   .dark {
-    --peridot-primary: #9fcc3b;
-    --peridot-primary-soft: #cfea7a;
-    --peridot-highlight: #d9ee88;
-    --peridot-bg: #0f1408;
-    --peridot-surface: rgba(159, 204, 59, 0.16);
-    --peridot-surface-secondary: rgba(207, 234, 122, 0.12);
-    --peridot-text: #eef6da;
-    --peridot-text-secondary: #c8d7a0;
-    --peridot-text-muted: #95a76c;
-    --peridot-active: #a4d65e;
-    --peridot-success: #7fbf3f;
-    --peridot-warning: #e6c84f;
-    --peridot-error: #d96b4a;
-    --peridot-border: rgba(207, 234, 122, 0.22);
-    --peridot-border-strong: rgba(207, 234, 122, 0.34);
-    --peridot-shadow: 0 26px 70px rgba(0, 0, 0, 0.4);
-    --peridot-shell-glow: rgba(159, 204, 59, 0.28);
+    --peridot-primary: #66ff99;
+    --peridot-primary-soft: #33b7db;
+    --peridot-highlight: #ffdf33;
+    --peridot-bg: #000000;
+    --peridot-surface: rgba(51, 183, 219, 0.12);
+    --peridot-surface-secondary: rgba(102, 255, 153, 0.08);
+    --peridot-text: #ffdf33;
+    --peridot-text-secondary: rgba(255, 223, 51, 0.78);
+    --peridot-text-muted: rgba(255, 223, 51, 0.48);
+    --peridot-active: #66ff99;
+    --peridot-success: #66ff99;
+    --peridot-warning: #ffdf33;
+    --peridot-error: #bd0000;
+    --peridot-border: rgba(102, 255, 153, 0.18);
+    --peridot-border-strong: rgba(102, 255, 153, 0.34);
+    --peridot-shadow: 0 26px 70px rgba(0, 0, 0, 0.46);
+    --peridot-shell-glow: rgba(51, 183, 219, 0.18);
   }
 
   html,
@@ -80,7 +85,7 @@
   }
 
   ::selection {
-    background: rgba(159, 204, 59, 0.28);
+    background: rgba(102, 255, 153, 0.28);
     color: var(--peridot-text);
   }
 
@@ -102,30 +107,28 @@
 
   .zune-bg {
     background:
-      radial-gradient(circle at top left, rgba(232, 247, 161, 0.78), transparent 22%),
-      radial-gradient(circle at top right, rgba(159, 204, 59, 0.34), transparent 20%),
-      linear-gradient(180deg, #f8fbef 0%, #f0f8dc 46%, #e7f1ca 100%);
+      radial-gradient(circle at 0% 100%, rgba(255, 223, 51, 0.06), transparent 22%),
+      radial-gradient(circle at top right, rgba(255, 223, 51, 0.03), transparent 18%),
+      linear-gradient(180deg, #070907 0%, #050705 46%, #030403 100%);
     background-attachment: fixed;
     color: var(--peridot-text);
   }
 
   .dark .zune-bg {
     background:
-      radial-gradient(circle at top left, rgba(159, 204, 59, 0.18), transparent 24%),
-      radial-gradient(circle at top right, rgba(207, 234, 122, 0.12), transparent 20%),
-      linear-gradient(180deg, #0f1408 0%, #141b0c 46%, #101608 100%);
+      radial-gradient(circle at 0% 100%, rgba(255, 223, 51, 0.06), transparent 24%),
+      radial-gradient(circle at top right, rgba(255, 223, 51, 0.03), transparent 20%),
+      linear-gradient(180deg, #070907 0%, #050705 46%, #030403 100%);
   }
 
   .zune-card,
   .peridot-panel {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(232, 247, 161, 0.26)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(207, 234, 122, 0.12));
-    border: 1px solid var(--peridot-border);
-    border-radius: 0.9rem;
-    box-shadow: var(--peridot-shadow);
-    backdrop-filter: blur(22px) saturate(145%);
-    -webkit-backdrop-filter: blur(22px) saturate(145%);
+      linear-gradient(180deg, rgba(3, 5, 6, 0.98), rgba(0, 0, 0, 0.96)),
+      radial-gradient(circle at 0% 100%, rgba(51, 183, 219, 0.08), transparent 28%);
+    border: 1px solid rgba(102, 255, 153, 0.18);
+    border-radius: 0.2rem;
+    box-shadow: none;
     position: relative;
     overflow: hidden;
     isolation: isolate;
@@ -134,18 +137,17 @@
   .dark .zune-card,
   .dark .peridot-panel {
     background:
-      linear-gradient(180deg, rgba(159, 204, 59, 0.12), rgba(26, 34, 16, 0.82)),
-      linear-gradient(135deg, rgba(232, 247, 161, 0.06), rgba(207, 234, 122, 0.03));
+      linear-gradient(180deg, rgba(51, 183, 219, 0.08), rgba(0, 0, 0, 0.04)),
+      linear-gradient(135deg, rgba(102, 255, 153, 0.05), rgba(51, 183, 219, 0.04));
   }
 
   .peridot-panel-soft {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(232, 247, 161, 0.18)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(207, 234, 122, 0.08));
-    border: 1px solid rgba(159, 204, 59, 0.14);
-    border-radius: 0.75rem;
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+      linear-gradient(180deg, rgba(3, 6, 7, 0.94), rgba(0, 0, 0, 0.9)),
+      radial-gradient(circle at 100% 0%, rgba(51, 183, 219, 0.06), transparent 22%);
+    border: 1px solid rgba(102, 255, 153, 0.14);
+    border-radius: 0.18rem;
+    box-shadow: none;
     position: relative;
     overflow: hidden;
     isolation: isolate;
@@ -153,19 +155,17 @@
 
   .dark .peridot-panel-soft {
     background:
-      linear-gradient(180deg, rgba(159, 204, 59, 0.1), rgba(28, 36, 16, 0.78)),
-      linear-gradient(135deg, rgba(232, 247, 161, 0.04), rgba(207, 234, 122, 0.03));
+      linear-gradient(180deg, rgba(51, 183, 219, 0.06), rgba(0, 0, 0, 0.02)),
+      linear-gradient(135deg, rgba(102, 255, 153, 0.04), rgba(51, 183, 219, 0.03));
   }
 
   .peridot-panel-deep {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(232, 247, 161, 0.24)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(207, 234, 122, 0.1));
-    border: 1px solid var(--peridot-border);
-    border-radius: 0.75rem;
-    box-shadow: var(--peridot-shadow);
-    backdrop-filter: blur(24px) saturate(150%);
-    -webkit-backdrop-filter: blur(24px) saturate(150%);
+      linear-gradient(180deg, rgba(2, 5, 6, 0.98), rgba(0, 0, 0, 0.96)),
+      radial-gradient(circle at 100% 0%, rgba(51, 183, 219, 0.05), transparent 24%);
+    border: 1px solid rgba(102, 255, 153, 0.18);
+    border-radius: 0.18rem;
+    box-shadow: none;
     position: relative;
     overflow: hidden;
     isolation: isolate;
@@ -173,34 +173,81 @@
 
   .dark .peridot-panel-deep {
     background:
-      linear-gradient(180deg, rgba(159, 204, 59, 0.12), rgba(20, 28, 13, 0.84)),
-      linear-gradient(135deg, rgba(232, 247, 161, 0.04), rgba(207, 234, 122, 0.03));
+      linear-gradient(180deg, rgba(51, 183, 219, 0.06), rgba(0, 0, 0, 0.02)),
+      linear-gradient(135deg, rgba(102, 255, 153, 0.04), rgba(51, 183, 219, 0.03));
   }
 
   .zune-button {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(232, 247, 161, 0.24)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(207, 234, 122, 0.08));
-    border: 1px solid var(--peridot-border);
-    border-radius: 0.55rem;
+      linear-gradient(180deg, rgba(3, 6, 7, 0.96), rgba(0, 0, 0, 0.94)),
+      radial-gradient(circle at 0% 100%, rgba(51, 183, 219, 0.04), transparent 24%);
+    border: 1px solid rgba(102, 255, 153, 0.14);
+    border-radius: 0.14rem;
     transition: all 0.25s ease;
     color: var(--peridot-text);
-    box-shadow: 0 12px 30px rgba(145, 169, 80, 0.1);
-    backdrop-filter: blur(16px) saturate(145%);
-    -webkit-backdrop-filter: blur(16px) saturate(145%);
+    box-shadow: none;
   }
 
   .zune-button:hover {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(232, 247, 161, 0.3)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(207, 234, 122, 0.1));
+      linear-gradient(180deg, rgba(255, 223, 51, 0.06), rgba(255, 223, 51, 0.025)),
+      linear-gradient(135deg, rgba(255, 223, 51, 0.04), rgba(255, 223, 51, 0.016));
     border-color: var(--peridot-border-strong);
-    box-shadow: 0 16px 34px rgba(145, 169, 80, 0.14);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.34);
     transform: translateY(-1px);
   }
 
+  .peridot-accent-button {
+    background: var(--peridot-primary);
+    border: 1px solid rgba(102, 255, 153, 0.32);
+    color: #000;
+    box-shadow: none;
+  }
+
+  .peridot-accent-button:hover {
+    background: var(--peridot-highlight);
+    color: rgba(0, 0, 0, 0.96);
+    box-shadow: 0 18px 38px rgba(255, 223, 51, 0.2);
+  }
+
+  .peridot-accent-button:disabled {
+    opacity: 0.72;
+    box-shadow: none;
+  }
+
+  .peridot-accent-link {
+    color: var(--peridot-primary);
+    transition: color 0.2s ease;
+  }
+
+  .peridot-accent-link:hover {
+    color: var(--peridot-highlight);
+  }
+
+  .peridot-success-note {
+    border: 1px solid rgba(102, 255, 153, 0.22);
+    background:
+      linear-gradient(180deg, rgba(102, 255, 153, 0.12), rgba(0, 0, 0, 0.02)),
+      linear-gradient(135deg, rgba(51, 183, 219, 0.08), rgba(102, 255, 153, 0.04));
+    color: var(--peridot-highlight);
+  }
+
+  .peridot-danger-note {
+    border: 1px solid rgba(189, 0, 0, 0.32);
+    background:
+      linear-gradient(180deg, rgba(189, 0, 0, 0.22), rgba(0, 0, 0, 0.06)),
+      linear-gradient(135deg, rgba(189, 0, 0, 0.14), rgba(0, 0, 0, 0.02));
+    color: var(--peridot-highlight);
+  }
+
+  .peridot-accent-pill {
+    border: 1px solid rgba(51, 183, 219, 0.28);
+    background: rgba(51, 183, 219, 0.12);
+    color: var(--peridot-highlight);
+  }
+
   .dark .zune-button {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 223, 51, 0.04);
     color: var(--peridot-text);
   }
 
@@ -221,7 +268,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: linear-gradient(90deg, transparent, rgba(232, 247, 161, 0.44), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 223, 51, 0.44), transparent);
     opacity: 0;
     transition: opacity 0.25s ease;
     transform: translateX(-100%);
@@ -233,30 +280,25 @@
   }
 
   .zune-glow {
-    box-shadow: 0 0 0 1px rgba(159, 204, 59, 0.2), 0 18px 40px rgba(159, 204, 59, 0.14);
+    box-shadow: 0 0 0 1px rgba(102, 255, 153, 0.2), 0 18px 40px rgba(102, 255, 153, 0.14);
   }
 
   .zune-text-glow {
-    text-shadow: 0 10px 30px rgba(159, 204, 59, 0.14);
+    text-shadow: 0 10px 30px rgba(102, 255, 153, 0.14);
   }
 
   .zune-input,
   .peridot-control {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(247, 250, 239, 0.9)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(232, 247, 161, 0.22));
-    border: 1px solid rgba(145, 169, 80, 0.28);
+      linear-gradient(180deg, rgba(4, 6, 4, 0.96), rgba(2, 3, 2, 0.92)),
+      radial-gradient(circle at 0% 100%, rgba(255, 223, 51, 0.025), transparent 24%);
+    border: 1px solid rgba(102, 255, 153, 0.16);
     color: var(--peridot-text);
-    border-radius: 0.55rem;
+    border-radius: 0.12rem;
     font-size: 1rem;
     line-height: 1.4;
     transition: all 0.25s ease;
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.78),
-      0 0 0 1px rgba(255, 255, 255, 0.4),
-      0 10px 24px rgba(145, 169, 80, 0.08);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: none;
   }
 
   @media (min-width: 640px) {
@@ -268,42 +310,42 @@
 
   select.peridot-control {
     color: var(--peridot-text);
-    background-color: rgba(255, 255, 255, 0.96);
+    background-color: rgba(8, 10, 8, 0.95);
     min-height: 2.75rem;
     padding-right: 2.75rem;
   }
 
   .dark select.peridot-control {
     color: var(--peridot-text);
-    background-color: rgba(26, 34, 16, 0.92);
+    background-color: rgba(8, 10, 8, 0.95);
   }
 
   select.peridot-control option {
     color: var(--peridot-text);
-    background: #f4f9e7;
+    background: #090c09;
   }
 
   .dark select.peridot-control option {
     color: var(--peridot-text);
-    background: #1a2210;
+    background: #090c09;
   }
 
   .dark .zune-input,
   .dark .peridot-control {
-    background: linear-gradient(180deg, rgba(37, 49, 25, 0.95), rgba(26, 34, 16, 0.94));
-    border-color: rgba(207, 234, 122, 0.18);
+    background: linear-gradient(180deg, rgba(12, 14, 12, 0.96), rgba(8, 10, 8, 0.95));
+    border-color: rgba(102, 255, 153, 0.14);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 1px 0 rgba(255, 223, 51, 0.04),
       0 0 0 1px rgba(0, 0, 0, 0.18);
   }
 
   .zune-input:focus,
   .peridot-control:focus {
-    border-color: rgba(127, 191, 63, 0.52);
+    border-color: rgba(102, 255, 153, 0.34);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.86),
-      0 0 0 3px rgba(232, 247, 161, 0.5),
-      0 14px 28px rgba(145, 169, 80, 0.12);
+      inset 0 1px 0 rgba(255, 223, 51, 0.05),
+      0 0 0 2px rgba(102, 255, 153, 0.12),
+      0 14px 28px rgba(102, 255, 153, 0.08);
     outline: none;
   }
 
@@ -314,22 +356,1771 @@
 
   .peridot-shell {
     background:
-      radial-gradient(circle at top left, rgba(232, 247, 161, 0.82), transparent 22%),
-      radial-gradient(circle at 82% 16%, rgba(159, 204, 59, 0.3), transparent 18%),
-      radial-gradient(circle at 50% 100%, rgba(207, 234, 122, 0.26), transparent 24%),
-      linear-gradient(180deg, #f8fbef 0%, #f1f8de 38%, #e8f2cd 100%);
+      radial-gradient(circle at 0% 100%, rgba(255, 223, 51, 0.06), transparent 22%),
+      radial-gradient(circle at 82% 16%, rgba(255, 223, 51, 0.025), transparent 18%),
+      radial-gradient(circle at 50% 100%, rgba(255, 223, 51, 0.03), transparent 24%),
+      linear-gradient(180deg, #090b09 0%, #060806 38%, #040504 100%);
     color: var(--peridot-text);
   }
 
   .peridot-page-gutter {
-    padding-left: 0.625rem;
-    padding-right: 0.625rem;
+    --peridot-page-gutter: 0.625rem;
+    padding-left: var(--peridot-page-gutter);
+    padding-right: var(--peridot-page-gutter);
   }
 
   .peridot-page-frame {
     width: min(100%, 1380px);
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .peridot-stage-shell {
+    width: min(100%, 1440px);
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .peridot-stage-header {
+    display: grid;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .peridot-stage-box {
+    border: 1px solid rgba(102, 255, 153, 0.28);
+    background:
+      linear-gradient(180deg, rgba(6, 6, 6, 0.98), rgba(3, 3, 3, 0.96)),
+      radial-gradient(circle at 0% 100%, rgba(255, 223, 51, 0.07), transparent 28%);
+    padding: 0.9rem 0.95rem 1rem;
+    min-width: 0;
+  }
+
+  .peridot-stage-box.is-compact {
+    padding: 0.75rem 0.85rem;
+  }
+
+  .peridot-stage-kicker {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.44em;
+    text-transform: uppercase;
+    color: rgba(255, 223, 51, 0.66);
+  }
+
+  .peridot-stage-title {
+    margin-top: 0.55rem;
+    color: #ffdf33;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4.6rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+  }
+
+  .peridot-stage-meta {
+    margin-top: 0.95rem;
+    color: rgba(255, 223, 51, 0.88);
+    font-family: var(--font-display);
+    font-size: clamp(0.82rem, 1.1vw, 1.08rem);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+  }
+
+  .peridot-stage-description {
+    margin-top: 0.9rem;
+    max-width: 66ch;
+    color: rgba(255, 223, 51, 0.62);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+
+  .peridot-stage-stack {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .peridot-stage-statline {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-top: 1px solid rgba(102, 255, 153, 0.16);
+    padding-top: 0.5rem;
+  }
+
+  .peridot-stage-statline:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .peridot-stage-statline-label {
+    font-family: var(--font-display);
+    font-size: 0.74rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: rgba(255, 223, 51, 0.58);
+  }
+
+  .peridot-stage-statline-value {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.2vw, 2.3rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: #ffdf33;
+  }
+
+  .peridot-tboard-surface {
+    position: relative;
+  }
+
+  .peridot-tboard-command-stack,
+  .peridot-tboard-hive-zone {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+    align-content: start;
+  }
+
+  .peridot-tboard-layout,
+  .peridot-tboard-command-column,
+  .peridot-tboard-live-column {
+    min-width: 0;
+  }
+
+  .peridot-tboard-command-center,
+  .peridot-tboard-route-matrix,
+  .peridot-tboard-hive-grid-intro,
+  .peridot-tboard-hive-panel,
+  .peridot-tboard-cell {
+    min-width: 0;
+    position: relative;
+  }
+
+  .peridot-tboard-route-matrix,
+  .peridot-tboard-hive-grid-intro,
+  .peridot-tboard-hive-panel,
+  .peridot-tboard-cell {
+    overflow: hidden;
+  }
+
+  .peridot-tboard-command-center::before,
+  .peridot-tboard-route-matrix::before,
+  .peridot-tboard-hive-grid-intro::before,
+  .peridot-tboard-hive-panel::before {
+    content: none;
+  }
+
+  .peridot-tboard-command-center {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+    max-width: 100%;
+  }
+
+  .peridot-tboard-route-matrix,
+  .peridot-tboard-hive-grid-intro {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .peridot-tboard-hive-panel {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .peridot-tboard-hive-grid-intro,
+  .peridot-tboard-hive-panel {
+    display: grid;
+    align-content: start;
+    gap: 1rem;
+  }
+
+  .peridot-tboard-hive-panel > .mt-4 {
+    margin-top: 0 !important;
+  }
+
+  .peridot-tboard-surface {
+    --tboard-cell-width: 10.6rem;
+    --tboard-cell-height: 8.2rem;
+    /* Flat-top honeycomb spacing: 3/4 width center step and 1/2 height row step. */
+    --tboard-cell-gap: calc(var(--tboard-cell-width) * -0.25);
+    --tboard-row-overlap: calc(var(--tboard-cell-height) * 0.5);
+    --tboard-hex-row-offset: calc((var(--tboard-cell-width) + var(--tboard-cell-gap)) / 2);
+  }
+
+  .peridot-tboard-surface .peridot-panel-deep {
+    border: 0;
+    background: #020202;
+    box-shadow: none;
+  }
+
+  .peridot-tboard-hive-matrix {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.85rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.35rem 0 0;
+  }
+
+  .peridot-tboard-hive-column {
+    display: contents;
+  }
+
+  .peridot-tboard-open-grid {
+    --analytics-cell-width: var(--tboard-cell-width);
+    --analytics-cell-height: var(--tboard-cell-height);
+    --analytics-cell-content-width: var(--tboard-cell-content-width, 7.5rem);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.85rem;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.35rem 0 0;
+  }
+
+  .peridot-tboard-open-column {
+    display: contents;
+  }
+
+  .peridot-tboard-open-stage {
+    display: grid;
+    gap: 0.35rem;
+    width: 100%;
+    justify-items: center;
+  }
+
+  .peridot-tboard-open-card {
+    position: relative;
+    width: var(--analytics-cell-width);
+    min-height: 0;
+    height: var(--analytics-cell-height);
+    box-sizing: content-box;
+    appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 0.78rem 0.72rem 0.74rem;
+    display: grid;
+    grid-template-rows: 1fr;
+    align-content: center;
+    gap: 0.2rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+      transform 180ms ease,
+      filter 180ms ease;
+    z-index: 0;
+  }
+
+  .peridot-tboard-open-card:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
+  }
+
+  .peridot-tboard-open-card:focus-visible {
+    outline: none;
+    transform: translateY(-1px);
+  }
+
+  .peridot-tboard-open-card.is-selected {
+    z-index: 2;
+  }
+
+  .peridot-tboard-open-column:has(.peridot-tboard-open-card.is-selected) {
+    z-index: 3;
+  }
+
+  .peridot-tboard-open-card.is-selected::before {
+    background: rgba(102, 255, 153, 0.98);
+    box-shadow:
+      0 0 14px rgba(102, 255, 153, 0.28),
+      0 0 32px rgba(102, 255, 153, 0.12);
+  }
+
+  .peridot-tboard-open-card.is-selected::after {
+    background:
+      radial-gradient(circle at 50% 38%, rgba(102, 255, 153, 0.08), transparent 58%),
+      linear-gradient(180deg, rgba(3, 5, 6, 0.98), rgba(0, 0, 0, 0.99));
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 223, 51, 0.42),
+      inset 0 0 28px rgba(102, 255, 153, 0.05);
+  }
+
+  .peridot-tboard-open-card.is-selected .peridot-analytics-stat-kicker {
+    color: rgba(255, 223, 51, 0.88);
+  }
+
+  .peridot-tboard-open-card > .peridot-tboard-open-body {
+    align-self: stretch;
+    justify-self: center;
+    width: min(100%, var(--analytics-cell-content-width));
+    display: grid;
+    align-content: center;
+    gap: 0.16rem;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .peridot-tboard-open-card .peridot-analytics-stat-kicker {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .peridot-tboard-open-title {
+    font-size: 0.76rem;
+    line-height: 0.95;
+    letter-spacing: 0.005em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .peridot-tboard-open-title.is-struck {
+    color: rgba(255, 223, 51, 0.66);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+
+  .peridot-tboard-open-card.is-selected .peridot-tboard-open-title.is-struck {
+    color: #ffdf33;
+  }
+
+  .peridot-tboard-open-card--archive:not(.is-selected)::before {
+    background: rgba(51, 183, 219, 0.5);
+    box-shadow:
+      0 0 10px rgba(51, 183, 219, 0.12),
+      0 0 22px rgba(51, 183, 219, 0.04);
+  }
+
+  .peridot-tboard-open-card--archive:not(.is-selected)::after {
+    background:
+      radial-gradient(circle at 50% 38%, rgba(51, 183, 219, 0.035), transparent 58%),
+      linear-gradient(180deg, rgba(2, 4, 6, 0.98), rgba(0, 0, 0, 0.99));
+    box-shadow:
+      inset 0 0 0 1px rgba(51, 183, 219, 0.14),
+      inset 0 0 24px rgba(51, 183, 219, 0.03);
+  }
+
+  .peridot-tboard-open-card--archive:not(.is-selected) .peridot-analytics-stat-kicker {
+    color: rgba(51, 183, 219, 0.68);
+  }
+
+  .peridot-tboard-open-card--archive:not(.is-selected) .peridot-tboard-open-title {
+    color: rgba(255, 223, 51, 0.66);
+  }
+
+  .peridot-tboard-open-card--archive:not(.is-selected) .peridot-tboard-open-title.is-struck {
+    color: rgba(255, 223, 51, 0.5);
+  }
+
+  .peridot-tboard-open-card--archive:not(.is-selected) .peridot-tboard-open-meta {
+    color: rgba(102, 255, 153, 0.42);
+  }
+
+  .peridot-tboard-open-copy {
+    display: none;
+  }
+
+  .peridot-tboard-open-meta {
+    font-size: 0.47rem;
+    line-height: 1.22;
+    letter-spacing: 0.12em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .peridot-tboard-open-command-shell {
+    display: grid;
+    justify-items: center;
+    gap: 0.2rem;
+    width: max-content;
+    max-width: 100%;
+    margin: 0 auto 1.45rem;
+  }
+
+  .peridot-tboard-open-command-deck {
+    --routine-command-scale: 0.76;
+    margin: 0;
+  }
+
+  .peridot-tboard-open-command-caption {
+    max-width: 16rem;
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    line-height: 1.1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #effffc;
+    text-wrap: balance;
+  }
+
+  .peridot-tboard-open-command-meta {
+    font-size: 0.58rem;
+    line-height: 1.5;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(191, 255, 216, 0.46);
+  }
+
+  .peridot-tboard-cell {
+    width: var(--tboard-cell-width);
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .peridot-tboard-cell-frame {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 0.24rem;
+    min-height: var(--tboard-cell-height);
+    padding: 0.98rem 0.98rem 0.9rem;
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background: transparent;
+    box-shadow: none;
+    justify-items: center;
+    text-align: left;
+    overflow: hidden;
+  }
+
+  .peridot-tboard-cell-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background: rgba(51, 183, 219, 0.92);
+    box-shadow:
+      0 0 12px rgba(51, 183, 219, 0.18),
+      0 0 24px rgba(51, 183, 219, 0.06);
+    pointer-events: none;
+  }
+
+  .peridot-tboard-cell-frame::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background:
+      radial-gradient(circle at 50% 38%, rgba(51, 183, 219, 0.03), transparent 58%),
+      linear-gradient(180deg, rgba(2, 8, 7, 0.98), rgba(0, 3, 2, 0.99));
+    box-shadow:
+      inset 0 0 0 1px rgba(51, 183, 219, 0.18),
+      inset 0 0 30px rgba(51, 183, 219, 0.02);
+    pointer-events: none;
+  }
+
+  .peridot-tboard-cell-frame > * {
+    position: relative;
+    z-index: 1;
+    width: min(100%, var(--tboard-cell-content-width, 7.5rem));
+    justify-self: center;
+  }
+
+  .peridot-tboard-cell-toolbar {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 0.35rem;
+    width: min(100%, var(--tboard-cell-content-width, 7.5rem));
+  }
+
+  .peridot-tboard-cell-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.95rem;
+    height: 1.95rem;
+    padding: 0;
+    flex: 0 0 auto;
+  }
+
+  .peridot-tboard-cell-icon--ghost {
+    border-color: rgba(51, 183, 219, 0.24);
+    background: rgba(51, 183, 219, 0.06);
+    color: #33b7db;
+  }
+
+  .peridot-tboard-cell-body {
+    display: grid;
+    align-content: start;
+    gap: 0.24rem;
+    min-height: 0;
+    width: min(100%, var(--tboard-cell-content-width, 7.5rem));
+    justify-self: center;
+  }
+
+  .peridot-tboard-cell-label {
+    font-family: var(--font-display);
+    font-size: 0.48rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(179, 255, 190, 0.56);
+  }
+
+  .peridot-tboard-cell-title {
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: #33b7db;
+    text-wrap: balance;
+    max-width: 100%;
+  }
+
+  .peridot-tboard-cell-title.is-struck {
+    color: rgba(207, 255, 247, 0.54);
+    text-decoration: line-through;
+  }
+
+  .peridot-tboard-cell-copy {
+    font-family: var(--font-display);
+    font-size: 0.56rem;
+    line-height: 1.25;
+    letter-spacing: 0.12em;
+    color: rgba(213, 255, 203, 0.42);
+    text-transform: uppercase;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .peridot-tboard-cell-meta {
+    font-family: var(--font-display);
+    font-size: 0.48rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(213, 255, 203, 0.44);
+  }
+
+  .peridot-tboard-cell-actions {
+    display: grid;
+    gap: 0.32rem;
+    align-content: end;
+    width: min(100%, var(--tboard-cell-content-width, 7.5rem));
+  }
+
+  .peridot-tboard-cell .peridot-accent-button {
+    border-color: rgba(102, 255, 153, 0.42);
+    background: rgba(102, 255, 153, 0.94);
+    box-shadow: 0 0 18px rgba(102, 255, 153, 0.12);
+  }
+
+  .peridot-tboard-cell .peridot-live-inline-button,
+  .peridot-tboard-cell .peridot-live-inline-link {
+    justify-content: center;
+    width: 100%;
+    min-height: 1.8rem;
+    padding: 0.3rem 0.55rem;
+    border-color: rgba(51, 183, 219, 0.3);
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    color: #ffdf33;
+  }
+
+  .peridot-tboard-cell .peridot-live-inline-button:hover,
+  .peridot-tboard-cell .peridot-live-inline-link:hover {
+    border-color: rgba(51, 183, 219, 0.5);
+    background: rgba(51, 183, 219, 0.12);
+    color: #ffdf33;
+  }
+
+  .peridot-tboard-cell--open {
+    transform: translateX(0);
+  }
+
+  .peridot-tboard-cell--calendar {
+    transform: translateX(0);
+  }
+
+  .peridot-tboard-cell--archive {
+    transform: translateX(0);
+  }
+
+  @media (min-width: 1280px) {
+    .peridot-tboard-control-shell {
+      margin-top: -9.5rem;
+    }
+
+    .peridot-tboard-command-band {
+      margin-top: 15.4rem;
+    }
+
+    .peridot-tboard-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.1rem;
+      align-items: start;
+    }
+
+    .peridot-tboard-live-column {
+      --tboard-cell-width: clamp(8rem, 33vw, 9.35rem);
+      --tboard-cell-height: clamp(6.05rem, 24vw, 7.25rem);
+      --tboard-cell-content-width: clamp(5.3rem, 22vw, 6.35rem);
+      --analytics-cell-width: var(--tboard-cell-width);
+      --analytics-cell-height: var(--tboard-cell-height);
+      --analytics-cell-content-width: var(--tboard-cell-content-width);
+      --tboard-live-grid-cell-width: var(--tboard-cell-width);
+      --tboard-live-column-gap: 0.62rem;
+      --tboard-live-center-shift: -0.25;
+      --tboard-open-shell-pad-inline: 0.72rem;
+      --tboard-open-stack-overlap: 3px;
+      --tboard-open-shell-width: calc(var(--analytics-cell-width) + (var(--tboard-open-shell-pad-inline) * 2));
+      --tboard-live-rail-offset: 0.42rem;
+      --tboard-live-rail-drop: calc((var(--tboard-cell-height) + var(--tboard-live-column-gap)) * 0.5);
+      --tboard-open-stage-width: calc((var(--analytics-cell-width) * 3) + (var(--tboard-live-rail-offset) * 2));
+      order: -1;
+      gap: 1.1rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-matrix {
+      display: grid;
+      grid-template-columns: repeat(3, var(--tboard-live-grid-cell-width));
+      justify-content: center;
+      column-gap: 0;
+      row-gap: 0;
+      width: max-content;
+      max-width: none;
+      margin: 0 auto;
+      padding: 0.15rem var(--tboard-live-rail-offset) 0.4rem;
+      align-items: start;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-panel {
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-grid {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(3, var(--analytics-cell-width));
+      justify-content: start;
+      column-gap: 0;
+      row-gap: 0;
+      box-sizing: border-box;
+      width: var(--tboard-open-stage-width);
+      max-width: none;
+      margin: 0 auto;
+      padding: 0.15rem var(--tboard-live-rail-offset) 0.4rem;
+      align-items: start;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-stage {
+      width: var(--tboard-open-stage-width);
+      max-width: none;
+      margin: 0 auto;
+      padding-inline: 0;
+      justify-items: center;
+      transform: none;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-shell {
+      grid-column: 1 / -1;
+      justify-self: center;
+      width: var(--tboard-open-stage-width);
+      max-width: none;
+      margin-top: 0.2rem;
+      margin-bottom: 2.75rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-deck {
+      --routine-command-scale: 1.06;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-caption,
+    .peridot-tboard-live-column .peridot-tboard-open-command-meta {
+      grid-column: 1 / -1;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column {
+      display: grid;
+      gap: var(--tboard-live-column-gap);
+      width: 100%;
+      max-width: var(--analytics-cell-width);
+      justify-self: center;
+      align-content: start;
+      justify-items: center;
+      position: relative;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column > .peridot-tboard-open-card + .peridot-tboard-open-card {
+      margin-top: 0;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--left {
+      justify-self: end;
+      transform: translateX(var(--tboard-live-rail-offset));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--center {
+      justify-self: center;
+      margin-top: calc(var(--tboard-live-rail-drop) * var(--tboard-live-center-shift));
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--right {
+      justify-self: start;
+      transform: translateX(calc(var(--tboard-live-rail-offset) * -1));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-card {
+      width: var(--analytics-cell-width);
+      min-height: 0;
+      height: var(--analytics-cell-height);
+      overflow: hidden;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-column {
+      display: grid;
+      gap: var(--tboard-live-column-gap);
+      width: 100%;
+      max-width: var(--tboard-live-grid-cell-width);
+      justify-self: center;
+      align-content: start;
+      justify-items: center;
+      position: relative;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-column--left {
+      justify-self: end;
+      transform: translateX(var(--tboard-live-rail-offset));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-column--center {
+      justify-self: center;
+      margin-top: calc(var(--tboard-live-rail-drop) * var(--tboard-live-center-shift));
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-column--right {
+      justify-self: start;
+      transform: translateX(calc(var(--tboard-live-rail-offset) * -1));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell {
+      width: var(--tboard-live-grid-cell-width);
+      max-width: var(--tboard-live-grid-cell-width);
+      min-width: 0;
+      margin-top: 0;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell-frame {
+      min-height: var(--tboard-cell-height);
+      padding: 0.78rem 0.72rem 0.74rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-frame {
+      height: var(--tboard-cell-height);
+      min-height: var(--tboard-cell-height);
+      display: grid;
+      grid-template-rows: 1fr;
+      align-content: center;
+      gap: 0.2rem;
+      padding: 0.78rem 0.72rem 0.74rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-open-analytics-cell {
+      width: var(--analytics-cell-width);
+      min-height: var(--analytics-cell-height);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-toolbar,
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-actions {
+      position: absolute;
+      left: 0.72rem;
+      right: 0.72rem;
+      width: auto;
+      z-index: 2;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-toolbar {
+      top: 0.62rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-actions {
+      bottom: 0.58rem;
+      gap: 0;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-body {
+      align-self: center;
+      gap: 0.16rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-icon {
+      width: 1.55rem;
+      height: 1.55rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-title {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-copy {
+      display: none;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-live-inline-button {
+      min-height: 1.2rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      justify-content: flex-start;
+      color: rgba(213, 255, 203, 0.88);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-live-inline-button:hover {
+      background: transparent;
+      border: 0;
+      color: #effffc;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell-label {
+      font-size: 0.47rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell-title {
+      font-size: 0.82rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell-copy,
+    .peridot-tboard-live-column .peridot-tboard-cell-meta,
+    .peridot-tboard-live-column .peridot-tboard-cell .peridot-live-inline-button,
+    .peridot-tboard-live-column .peridot-tboard-cell .peridot-live-inline-link {
+      font-size: 0.47rem;
+    }
+
+    .peridot-tboard-command-stack {
+      position: sticky;
+      top: 5.75rem;
+      align-self: start;
+    }
+  }
+
+  .peridot-page-chrome {
+    --peridot-page-chrome-bar-height: 58px;
+    position: relative;
+    min-height: 100svh;
+    background: #020202;
+  }
+
+  .peridot-page-chrome-content {
+    min-height: calc(100svh - var(--peridot-page-chrome-bar-height));
+    padding-bottom: var(--peridot-page-chrome-bar-height);
+    background: #020202;
+  }
+
+  .peridot-page-chrome-content.is-analytics {
+    background: #020202;
+  }
+
+  .peridot-page-chrome-bar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--peridot-page-chrome-bar-height);
+    padding: 0 1.2rem 0 2rem;
+    background: #66ff99;
+  }
+
+  .peridot-page-chrome-wordmark {
+    color: #000;
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.44em;
+    text-transform: uppercase;
+  }
+
+  .peridot-page-chrome-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    box-sizing: border-box;
+    border: 1.75px solid #000;
+    background: transparent;
+    color: #000;
+  }
+
+  .peridot-page-chrome-toggle svg {
+    width: 1.55rem;
+    height: 1.55rem;
+    color: #000;
+    stroke: currentColor;
+    stroke-width: 2.7;
+  }
+
+  .peridot-page-chrome-toggle svg * {
+    stroke: currentColor;
+  }
+
+  .peridot-page-chrome-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 85;
+    display: grid;
+    align-items: stretch;
+    justify-items: stretch;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+  }
+
+  .peridot-page-chrome-menu-panel {
+    display: grid;
+    gap: 0.3rem;
+    min-width: 17rem;
+    border: 1px solid rgba(102, 255, 153, 0.18);
+    background:
+      linear-gradient(180deg, rgba(4, 5, 4, 0.98), rgba(2, 3, 2, 0.96)),
+      radial-gradient(circle at 0% 100%, rgba(255, 223, 51, 0.04), transparent 28%);
+    padding: 0.85rem 0.9rem;
+  }
+
+  .peridot-page-chrome-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.45rem 0;
+    color: #ffdf33;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .peridot-page-chrome-menu-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    color: #66ff99;
+  }
+
+  .peridot-routines-builder-flow.is-active {
+    border-color: rgba(102, 255, 153, 0.28);
+  }
+
+  .peridot-routines-builder-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.7rem;
+    border: 1px solid rgba(102, 255, 153, 0.22);
+    padding: 0 0.55rem;
+    color: #66ff99;
+    font-family: var(--font-display);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: rgba(255, 223, 51, 0.04);
+  }
+
+  .peridot-routines-builder-chip.is-muted {
+    color: rgba(255, 223, 51, 0.82);
+    border-color: rgba(255, 223, 51, 0.14);
+    background: transparent;
+  }
+
+  .peridot-routines-builder-chip.is-ghost {
+    color: rgba(255, 223, 51, 0.62);
+    border-color: rgba(102, 255, 153, 0.12);
+    background: rgba(255, 223, 51, 0.01);
+  }
+
+  .peridot-routines-builder-action {
+    border: 1px solid rgba(102, 255, 153, 0.16);
+    background: transparent;
+  }
+
+  .peridot-routines-builder-task.is-active {
+    border-color: rgba(102, 255, 153, 0.24);
+    background:
+      linear-gradient(180deg, rgba(5, 7, 5, 0.96), rgba(2, 3, 2, 0.92)),
+      radial-gradient(circle at 100% 0%, rgba(255, 223, 51, 0.03), transparent 22%);
+  }
+
+  .peridot-routines-builder-preview {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.4rem 0 0.2rem;
+  }
+
+  .peridot-routines-builder-preview-shell {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .peridot-routines-builder-edit {
+    border-top: 1px solid rgba(102, 255, 153, 0.14);
+    padding-top: 0.95rem;
+  }
+
+  .peridot-routines-builder-edit-label {
+    color: #66ff99;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .peridot-routines-builder-edit-note {
+    margin-top: 0.6rem;
+    color: rgba(255, 223, 51, 0.58);
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  .peridot-routines-builder-command-shell {
+    display: grid;
+    justify-items: center;
+    width: 100%;
+    margin: 1rem auto 0;
+  }
+
+  .peridot-routines-builder-command-deck {
+    justify-self: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .peridot-routines-flows-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    max-width: 100%;
+    font-family: var(--font-display);
+    font-size: clamp(0.98rem, 2vw, 1.2rem);
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 223, 51, 0.44);
+    border: 1px solid rgba(102, 255, 153, 0.18);
+    background: transparent;
+    padding: 0.12rem 0.72rem 0.16rem;
+  }
+
+  .peridot-routines-flows-toggle.is-active {
+    color: #050705;
+    border-color: #66ff99;
+    background: #66ff99;
+    box-shadow: 0 0 18px rgba(102, 255, 153, 0.14);
+  }
+
+  .peridot-routines-topline {
+    margin-bottom: 2rem;
+  }
+
+  .peridot-routines-topline-label,
+  .peridot-routines-topline-meta,
+  .peridot-routines-topline-action {
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+  }
+
+  .peridot-routines-topline-label {
+    color: #ffdf33;
+  }
+
+  .peridot-routines-topline-meta {
+    margin-top: 0.55rem;
+    color: rgba(255, 223, 51, 0.72);
+  }
+
+  .peridot-routines-topline-action {
+    border: 0;
+    background: transparent;
+    color: #ffdf33;
+    text-align: left;
+  }
+
+  .peridot-routines-canvas {
+    min-height: calc(100svh - 16rem);
+    min-width: 0;
+    padding-right: 0;
+  }
+
+  .peridot-routines-live-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 24rem);
+    gap: 2.75rem;
+    align-items: start;
+    min-height: calc(100svh - 15rem);
+  }
+
+  .peridot-routines-live-shell--builder {
+    min-height: 0;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .peridot-routines-live-shell--builder .peridot-routines-canvas {
+    min-height: 0;
+  }
+
+  .peridot-routines-live-shell--builder .peridot-routines-editor {
+    position: static;
+    max-width: none;
+    max-height: none;
+  }
+
+  .peridot-routines-editor--builder {
+    display: block;
+    position: static;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0 0 1.75rem;
+  }
+
+  .peridot-routines-routine-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .peridot-routines-routine-button {
+    border: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 1.55rem;
+    padding: 0.08rem 0.45rem 0.16rem;
+    background: transparent;
+    color: rgba(255, 223, 51, 0.62);
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .peridot-routines-routine-button.is-selected {
+    background: #66ff99;
+    color: #050705;
+  }
+
+  .peridot-routines-canvas-title {
+    margin-bottom: 1.5rem;
+    color: rgba(255, 223, 51, 0.92);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
+  .peridot-routine-command-deck {
+    --routine-command-scale: 1;
+    position: relative;
+    width: min(100%, calc(22.5rem * var(--routine-command-scale)));
+    height: calc(25.5rem * var(--routine-command-scale));
+    margin: 0 auto 2.2rem;
+    overflow: visible;
+  }
+
+  .peridot-routine-command-deck-inner {
+    position: relative;
+    width: 22.5rem;
+    height: 25.5rem;
+    transform: scale(var(--routine-command-scale));
+    transform-origin: top left;
+  }
+
+  .peridot-routine-command-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .peridot-routine-frame-shape,
+  .peridot-routine-frame-inner,
+  .peridot-routine-frame-connector {
+    fill: none;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+  }
+
+  .peridot-routine-frame-shape {
+    stroke-width: 1.8;
+  }
+
+  .peridot-routine-frame-top,
+  .peridot-routine-frame-left,
+  .peridot-routine-frame-right {
+    fill: rgba(3, 6, 4, 0.12);
+    transition: fill 120ms ease, stroke 120ms ease;
+  }
+
+  .peridot-routine-frame-hub-plate {
+    fill: rgba(3, 6, 4, 0.96);
+  }
+
+  .peridot-routine-frame-inner {
+    stroke-width: 1;
+    opacity: 0.62;
+  }
+
+  .peridot-routine-frame-connector {
+    stroke-width: 1.8;
+  }
+
+  .peridot-routine-frame-shape.is-cyan,
+  .peridot-routine-frame-inner.is-cyan,
+  .peridot-routine-frame-connector.is-cyan {
+    stroke: rgba(51, 183, 219, 0.92);
+  }
+
+  .peridot-routine-frame-shape.is-red,
+  .peridot-routine-frame-inner.is-red {
+    stroke: rgba(189, 0, 0, 0.92);
+  }
+
+  .peridot-routine-command-deck:has(.peridot-routine-command--top:hover:not(:disabled)) .peridot-routine-frame-top,
+  .peridot-routine-command-deck:has(.peridot-routine-command--left:hover:not(:disabled)) .peridot-routine-frame-left,
+  .peridot-routine-command-deck:has(.peridot-routine-command--right:hover:not(:disabled)) .peridot-routine-frame-right {
+    fill: rgba(255, 223, 51, 0.18);
+    stroke: rgba(255, 223, 51, 0.96);
+  }
+
+  .peridot-routine-command-deck:has(.peridot-routine-command--top:active:not(:disabled)) .peridot-routine-frame-top,
+  .peridot-routine-command-deck:has(.peridot-routine-command--left:active:not(:disabled)) .peridot-routine-frame-left {
+    fill: rgba(102, 255, 153, 0.18);
+    stroke: rgba(102, 255, 153, 0.96);
+  }
+
+  .peridot-routine-command-deck:has(.peridot-routine-command--right:active:not(:disabled)) .peridot-routine-frame-right {
+    fill: rgba(189, 0, 0, 0.18);
+    stroke: rgba(189, 0, 0, 0.96);
+  }
+
+  .peridot-routine-command {
+    --routine-command-color: #33b7db;
+    --routine-command-glow: rgba(51, 183, 219, 0.24);
+    --routine-command-hover-color: #ffdf33;
+    --routine-command-hover-glow: rgba(255, 223, 51, 0.28);
+    --routine-command-active-color: #66ff99;
+    --routine-command-active-glow: rgba(102, 255, 153, 0.28);
+    box-sizing: border-box;
+    appearance: none;
+    outline: none;
+    box-shadow: none;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.55rem;
+    min-height: 6.7rem;
+    min-width: 0;
+    padding: 0.55rem 0.9rem 0.8rem;
+    border: 0;
+    background: transparent;
+    color: var(--routine-command-color);
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-align: center;
+    text-shadow: 0 0 12px var(--routine-command-glow);
+    z-index: 3;
+    transition: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .peridot-routine-command:hover:not(:disabled) {
+    --routine-command-color: var(--routine-command-hover-color);
+    --routine-command-glow: var(--routine-command-hover-glow);
+    filter: none;
+  }
+
+  .peridot-routine-command:focus,
+  .peridot-routine-command:focus-visible {
+    outline: none;
+    box-shadow: none;
+    filter: none;
+  }
+
+  .peridot-routine-command:active:not(:disabled) {
+    --routine-command-color: var(--routine-command-active-color);
+    --routine-command-glow: var(--routine-command-active-glow);
+    outline: none;
+    box-shadow: none;
+    filter: none;
+  }
+
+  .peridot-routine-command:disabled {
+    opacity: 0.58;
+    cursor: not-allowed;
+  }
+
+  .peridot-routine-command--top {
+    top: 4.15rem;
+    left: 50%;
+    width: 10.4rem;
+    transform: translateX(-50%);
+    min-height: 6.1rem;
+    justify-content: center;
+    padding-top: 0.4rem;
+    padding-bottom: 0.5rem;
+    gap: 0.7rem;
+  }
+
+  .peridot-routine-command--top .peridot-routine-command-badge,
+  .peridot-routine-command--top .peridot-routine-command-label {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .peridot-routine-command--top:hover:not(:disabled),
+  .peridot-routine-command--top:active {
+    transform: translateX(-50%);
+    filter: none;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .peridot-routine-command--top:focus-visible {
+    transform: translateX(-50%);
+    filter: none;
+    outline: none;
+    box-shadow: none;
+  }
+
+  .peridot-routine-command--left {
+    left: 1.95rem;
+    top: 14.65rem;
+    width: 8.35rem;
+    min-height: 7.15rem;
+    justify-content: center;
+    padding-top: 0.8rem;
+    padding-bottom: 0.85rem;
+    gap: 0.78rem;
+  }
+
+  .peridot-routine-command--right {
+    right: 1.95rem;
+    top: 14.65rem;
+    width: 8.35rem;
+    min-height: 7.15rem;
+    justify-content: center;
+    padding-top: 0.8rem;
+    padding-bottom: 0.85rem;
+    gap: 0.78rem;
+  }
+
+  .peridot-routine-command-hub {
+    position: absolute;
+    left: 50%;
+    top: 14.15rem;
+    z-index: 2;
+    width: 4.8rem;
+    height: 3.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .peridot-routine-command-hub span {
+    color: #66ff99;
+    font-family: var(--font-display);
+    font-size: 0.56rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(102, 255, 153, 0.2);
+  }
+
+  .peridot-routine-command-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.85rem;
+    min-height: 2rem;
+    padding: 0.36rem 0.62rem;
+    border: 1px solid color-mix(in srgb, var(--routine-command-color) 64%, transparent);
+    border-radius: 0.35rem;
+    background: rgba(0, 0, 0, 0.88);
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--routine-command-color) 12%, transparent),
+      0 0 16px var(--routine-command-glow);
+    transition: none !important;
+  }
+
+  .peridot-routine-command-badge svg {
+    width: 1.56rem;
+    height: 0.9rem;
+    opacity: 0.94;
+    filter: drop-shadow(0 0 8px var(--routine-command-glow));
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .peridot-routine-command-meta {
+    display: none;
+  }
+
+  .peridot-routine-command-label {
+    display: block;
+    width: 100%;
+    color: var(--routine-command-color);
+    font-size: 1.02rem;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-align: center;
+  }
+
+  .peridot-routine-command.is-edit {
+    --routine-command-color: #33b7db;
+    --routine-command-glow: rgba(51, 183, 219, 0.24);
+  }
+
+  .peridot-routine-command.is-edit:hover:not(:disabled) {
+    filter: none;
+  }
+
+  .peridot-routine-command.is-duplicate {
+    --routine-command-color: #ffdf33;
+    --routine-command-glow: rgba(255, 223, 51, 0.22);
+  }
+
+  .peridot-routine-command.is-duplicate:hover:not(:disabled) {
+    filter: none;
+  }
+
+  .peridot-routine-command.is-delete {
+    --routine-command-color: #bd0000;
+    --routine-command-glow: rgba(189, 0, 0, 0.24);
+    --routine-command-hover-color: #ffdf33;
+    --routine-command-hover-glow: rgba(255, 223, 51, 0.24);
+    --routine-command-active-color: #bd0000;
+    --routine-command-active-glow: rgba(189, 0, 0, 0.3);
+  }
+
+  .peridot-routine-command.is-delete:hover:not(:disabled) {
+    filter: none;
+  }
+
+  .peridot-routine-command.is-delete .peridot-routine-command-badge svg {
+    color: #bd0000;
+    filter: drop-shadow(0 0 8px rgba(189, 0, 0, 0.26));
+  }
+
+  .peridot-routine-command:hover:not(:disabled) .peridot-routine-command-badge svg,
+  .peridot-routine-command:active:not(:disabled) .peridot-routine-command-badge svg {
+    color: var(--routine-command-color);
+    filter: drop-shadow(0 0 8px var(--routine-command-glow));
+  }
+
+  .peridot-routines-flow-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    gap: 3.25rem 4rem;
+    align-items: start;
+    justify-content: start;
+  }
+
+  .peridot-routines-flow-cell {
+    appearance: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    text-align: left;
+    flex: 0 0 auto;
+  }
+
+  .peridot-routines-flow-cell.is-selected {
+    filter: none;
+  }
+
+  .peridot-routine-command-deck--compact {
+    --routine-command-scale: 0.25;
+    position: absolute;
+    left: 0;
+    top: 9.6rem;
+    margin: 0;
+    z-index: 4;
+  }
+
+  .peridot-routines-canvas-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .peridot-routines-canvas-header-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.45rem;
+  }
+
+  .peridot-routines-canvas-header .peridot-routines-canvas-title {
+    margin-right: 0;
+    margin-bottom: 0;
+  }
+
+  .peridot-routine-command-deck--header {
+    --routine-command-scale: 0.56;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+
+  .peridot-routines-editor-deck {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .peridot-routine-command-deck--detail {
+    --routine-command-scale: 0.47;
+    margin: 0;
+  }
+
+  .peridot-routines-page .peridot-routine-command-deck--header,
+  .peridot-routines-page .peridot-routine-command-deck--detail {
+    --routine-command-scale: 0.74;
+  }
+
+  .peridot-routines-editor {
+    position: sticky;
+    top: 3rem;
+    align-self: start;
+    justify-self: end;
+    width: 100%;
+    max-width: 24rem;
+    max-height: none;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    padding: 0;
+  }
+
+  .peridot-routines-editor--inline {
+    display: none;
+    grid-column: 1 / -1;
+    margin: 0 0 1.5rem;
+  }
+
+  .peridot-routines-editor-section + .peridot-routines-editor-section {
+    margin-top: 1.5rem;
+  }
+
+  .peridot-routines-editor-meta {
+    color: rgba(255, 223, 51, 0.6);
+    font-size: 12px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .peridot-routines-editor-label {
+    color: #66ff99;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  .peridot-routines-editor-section {
+    border-top: 1px solid rgba(102, 255, 153, 0.14);
+    padding-top: 1rem;
+  }
+
+  .peridot-routines-editor-section:first-of-type {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .peridot-routines-editor-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(102, 255, 153, 0.14);
+  }
+
+  .peridot-routines-editor-empty {
+    color: rgba(255, 223, 51, 0.58);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .peridot-routines-day-label {
+    fill: rgba(255, 223, 51, 0.62);
+    font-family: var(--font-display);
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 1279px) {
+    .peridot-routines-page .peridot-routine-command-deck--header,
+    .peridot-routines-page .peridot-routine-command-deck--detail {
+      --routine-command-scale: 0.68;
+    }
+
+    .peridot-routines-flow-grid {
+      grid-template-columns: repeat(2, minmax(0, max-content));
+      gap: 2.5rem 2.75rem;
+    }
+
+    .peridot-routines-live-shell {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+      gap: 2rem;
+    }
+
+    .peridot-routines-editor {
+      max-width: 22rem;
+    }
+  }
+
+  @media (max-width: 1023px) {
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact):not(.peridot-routine-command-deck--header):not(.peridot-routine-command-deck--detail) {
+      --routine-command-scale: 0.93;
+    }
+
+    .peridot-routines-flow-grid {
+      grid-template-columns: minmax(0, max-content);
+      justify-content: center;
+      width: 100%;
+    }
+
+    .peridot-routines-live-shell {
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
+    }
+
+    .peridot-routines-editor {
+      position: static;
+      width: 100%;
+      max-width: none;
+      max-height: none;
+      margin-top: 1.5rem;
+    }
+
+    .peridot-routines-editor--desktop {
+      display: none;
+    }
+
+    .peridot-routines-flow-cell {
+      width: 100%;
+      align-items: center;
+    }
+
+    .peridot-routines-flow-cell.is-selected {
+      justify-items: center;
+    }
+
+    .peridot-routines-editor--inline {
+      display: grid;
+      justify-items: center;
+      width: min(100%, 30rem);
+      margin: 0 auto 1.5rem;
+    }
+
+    .peridot-routines-editor--inline > * {
+      width: 100%;
+    }
+
+    .peridot-routines-editor--inline .peridot-routines-editor-deck {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .peridot-routines-editor--inline .peridot-routine-command-deck--detail {
+      justify-self: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .peridot-routines-editor--builder .peridot-routines-builder-command-shell {
+      width: 100%;
+      justify-items: center;
+    }
+
+    .peridot-routines-editor--builder .peridot-routines-builder-command-deck {
+      justify-self: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .peridot-stage-header {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+    }
   }
 
   .peridot-app-page {
@@ -342,28 +2133,25 @@
 
   @media (min-width: 640px) {
     .peridot-page-gutter {
-      padding-left: 2rem;
-      padding-right: 2rem;
+      --peridot-page-gutter: 2rem;
     }
   }
 
   @media (min-width: 1024px) {
     .peridot-page-gutter {
-      padding-left: 2.75rem;
-      padding-right: 2.75rem;
+      --peridot-page-gutter: 2.75rem;
     }
   }
 
   @media (min-width: 1280px) {
     .peridot-page-gutter {
-      padding-left: 3rem;
-      padding-right: 3rem;
+      --peridot-page-gutter: 3rem;
     }
   }
 
   @media (min-width: 1024px) {
     .peridot-app-page {
-      min-height: 100svh;
+      min-height: calc(100svh - 4.5rem);
     }
 
     .peridot-app-page--with-mobile-nav {
@@ -374,32 +2162,34 @@
   .peridot-focus-scrim {
     background:
       linear-gradient(180deg, rgba(10, 16, 8, 0.94), rgba(10, 16, 8, 0.92)),
-      radial-gradient(circle at top, rgba(207, 234, 122, 0.12), transparent 42%);
+      radial-gradient(circle at top, rgba(255, 223, 51, 0.05), transparent 42%);
     backdrop-filter: blur(22px) saturate(120%);
     -webkit-backdrop-filter: blur(22px) saturate(120%);
   }
 
   .peridot-sidebar-shell {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(232, 247, 161, 0.18)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(207, 234, 122, 0.08));
-    border-right: 1px solid rgba(159, 204, 59, 0.14);
+      linear-gradient(180deg, rgba(8, 10, 8, 0.98), rgba(5, 7, 5, 0.98)),
+      linear-gradient(135deg, rgba(255, 223, 51, 0.025), rgba(255, 223, 51, 0.01));
+    border-right: 1px solid rgba(102, 255, 153, 0.12);
     backdrop-filter: blur(18px) saturate(135%);
     -webkit-backdrop-filter: blur(18px) saturate(135%);
   }
 
   .dark .peridot-sidebar-shell {
     background:
-      linear-gradient(180deg, rgba(19, 26, 11, 0.94), rgba(14, 20, 8, 0.98)),
-      linear-gradient(135deg, rgba(207, 234, 122, 0.04), rgba(159, 204, 59, 0.03));
-    border-right-color: rgba(207, 234, 122, 0.12);
+      linear-gradient(180deg, rgba(8, 10, 8, 0.98), rgba(5, 7, 5, 0.98)),
+      linear-gradient(135deg, rgba(255, 223, 51, 0.025), rgba(255, 223, 51, 0.01));
+    border-right-color: rgba(102, 255, 153, 0.12);
   }
 
   .peridot-mobile-nav-card {
     background:
-      radial-gradient(circle at top left, rgba(232, 247, 161, 0.88), transparent 28%),
-      radial-gradient(circle at top right, rgba(159, 204, 59, 0.22), transparent 24%),
-      linear-gradient(180deg, #f8fbef 0%, #eef7d6 52%, #e4f0c1 100%);
+      radial-gradient(circle at 0% 100%, rgba(255, 223, 51, 0.06), transparent 28%),
+      radial-gradient(circle at top right, rgba(255, 223, 51, 0.04), transparent 24%),
+      linear-gradient(180deg, #090b09 0%, #060806 52%, #040504 100%);
+    position: relative;
+    isolation: isolate;
     width: 100vw;
     min-height: 100dvh;
     box-shadow: none;
@@ -407,13 +2197,54 @@
     -webkit-backdrop-filter: blur(18px) saturate(120%);
   }
 
+  .peridot-mobile-nav-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+    padding: 0 1.2rem 0 2rem;
+    background: #66ff99;
+  }
+
+  .peridot-mobile-nav-wordmark {
+    color: #000;
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.44em;
+    text-transform: uppercase;
+  }
+
+  .peridot-mobile-nav-topbar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: transparent;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .peridot-mobile-nav-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0.85rem;
+  }
+
   .peridot-mobile-nav-link {
-    border: 1px solid rgba(159, 204, 59, 0.16);
+    border: 1px solid rgba(102, 255, 153, 0.12);
     border-radius: 0.75rem;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(232, 247, 161, 0.34)),
-      rgba(255, 255, 255, 0.3);
-    color: #21300f;
+      linear-gradient(180deg, rgba(255, 223, 51, 0.04), rgba(255, 223, 51, 0.02)),
+      rgba(255, 223, 51, 0.02);
+    color: #ffdf33;
     transition:
       transform 0.22s ease,
       background-color 0.22s ease,
@@ -423,32 +2254,113 @@
 
   .peridot-mobile-nav-link:hover {
     transform: translateY(-1px);
-    border-color: rgba(159, 204, 59, 0.28);
+    border-color: rgba(102, 255, 153, 0.22);
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(232, 247, 161, 0.4)),
-      rgba(255, 255, 255, 0.36);
-    color: #17210b;
+      linear-gradient(180deg, rgba(255, 223, 51, 0.06), rgba(255, 223, 51, 0.025)),
+      rgba(255, 223, 51, 0.03);
+    color: #ffdf33df2;
   }
 
   .peridot-mobile-nav-link.is-active {
-    border-color: rgba(127, 191, 63, 0.34);
-    background:
-      linear-gradient(90deg, rgba(159, 204, 59, 0.42), rgba(207, 234, 122, 0.24)),
-      rgba(255, 255, 255, 0.3);
-    color: #17210b;
+    border-color: rgba(102, 255, 153, 0.3);
+    background: linear-gradient(90deg, rgba(255, 223, 51, 0.08), rgba(255, 223, 51, 0.03));
+    color: #ffdf33df2;
   }
 
   .peridot-mobile-nav-icon {
-    border: 1px solid rgba(159, 204, 59, 0.18);
+    border: 1px solid rgba(102, 255, 153, 0.14);
     border-radius: 0.6rem;
-    background: rgba(255, 255, 255, 0.34);
-    color: #6d9424;
+    background: rgba(255, 223, 51, 0.04);
+    color: #66ff99;
   }
 
   .peridot-mobile-nav-link.is-active .peridot-mobile-nav-icon {
-    border-color: rgba(127, 191, 63, 0.24);
-    background: rgba(255, 255, 255, 0.44);
-    color: #4e6d17;
+    border-color: rgba(102, 255, 153, 0.24);
+    background: rgba(255, 223, 51, 0.05);
+    color: #66ff99;
+  }
+
+  .peridot-mobile-command-menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    width: 100%;
+    padding: 2rem 0 2.25rem;
+  }
+
+  .peridot-mobile-command-deck {
+    --routine-command-scale: 1.12;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+
+  .peridot-mobile-command-menu .peridot-routine-command-link {
+    text-decoration: none;
+  }
+
+  .peridot-routine-command.is-nav {
+    --routine-command-color: #33b7db;
+    --routine-command-glow: rgba(51, 183, 219, 0.24);
+  }
+
+  .peridot-routine-command-link.is-current {
+    --routine-command-color: #66ff99;
+    --routine-command-glow: rgba(102, 255, 153, 0.28);
+  }
+
+  .peridot-routine-command-deck:has(.peridot-routine-command--top.is-current) .peridot-routine-frame-top,
+  .peridot-routine-command-deck:has(.peridot-routine-command--left.is-current) .peridot-routine-frame-left,
+  .peridot-routine-command-deck:has(.peridot-routine-command--right.is-current) .peridot-routine-frame-right {
+    fill: rgba(102, 255, 153, 0.18);
+    stroke: rgba(102, 255, 153, 0.96);
+  }
+
+  .peridot-routine-command-deck:has(.peridot-routine-command-link.is-current) .peridot-routine-frame-hub-plate {
+    fill: rgba(0, 0, 0, 0.98);
+    stroke: rgba(102, 255, 153, 0.96);
+  }
+
+  .peridot-routine-command-deck:has(.peridot-routine-command-link.is-current) .peridot-routine-command-hub span {
+    color: #66ff99;
+    text-shadow: 0 0 10px rgba(102, 255, 153, 0.28);
+  }
+
+  @media (min-width: 768px) {
+    .peridot-mobile-command-menu {
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 3.75rem;
+      padding: 2rem 2.5rem 2.5rem;
+    }
+
+    .peridot-mobile-command-deck {
+      --routine-command-scale: 1.28;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .peridot-mobile-command-menu {
+      gap: 4rem;
+    }
+
+    .peridot-mobile-command-deck {
+      --routine-command-scale: 1.52;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .peridot-mobile-command-menu {
+      gap: 1.9rem;
+      padding: 1.2rem 0 1.35rem;
+    }
+
+    .peridot-mobile-command-deck {
+      --routine-command-scale: 0.88;
+    }
   }
 
   .peridot-overview-grid {
@@ -488,16 +2400,16 @@
 
   .dark .peridot-shell {
     background:
-      radial-gradient(circle at top left, rgba(159, 204, 59, 0.18), transparent 24%),
-      radial-gradient(circle at top right, rgba(207, 234, 122, 0.1), transparent 20%),
-      linear-gradient(180deg, #0f1408 0%, #131a0b 40%, #101608 100%);
+      radial-gradient(circle at 0% 100%, rgba(255, 223, 51, 0.06), transparent 24%),
+      radial-gradient(circle at top right, rgba(255, 223, 51, 0.03), transparent 20%),
+      linear-gradient(180deg, #090b09 0%, #060806 40%, #040504 100%);
   }
 
   .peridot-chip {
     border: 1px solid var(--peridot-border);
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(232, 247, 161, 0.2)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(207, 234, 122, 0.08));
+      linear-gradient(180deg, rgba(255, 223, 51, 0.04), rgba(255, 223, 51, 0.02)),
+      linear-gradient(135deg, rgba(255, 223, 51, 0.025), rgba(255, 223, 51, 0.01));
     color: var(--peridot-text-secondary);
     border-radius: 0.4rem;
     backdrop-filter: blur(14px) saturate(140%);
@@ -505,10 +2417,10 @@
   }
 
   .peridot-chip-active {
-    border: 1px solid rgba(159, 204, 59, 0.24);
-    background: linear-gradient(90deg, rgba(159, 204, 59, 0.18), rgba(207, 234, 122, 0.42));
+    border: 1px solid rgba(102, 255, 153, 0.26);
+    background: linear-gradient(90deg, rgba(255, 223, 51, 0.08), rgba(255, 223, 51, 0.03));
     color: var(--peridot-text);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.38);
+    box-shadow: inset 0 0 0 1px rgba(255, 223, 51, 0.38);
   }
 
   .peridot-shell :is(h1, h2, h3, h4, h5, h6),
@@ -609,8 +2521,8 @@
     pointer-events: none;
     border-radius: inherit;
     background:
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0, rgba(255, 255, 255, 0.02) 1px, transparent 1px, transparent 100%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0, rgba(255, 255, 255, 0.03) 1px, transparent 1px, transparent 100%);
+      linear-gradient(90deg, rgba(255, 223, 51, 0.02) 0, rgba(255, 223, 51, 0.02) 1px, transparent 1px, transparent 100%),
+      linear-gradient(180deg, rgba(255, 223, 51, 0.03) 0, rgba(255, 223, 51, 0.03) 1px, transparent 1px, transparent 100%);
     background-size: 22px 22px, 22px 22px;
     mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.36), transparent 88%);
   }
@@ -622,8 +2534,8 @@
     left: 10px;
     width: 22px;
     height: 22px;
-    border-top: 1px solid rgba(207, 234, 122, 0.3);
-    border-left: 1px solid rgba(207, 234, 122, 0.3);
+    border-top: 1px solid rgba(255, 223, 51, 0.3);
+    border-left: 1px solid rgba(255, 223, 51, 0.3);
     pointer-events: none;
   }
 
@@ -637,20 +2549,209 @@
   }
 
   .peridot-soft-inset {
-    border-radius: 0.75rem;
-    border: 1px solid rgba(159, 204, 59, 0.14);
+    border-radius: 0.18rem;
+    border: 1px solid rgba(102, 255, 153, 0.12);
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.3), rgba(232, 247, 161, 0.18)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(207, 234, 122, 0.08));
+      linear-gradient(180deg, rgba(6, 6, 6, 0.94), rgba(3, 3, 3, 0.9)),
+      linear-gradient(135deg, rgba(255, 223, 51, 0.05), rgba(255, 223, 51, 0.02));
     padding: 1rem;
+  }
+
+  @media (max-width: 639px) {
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) {
+      --routine-command-mobile-scale: max(var(--routine-command-scale), 0.64);
+      width: min(100%, calc(22.5rem * var(--routine-command-mobile-scale)));
+      height: calc(25.5rem * var(--routine-command-mobile-scale));
+      display: block !important;
+      overflow: visible !important;
+    }
+
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command-deck-inner {
+      width: 22.5rem;
+      height: 25.5rem;
+      margin: 0 auto;
+      position: relative !important;
+      transform: scale(var(--routine-command-mobile-scale)) !important;
+      transform-origin: top center !important;
+      display: block !important;
+    }
+
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command-frame {
+      position: absolute !important;
+      inset: 0 !important;
+      display: block !important;
+    }
+
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command {
+      position: absolute !important;
+      display: flex !important;
+      min-height: 6.7rem !important;
+    }
+
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command--top {
+      top: 4.15rem !important;
+      left: 50% !important;
+      width: 10.4rem !important;
+      right: auto !important;
+      transform: translateX(-50%) !important;
+    }
+
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command--left {
+      left: 1.95rem !important;
+      top: 14.65rem !important;
+      width: 8.35rem !important;
+      right: auto !important;
+      transform: none !important;
+    }
+
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command--right {
+      right: 1.95rem !important;
+      top: 14.65rem !important;
+      width: 8.35rem !important;
+      left: auto !important;
+      transform: none !important;
+    }
+
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command-hub {
+      position: absolute !important;
+      display: flex !important;
+      left: 50% !important;
+      top: 14.15rem !important;
+      transform: translate(-50%, -50%) !important;
+    }
+
+    .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command-label {
+      font-size: 1rem;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .peridot-routines-editor--inline .peridot-routines-editor-deck,
+    .peridot-routines-editor--builder .peridot-routines-builder-command-shell {
+      width: min(100%, calc(22.5rem * var(--routine-command-mobile-scale, var(--routine-command-scale))));
+      justify-self: center;
+      justify-items: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .peridot-routines-editor--inline .peridot-routine-command-deck--detail,
+    .peridot-routines-editor--builder .peridot-routines-builder-command-deck {
+      justify-self: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .peridot-routines-editor--inline .peridot-routine-command-deck--detail .peridot-routine-command-deck-inner,
+    .peridot-routines-editor--builder .peridot-routines-builder-command-deck .peridot-routine-command-deck-inner {
+      margin: 0 !important;
+      transform-origin: top left !important;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .peridot-mobile-command-menu {
+      display: grid;
+      justify-content: center;
+      justify-items: center;
+      align-items: start;
+      gap: 1rem;
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+      padding: 0.35rem 1.2rem 0.75rem;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-deck {
+      --routine-command-scale: 0.72;
+      width: min(100%, calc(22.5rem * var(--routine-command-scale)));
+      height: calc(24.75rem * var(--routine-command-scale));
+      display: block !important;
+      justify-self: center;
+      margin-inline: auto;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-deck:not(.peridot-routine-command-deck--compact) .peridot-routine-command-deck-inner {
+      width: 22.5rem;
+      height: 24.75rem;
+      margin: 0 !important;
+      transform: scale(var(--routine-command-scale)) !important;
+      transform-origin: top left !important;
+      display: block !important;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-frame {
+      display: block;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command {
+      position: absolute;
+      min-height: 6.7rem;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command--top {
+      top: 4.15rem;
+      left: 50%;
+      width: 10.4rem;
+      transform: translateX(-50%);
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command--left {
+      left: 1.95rem;
+      top: 14.65rem;
+      width: 8.35rem;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command--right {
+      right: 1.95rem;
+      top: 14.65rem;
+      width: 8.35rem;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-hub {
+      display: flex;
+      left: 50%;
+      top: 14.15rem;
+      transform: translate(-50%, -50%);
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-label {
+      font-size: 1.02rem;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-link.is-current {
+      --routine-command-glow: rgba(102, 255, 153, 0.18);
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-deck:has(.peridot-routine-command--top.is-current) .peridot-routine-frame-top,
+    .peridot-mobile-command-menu .peridot-routine-command-deck:has(.peridot-routine-command--left.is-current) .peridot-routine-frame-left,
+    .peridot-mobile-command-menu .peridot-routine-command-deck:has(.peridot-routine-command--right.is-current) .peridot-routine-frame-right {
+      fill: rgba(102, 255, 153, 0.12);
+      stroke: rgba(102, 255, 153, 0.94);
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-deck:has(.peridot-routine-command-link.is-current) .peridot-routine-command-hub span {
+      text-shadow: 0 0 8px rgba(102, 255, 153, 0.2);
+    }
+  }
+
+  @media (max-width: 420px) {
+    .peridot-mobile-command-menu {
+      gap: 0.7rem;
+      padding: 0.1rem 0 0.5rem;
+    }
+
+    .peridot-mobile-command-menu .peridot-routine-command-deck {
+      --routine-command-scale: 0.64;
+    }
   }
 
   .peridot-chart-shell {
     border-radius: 0.75rem;
-    border: 1px solid rgba(159, 204, 59, 0.16);
+    border: 1px solid rgba(102, 255, 153, 0.16);
     background:
-      radial-gradient(circle at top, rgba(232, 247, 161, 0.42), transparent 48%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(232, 247, 161, 0.14));
+      radial-gradient(circle at top, rgba(255, 223, 51, 0.42), transparent 48%),
+      linear-gradient(180deg, rgba(255, 223, 51, 0.34), rgba(255, 223, 51, 0.14));
     padding: 1rem;
   }
 
@@ -665,15 +2766,15 @@
 
   .peridot-chart-line {
     fill: none;
-    stroke: rgba(127, 191, 63, 0.95);
+    stroke: rgba(102, 255, 153, 0.95);
     stroke-width: 3;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
   .peridot-chart-dot {
-    fill: #f7faef;
-    stroke: rgba(127, 191, 63, 0.95);
+    fill: #ffdf33;
+    stroke: rgba(102, 255, 153, 0.95);
     stroke-width: 3;
   }
 
@@ -687,7 +2788,7 @@
   .peridot-stat-rule {
     height: 4px;
     background: linear-gradient(90deg, rgba(31, 42, 16, 0.58), rgba(31, 42, 16, 0.22));
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(255, 223, 51, 0.12);
   }
 
   .peridot-stat-line {
@@ -761,6 +2862,2060 @@
     }
   }
 
+  .peridot-analytics-system {
+    position: relative;
+    width: 100%;
+    padding: 2rem 0 2.4rem;
+    background: var(--analytics-surface-fill);
+    border: 0;
+    overflow: visible;
+  }
+
+  .peridot-analytics-page {
+    background: #020202;
+    background-image: none;
+  }
+
+  .peridot-analytics-page.peridot-shell,
+  .dark .peridot-analytics-page.peridot-shell {
+    background: #020202;
+    background-image: none;
+  }
+
+  .peridot-analytics-shell {
+    --analytics-surface-fill: #020202;
+    --analytics-cell-width: 10.6rem;
+    --analytics-cell-height: 8.2rem;
+    --analytics-cell-content-width: 7.5rem;
+    --analytics-wide-width: min(78rem, calc(100vw - (var(--peridot-page-gutter, 0.625rem) * 2) - 1rem));
+    width: 100%;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .peridot-settings-page {
+    background: #020202;
+    background-image: none;
+  }
+
+  .peridot-calendar-match-page {
+    padding: 0.35rem;
+  }
+
+  .peridot-calendar-match-frame {
+    min-height: calc(100svh - 0.7rem - 4.5rem);
+    box-sizing: border-box;
+    padding: 1.4rem 0 6.4rem;
+    background: #000;
+    overflow: visible;
+  }
+
+  .peridot-routines-page {
+    background: #020202;
+    background-image: none;
+  }
+
+  .peridot-routines-page.peridot-shell,
+  .dark .peridot-routines-page.peridot-shell {
+    background: #020202;
+    background-image: none;
+  }
+
+  .peridot-settings-shell {
+    --peridot-settings-shell-inline: clamp(1.2rem, 3vw, 4.2rem);
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-inline: var(--peridot-settings-shell-inline);
+    display: grid;
+    gap: 1.6rem;
+  }
+
+  .peridot-settings-header {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: 0.35rem;
+  }
+
+  .peridot-settings-kicker {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: rgba(179, 255, 190, 0.62);
+  }
+
+  .peridot-settings-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #33b7db;
+    text-shadow: 0 0 16px rgba(51, 183, 219, 0.14);
+  }
+
+  .peridot-settings-description {
+    max-width: 44rem;
+    margin: 0;
+    font-size: 0.94rem;
+    line-height: 1.7;
+    color: rgba(213, 255, 203, 0.46);
+  }
+
+  .peridot-settings-control-shell {
+    display: grid;
+    gap: 1.65rem;
+  }
+
+  .peridot-settings-identity {
+    display: grid;
+    gap: 1rem;
+    padding: 0.15rem 0 0;
+    justify-items: center;
+  }
+
+  .peridot-settings-identity-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr);
+    gap: 0.9rem;
+    align-items: end;
+    width: min(100%, 24rem);
+    max-width: 24rem;
+    justify-self: center;
+  }
+
+  .peridot-settings-input-lane {
+    display: grid;
+    gap: 0.45rem;
+    min-width: 0;
+  }
+
+  .peridot-settings-input-lane--command {
+    min-width: min(100%, 16rem);
+  }
+
+  .peridot-settings-input-label {
+    font-family: var(--font-display);
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(191, 255, 216, 0.56);
+  }
+
+  .peridot-settings-command-section {
+    display: grid;
+    justify-items: center;
+    gap: 1rem;
+    padding-top: 0.2rem;
+  }
+
+  .peridot-settings-command-copy {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 34rem;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .peridot-settings-count-cell {
+    width: min(100%, 9.6rem);
+    min-height: 7.2rem;
+    margin: 0.15rem 0 0.2rem;
+    justify-self: center;
+  }
+
+  .peridot-tboard-page {
+    background: #020202;
+    background-image: none;
+  }
+
+  .peridot-tboard-page.peridot-shell,
+  .dark .peridot-tboard-page.peridot-shell {
+    background: #020202;
+    background-image: none;
+  }
+
+  .peridot-tboard-page-shell {
+    --analytics-surface-fill: #020202;
+    --analytics-cell-width: 10.6rem;
+    --analytics-cell-height: 8.2rem;
+    --analytics-cell-content-width: 7.5rem;
+    --tboard-rail-cell-width: 10.6rem;
+    --tboard-rail-cell-height: 8.2rem;
+    --tboard-rail-cell-content-width: 7.5rem;
+    --tboard-rail-desktop-offset: 0.38rem;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-inline: clamp(1.2rem, 3vw, 4.2rem);
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .peridot-tboard-header {
+    display: grid;
+    gap: 0.55rem;
+    padding-top: 0.35rem;
+  }
+
+  .peridot-tboard-meta {
+    max-width: 48rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .peridot-tboard-control-shell {
+    display: grid;
+    gap: 0.35rem;
+    margin-top: -0.2rem;
+  }
+
+  .peridot-tboard-hive-rails {
+    display: grid;
+    grid-template-columns:
+      minmax(0, var(--tboard-rail-cell-width))
+      minmax(0, var(--tboard-rail-cell-width))
+      minmax(0, 1fr)
+      minmax(22rem, 36rem)
+      minmax(0, 1fr)
+      minmax(0, var(--tboard-rail-cell-width))
+      minmax(0, var(--tboard-rail-cell-width));
+    grid-template-areas: 'left right . command . . .';
+    align-items: start;
+    column-gap: 0;
+    row-gap: 0.95rem;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1.2rem;
+    margin-inline: auto;
+  }
+
+  .peridot-tboard-hive-rail {
+    display: grid;
+    width: var(--tboard-rail-cell-width);
+    max-width: var(--tboard-rail-cell-width);
+    gap: 0.14rem;
+    align-content: start;
+    justify-items: center;
+    min-height: 0;
+    position: relative;
+  }
+
+  .peridot-tboard-hive-rail:not(.is-right),
+  .peridot-tboard-hive-rail.is-right {
+    margin-top: 0;
+  }
+
+  .peridot-tboard-hive-rail:not(.is-right) {
+    grid-area: left;
+    justify-self: end;
+    transform: translateX(var(--tboard-rail-desktop-offset));
+  }
+
+  .peridot-tboard-hive-rail.is-right {
+    grid-area: right;
+    justify-self: start;
+    margin-top: calc(var(--tboard-rail-cell-height) * 0.56);
+    transform: translateX(calc(var(--tboard-rail-desktop-offset) * -1) + 0.1px);
+  }
+
+  .peridot-tboard-command-center--header {
+    width: min(100%, 36rem);
+    max-width: 100%;
+    min-width: 0;
+    justify-self: center;
+    align-self: start;
+  }
+
+  .peridot-tboard-command-band {
+    display: grid;
+    gap: 0.65rem;
+    grid-area: command;
+    width: min(100%, 36rem);
+    max-width: 100%;
+    min-width: 0;
+    justify-self: center;
+    margin-left: 0;
+    align-content: start;
+  }
+
+  .peridot-tboard-command-center--header :is(.peridot-control, input, textarea, select) {
+    max-width: 100%;
+  }
+
+  .peridot-tboard-hive-rail-label {
+    width: min(100%, var(--tboard-rail-cell-content-width));
+    font-family: var(--font-display);
+    font-size: 0.64rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(179, 255, 190, 0.62);
+  }
+
+  .peridot-tboard-hive-rail .peridot-analytics-stat-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .peridot-tboard-hive-rail .peridot-analytics-stat-cell {
+    width: var(--tboard-rail-cell-width);
+    min-height: 0;
+    height: var(--tboard-rail-cell-height);
+    padding: 0.98rem 0.9rem 0.86rem;
+  }
+
+  .peridot-tboard-hive-rail .peridot-analytics-stat-cell + .peridot-analytics-stat-cell {
+    margin-top: -3px;
+  }
+
+  .peridot-tboard-hive-rail .peridot-analytics-stat-cell > * {
+    width: min(100%, var(--tboard-rail-cell-content-width));
+  }
+
+  .peridot-tboard-hive-rail .peridot-analytics-stat-value {
+    font-size: 1.22rem;
+    line-height: 0.86;
+    text-wrap: balance;
+  }
+
+  .peridot-tboard-hive-rail .peridot-analytics-stat-kicker {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+  }
+
+  .peridot-tboard-hive-rail .peridot-analytics-stat-copy {
+    font-size: 0.54rem;
+    line-height: 1.22;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .peridot-tboard-surface {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .peridot-settings-command-deck {
+    justify-self: center;
+    --routine-command-scale: 0.95;
+  }
+
+  .peridot-settings-status {
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+
+  .peridot-settings-status--success {
+    color: rgba(191, 255, 216, 0.82);
+  }
+
+  .peridot-settings-status--error {
+    color: #ff8e7e;
+  }
+
+  @media (max-width: 1100px) {
+    .peridot-settings-identity-grid {
+      max-width: 100%;
+    }
+
+    .peridot-settings-command-section {
+      gap: 1.15rem;
+    }
+
+    .peridot-settings-command-deck {
+      justify-self: center;
+      --routine-command-scale: 0.85;
+    }
+
+    .peridot-settings-count-cell {
+      width: min(100%, 8.8rem);
+    }
+
+    .peridot-tboard-hive-rails {
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
+      gap: 1.5rem;
+    }
+
+    .peridot-tboard-hive-rail,
+    .peridot-tboard-hive-rail:not(.is-right),
+    .peridot-tboard-hive-rail.is-right {
+      justify-self: center;
+      margin-top: 0;
+      transform: none;
+    }
+
+    .peridot-tboard-command-center--header {
+      width: min(100%, 36rem);
+      max-width: 100%;
+    }
+
+    .peridot-tboard-command-band {
+      grid-area: auto;
+      width: min(100%, 36rem);
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .peridot-settings-shell {
+      gap: 1.25rem;
+      justify-items: center;
+      padding-inline: 0;
+      overflow-x: clip;
+    }
+
+    .peridot-settings-header {
+      width: 100%;
+      max-width: none;
+      justify-items: start;
+      text-align: left;
+    }
+
+    .peridot-settings-page .peridot-settings-shell {
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+      padding-inline: 0;
+      justify-items: stretch;
+    }
+
+    .peridot-settings-page .peridot-settings-header,
+    .peridot-settings-page .peridot-settings-control-shell {
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+      padding-inline: 1.2rem;
+      box-sizing: border-box;
+      justify-self: stretch;
+    }
+
+    .peridot-settings-page .peridot-settings-control-shell {
+      justify-items: stretch;
+    }
+
+    .peridot-settings-page .peridot-settings-command-section,
+    .peridot-settings-page .peridot-settings-identity {
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+      padding-inline: 0;
+      box-sizing: border-box;
+      justify-self: stretch;
+    }
+
+    .peridot-settings-page .peridot-settings-command-section {
+      gap: 0.9rem;
+      padding-top: 0;
+      overflow-x: clip;
+    }
+
+    .peridot-settings-page .peridot-settings-command-deck {
+      --routine-command-scale: 0.66;
+      --routine-command-mobile-scale: 0.66;
+      width: min(100%, calc(22.5rem * var(--routine-command-mobile-scale)));
+      justify-self: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .peridot-settings-page .peridot-settings-command-deck .peridot-routine-command-deck-inner {
+      margin: 0 !important;
+      transform-origin: top left !important;
+    }
+
+    .peridot-settings-page .peridot-settings-command-copy {
+      width: min(100%, 8rem);
+      justify-self: center;
+    }
+
+    .peridot-settings-page .peridot-settings-count-cell {
+      width: min(100%, 7.4rem);
+      min-height: 5.9rem;
+      margin: 0;
+    }
+
+    .peridot-settings-page .peridot-settings-identity-grid,
+    .peridot-settings-page .peridot-settings-input-lane {
+      width: 100%;
+      max-width: none;
+      justify-self: stretch;
+    }
+
+    .peridot-settings-page .peridot-settings-identity-grid {
+      justify-self: stretch;
+    }
+
+    .peridot-settings-page .peridot-settings-identity {
+      justify-items: stretch;
+    }
+
+    .peridot-tboard-page.peridot-calendar-match-page {
+      padding: 0;
+    }
+
+    .peridot-tboard-page-shell {
+      --tboard-mobile-content-width: min(calc(100vw - 2rem), 34rem);
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+      padding-inline: 0;
+      justify-items: center;
+      gap: 1.25rem;
+      overflow-x: clip;
+    }
+
+    .peridot-tboard-page .peridot-calendar-match-frame {
+      overflow-x: clip;
+    }
+
+    .peridot-tboard-command-band {
+      width: 100%;
+      max-width: none;
+      margin-inline: 0;
+      padding-inline: 0;
+      box-sizing: border-box;
+      justify-self: stretch;
+    }
+
+    .peridot-tboard-page .peridot-tboard-header,
+    .peridot-tboard-page .peridot-tboard-control-shell {
+      width: var(--tboard-mobile-content-width);
+      max-width: calc(100% - 2rem);
+      margin-inline: auto;
+      padding-inline: 0;
+      box-sizing: border-box;
+      justify-self: center;
+    }
+
+    .peridot-tboard-page .peridot-tboard-control-shell {
+      justify-items: stretch;
+    }
+
+    .peridot-tboard-page .peridot-tboard-surface,
+    .peridot-tboard-page .peridot-tboard-layout,
+    .peridot-tboard-page .peridot-tboard-live-column,
+    .peridot-tboard-page .peridot-tboard-hive-rails,
+    .peridot-tboard-page .peridot-tboard-command-band {
+      width: 100%;
+      max-width: none;
+      justify-self: stretch;
+    }
+
+    .peridot-tboard-page .peridot-tboard-layout {
+      padding-inline: 0 !important;
+      padding-bottom: 1.25rem !important;
+    }
+
+    .peridot-settings-control-shell,
+    .peridot-settings-command-section,
+    .peridot-settings-identity {
+      width: 100%;
+      max-width: none;
+      padding-inline: 1.2rem;
+      box-sizing: border-box;
+      justify-items: center;
+      justify-self: stretch;
+    }
+
+    .peridot-settings-command-copy {
+      width: 100%;
+      justify-items: center;
+    }
+
+    .peridot-settings-identity-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.8rem;
+      justify-self: center;
+    }
+
+    .peridot-settings-command-deck {
+      justify-self: center;
+      --routine-command-scale: 0.66;
+      --routine-command-mobile-scale: 0.66;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .peridot-settings-command-deck .peridot-routine-command-deck-inner {
+      margin: 0 !important;
+      transform-origin: top left !important;
+    }
+
+    .peridot-settings-count-cell {
+      width: min(100%, 9.2rem);
+      justify-self: center;
+    }
+
+    .peridot-tboard-page-shell {
+      --tboard-rail-cell-width: clamp(6.75rem, 30vw, 7.85rem);
+      --tboard-rail-cell-height: clamp(5.7rem, 24vw, 6.8rem);
+      --tboard-rail-cell-content-width: clamp(4.4rem, 20vw, 5.2rem);
+      --tboard-rail-mobile-offset: calc(var(--tboard-rail-cell-width) * 0.036);
+    }
+
+    .peridot-tboard-live-column {
+      --tboard-cell-width: clamp(5.95rem, calc((var(--tboard-mobile-content-width) - 0.55rem) / 3.08), 7.18rem);
+      --tboard-cell-height: calc(var(--tboard-cell-width) * 0.815);
+      --tboard-cell-content-width: calc(var(--tboard-cell-width) * 0.72);
+      --analytics-cell-width: var(--tboard-cell-width);
+      --analytics-cell-height: var(--tboard-cell-height);
+      --analytics-cell-content-width: var(--tboard-cell-content-width);
+      --tboard-live-column-gap: calc(var(--tboard-cell-width) * 0.0663);
+      --tboard-live-center-shift: -0.25;
+      --tboard-open-stage-axis-shift: 0px;
+      --tboard-open-shell-pad-inline: 0.72rem;
+      --tboard-open-stack-overlap: 3px;
+      --tboard-open-shell-width: calc(var(--analytics-cell-width) + (var(--tboard-open-shell-pad-inline) * 2));
+      --tboard-live-rail-offset: calc(var(--tboard-cell-width) * 0.0449);
+      --tboard-live-rail-drop: calc((var(--analytics-cell-height) + var(--tboard-live-column-gap)) * 0.5);
+      --tboard-open-stage-width: calc((var(--analytics-cell-width) * 3) + (var(--tboard-live-rail-offset) * 2));
+      justify-items: center;
+    }
+
+    .peridot-tboard-hive-rails {
+      grid-template-columns:
+        minmax(0, 1fr)
+        var(--tboard-rail-cell-width)
+        var(--tboard-rail-cell-width)
+        minmax(0, 1fr);
+      grid-template-areas:
+        '. left right .'
+        'command command command command';
+      justify-content: stretch;
+      justify-items: stretch;
+      align-items: start;
+      column-gap: 0;
+      row-gap: 0.9rem;
+      width: 100%;
+      max-width: none;
+      margin: 0.9rem auto 0;
+    }
+
+    .peridot-tboard-hive-rail {
+      width: var(--tboard-rail-cell-width);
+      max-width: var(--tboard-rail-cell-width);
+      justify-items: center;
+      gap: 0.1rem;
+      min-height: 0;
+      position: relative;
+    }
+
+    .peridot-tboard-hive-rail .peridot-analytics-stat-cell + .peridot-analytics-stat-cell {
+      margin-top: -3px;
+    }
+
+    .peridot-tboard-command-center--header {
+      grid-area: auto;
+      width: 100%;
+      max-width: none;
+      justify-self: stretch;
+      padding: 0 !important;
+      text-align: left;
+    }
+
+    .peridot-tboard-command-band {
+      grid-area: command;
+      width: 100%;
+      max-width: none;
+      padding-inline: 0;
+      justify-self: stretch;
+      justify-items: stretch;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-panel {
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-panel-deep {
+      max-width: none;
+      transform: none;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-stage {
+      display: grid;
+      grid-template-columns:
+        minmax(0, 1fr)
+        var(--tboard-open-stage-width)
+        minmax(0, 1fr);
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding-inline: 0;
+      justify-items: stretch;
+      justify-self: stretch;
+      overflow: visible;
+      transform: translateX(var(--tboard-open-stage-axis-shift));
+      position: relative;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-grid {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(3, var(--analytics-cell-width));
+      justify-content: start;
+      column-gap: 0;
+      row-gap: 0;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0.15rem var(--tboard-live-rail-offset) 0.4rem;
+      align-items: start;
+      overflow: visible;
+      justify-self: stretch;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column {
+      display: grid;
+      gap: var(--tboard-live-column-gap);
+      width: 100%;
+      max-width: var(--analytics-cell-width);
+      justify-self: center;
+      align-content: start;
+      justify-items: center;
+      position: relative;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column > .peridot-tboard-open-card + .peridot-tboard-open-card {
+      margin-top: 0;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--left {
+      justify-self: end;
+      transform: translateX(var(--tboard-live-rail-offset));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--center {
+      justify-self: center;
+      margin-top: calc(var(--tboard-live-rail-drop) * var(--tboard-live-center-shift));
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--right {
+      justify-self: start;
+      transform: translateX(calc(var(--tboard-live-rail-offset) * -1));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-card {
+      width: var(--analytics-cell-width);
+      max-width: var(--analytics-cell-width);
+      min-height: 0;
+      height: var(--analytics-cell-height);
+      box-sizing: border-box;
+      padding: 0.66rem 0.58rem 0.62rem;
+      overflow: hidden;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-shell {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      width: 100%;
+      max-width: 100%;
+      margin-top: 0;
+      margin-bottom: 1.8rem;
+      margin-left: 0;
+      margin-right: 0;
+      justify-items: center;
+      text-align: center;
+      justify-self: stretch;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-deck {
+      --routine-command-scale: 0.82;
+      justify-self: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-deck .peridot-routine-command-deck-inner {
+      margin: 0 !important;
+      transform-origin: top left !important;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-caption,
+    .peridot-tboard-live-column .peridot-tboard-open-command-meta {
+      width: 100%;
+      justify-self: center;
+      text-align: center;
+    }
+
+    .peridot-tboard-live-column .peridot-analytics-stat-kicker {
+      font-size: 0.52rem;
+      letter-spacing: 0.17em;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-title {
+      font-size: 0.78rem;
+      line-height: 0.94;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-meta {
+      font-size: 0.47rem;
+      letter-spacing: 0.12em;
+    }
+
+    .peridot-tboard-hive-rail:not(.is-right),
+    .peridot-tboard-hive-rail.is-right {
+      margin-top: 0;
+    }
+
+    .peridot-tboard-hive-rail:not(.is-right) {
+      grid-area: left;
+      justify-self: end;
+      transform: translateX(var(--tboard-rail-mobile-offset));
+    }
+
+    .peridot-tboard-hive-rail.is-right {
+      grid-area: right;
+      justify-self: start;
+      margin-top: calc(var(--tboard-rail-cell-height) * 0.56);
+      transform: translateX(calc(var(--tboard-rail-mobile-offset) * -1));
+    }
+
+    .peridot-tboard-hive-rail-label {
+      font-size: 0.47rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-tboard-hive-rail .peridot-analytics-stat-cell {
+      width: var(--tboard-rail-cell-width);
+      min-height: 0;
+      height: var(--tboard-rail-cell-height);
+      padding: 0.78rem 0.72rem 0.74rem;
+    }
+
+    .peridot-tboard-hive-rail .peridot-analytics-stat-kicker {
+      font-size: 0.44rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-tboard-hive-rail .peridot-analytics-stat-value {
+      font-size: 0.9rem;
+      line-height: 0.86;
+      text-wrap: balance;
+    }
+
+    .peridot-tboard-hive-rail .peridot-analytics-stat-copy {
+      font-size: 0.4rem;
+      line-height: 1.22;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .peridot-routines-page.peridot-page-gutter {
+      --peridot-page-gutter: 0.35rem;
+    }
+
+    .peridot-routines-page .peridot-stage-shell {
+      gap: 1.25rem;
+      box-sizing: border-box;
+      padding-inline: 1.2rem;
+      overflow-x: clip;
+    }
+
+    .peridot-routines-page .peridot-routines-topline,
+    .peridot-routines-page .peridot-routines-live-shell,
+    .peridot-routines-page .peridot-panel {
+      width: 100%;
+      max-width: none;
+    }
+
+    .peridot-settings-page .peridot-settings-shell,
+    .peridot-tboard-page-shell {
+      justify-items: stretch;
+    }
+
+    .peridot-settings-page .peridot-calendar-match-frame,
+    .peridot-tboard-page .peridot-calendar-match-frame {
+      overflow-x: clip;
+    }
+
+    .peridot-settings-page .peridot-settings-header,
+    .peridot-tboard-header,
+    .peridot-calendar-match-header {
+      gap: 1rem;
+      padding: 1.4rem 0 0;
+      width: 100%;
+      max-width: none;
+      box-sizing: border-box;
+      justify-items: start !important;
+      justify-self: stretch;
+      text-align: left !important;
+    }
+
+    .peridot-settings-page .peridot-settings-kicker,
+    .peridot-tboard-page .peridot-settings-kicker,
+    .peridot-calendar-match-header-kicker {
+      color: rgba(255, 223, 51, 0.48);
+      font-size: 12px;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+    }
+
+    .peridot-settings-page .peridot-settings-description,
+    .peridot-tboard-page .peridot-settings-description,
+    .peridot-tboard-page .peridot-tboard-meta,
+    .peridot-calendar-match-header-copy {
+      max-width: none;
+      margin: 0;
+      font-family: var(--font-display);
+      color: rgba(255, 223, 51, 0.9);
+      font-size: 0.9rem;
+      line-height: 1.25;
+      letter-spacing: 0.38rem;
+      text-transform: uppercase;
+      text-align: left;
+    }
+  }
+
+  .peridot-analytics-chart-slot {
+    width: var(--analytics-wide-width);
+    margin: 2rem auto 0;
+  }
+
+  .peridot-analytics-lower {
+    width: var(--analytics-wide-width);
+    margin: var(--analytics-chart-gap, 1.5rem) auto 0;
+  }
+
+  .peridot-analytics-lower-side {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .peridot-analytics-chart-stack {
+    display: grid;
+    gap: var(--analytics-chart-gap, 1.5rem);
+  }
+
+  .peridot-analytics-section {
+    position: relative;
+    padding: 0.45rem 0 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .peridot-analytics-section::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(51, 183, 219, 0.16), transparent 72%);
+    pointer-events: none;
+  }
+
+  .peridot-analytics-section--chart::before {
+    content: none;
+  }
+
+  .peridot-analytics-system-feed {
+    display: grid;
+    grid-template-columns: repeat(24, minmax(0, 1fr));
+    gap: 0.55rem;
+    margin-bottom: 1.6rem;
+    opacity: 0.8;
+  }
+
+  .peridot-analytics-system-feed-node {
+    position: relative;
+    display: block;
+    height: 2.5rem;
+  }
+
+  .peridot-analytics-system-feed-node::before,
+  .peridot-analytics-system-feed-node::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .peridot-analytics-system-feed-node::before {
+    top: 0;
+    width: 0.42rem;
+    height: 0.42rem;
+    background: rgba(255, 223, 51, 0.92);
+    box-shadow: 0 0 10px rgba(255, 223, 51, 0.2);
+  }
+
+  .peridot-analytics-system-feed-node::after {
+    top: 0.42rem;
+    width: 1px;
+    height: calc(100% - 0.7rem);
+    background: rgba(255, 223, 51, 0.16);
+  }
+
+  .peridot-analytics-system-layout {
+    display: grid;
+    grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr) minmax(11rem, 15rem);
+    grid-template-areas:
+      'left cluster right'
+      'left chart right';
+    gap: 1.5rem;
+    align-items: start;
+    justify-content: center;
+  }
+
+  .peridot-analytics-system-cluster-block {
+    grid-area: cluster;
+    width: min(100%, 31rem);
+    justify-self: center;
+  }
+
+  .peridot-analytics-system-chart-slot {
+    grid-area: chart;
+    width: min(100%, 31rem);
+    justify-self: center;
+  }
+
+  .peridot-analytics-system-side {
+    display: grid;
+    gap: 0;
+    align-content: center;
+    min-height: 30rem;
+    padding-top: 5rem;
+    width: min(100%, 12.5rem);
+    justify-self: center;
+  }
+
+  .peridot-analytics-system-side:not(.is-right) {
+    grid-area: left;
+  }
+
+  .peridot-analytics-system-side.is-right {
+    grid-area: right;
+  }
+
+  .peridot-analytics-system-side-line {
+    display: grid;
+    gap: 0.18rem;
+    padding: 0.55rem 0.7rem 0.6rem;
+    border: 1px solid rgba(102, 255, 153, 0.12);
+    background: rgba(255, 223, 51, 0.03);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .peridot-analytics-system-side-line span {
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    color: rgba(213, 255, 203, 0.55);
+  }
+
+  .peridot-analytics-system-side-line strong {
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    color: #66ff99;
+  }
+
+  .peridot-analytics-stat-grid {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: center;
+  }
+
+  .peridot-analytics-stat-grid--inline {
+    width: min(100%, 25rem);
+  }
+
+  .peridot-analytics-chart-controls {
+    margin-top: 1.4rem;
+  }
+
+  .peridot-analytics-chart-panel {
+    margin-top: 0.1rem;
+    background: var(--analytics-surface-fill);
+    border: 0;
+    box-shadow: none;
+  }
+
+  .peridot-analytics-stat-grid--chart {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .peridot-analytics-stat-cell {
+    position: relative;
+    isolation: isolate;
+    width: var(--analytics-cell-width);
+    min-height: var(--analytics-cell-height);
+    padding: 0.98rem 0.98rem 0.9rem;
+    display: grid;
+    align-content: center;
+    gap: 0.3rem;
+    justify-items: center;
+    text-align: left;
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .peridot-analytics-stat-cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background: rgba(51, 183, 219, 0.92);
+    box-shadow:
+      0 0 12px rgba(51, 183, 219, 0.18),
+      0 0 24px rgba(51, 183, 219, 0.06);
+    pointer-events: none;
+  }
+
+  .peridot-analytics-stat-cell::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background:
+      radial-gradient(circle at 50% 38%, rgba(51, 183, 219, 0.04), transparent 58%),
+      linear-gradient(180deg, rgba(3, 5, 6, 0.98), rgba(0, 0, 0, 0.99));
+    box-shadow:
+      inset 0 0 0 1px rgba(51, 183, 219, 0.18),
+      inset 0 0 30px rgba(51, 183, 219, 0.02);
+    pointer-events: none;
+  }
+
+  .peridot-analytics-stat-cell > * {
+    position: relative;
+    z-index: 1;
+    width: min(100%, var(--analytics-cell-content-width));
+    justify-self: center;
+  }
+
+  .peridot-analytics-stat-cell--summary {
+    padding-bottom: 1.25rem;
+  }
+
+  .peridot-analytics-stat-kicker {
+    font-family: var(--font-display);
+    font-size: 0.56rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(102, 255, 153, 0.72);
+  }
+
+  .peridot-analytics-stat-value {
+    font-family: var(--font-display);
+    font-size: 1.52rem;
+    line-height: 0.92;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ffdf33;
+    text-shadow: 0 0 16px rgba(255, 223, 51, 0.12);
+  }
+
+  .peridot-analytics-stat-copy {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.52rem;
+    line-height: 1.45;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(102, 255, 153, 0.46);
+  }
+
+  .peridot-analytics-system-side .peridot-analytics-stat-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .peridot-analytics-system-side .peridot-analytics-stat-cell {
+    width: var(--analytics-cell-width);
+  }
+
+  .peridot-analytics-system-side .peridot-analytics-stat-cell + .peridot-analytics-stat-cell {
+    margin-top: -3px;
+  }
+
+  .peridot-analytics-system-side .peridot-analytics-stat-value {
+    font-size: 1.22rem;
+  }
+
+  .peridot-analytics-system-side .peridot-analytics-stat-kicker,
+  .peridot-analytics-system-side .peridot-analytics-stat-value,
+  .peridot-analytics-system-side .peridot-analytics-stat-copy {
+    width: min(100%, var(--analytics-cell-content-width));
+  }
+
+  .peridot-analytics-system-chart-slot .peridot-analytics-section--chart {
+    position: relative;
+    left: 50%;
+    width: var(--analytics-wide-width);
+    max-width: none;
+    margin: 2rem 0 0;
+    transform: translateX(-50%);
+  }
+
+  .peridot-analytics-section--chart .peridot-analytics-chart-panel,
+  .peridot-analytics-section--chart .peridot-analytics-chart-board {
+    width: 100%;
+  }
+
+  .peridot-analytics-system-kicker,
+  .peridot-analytics-system-meta {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(179, 255, 190, 0.62);
+  }
+
+  .peridot-analytics-system-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 4rem);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #33b7db;
+    text-shadow: 0 0 20px rgba(51, 183, 219, 0.22);
+  }
+
+  .peridot-analytics-system-cluster {
+    position: relative;
+    width: min(30rem, 100%);
+    height: 18.15rem;
+    margin: 1.25rem auto 0;
+  }
+
+  .peridot-analytics-cluster-link {
+    display: none;
+  }
+
+  .peridot-analytics-cluster-link.is-left {
+    top: 0;
+    left: 0;
+    transform: none;
+  }
+
+  .peridot-analytics-cluster-link.is-right {
+    top: 0;
+    left: 0;
+    transform: none;
+  }
+
+  .peridot-analytics-system-node-row {
+    display: contents;
+  }
+
+  .peridot-analytics-system-center {
+    display: grid;
+    gap: 0.2rem;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .peridot-analytics-system-center-title,
+  .peridot-analytics-system-center-meta {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(179, 255, 190, 0.62);
+  }
+
+  .peridot-analytics-system-center-name {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    line-height: 0.95;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #66ff99;
+    text-shadow: 0 0 20px rgba(102, 255, 153, 0.2);
+  }
+
+  .peridot-analytics-system-bottom {
+    display: contents;
+  }
+
+  .peridot-analytics-node {
+    width: var(--analytics-cell-width);
+    display: grid;
+    justify-items: center;
+    gap: 0.25rem;
+    position: absolute;
+  }
+
+  .peridot-analytics-node.is-left {
+    top: 1.45rem;
+    left: 0;
+  }
+
+  .peridot-analytics-node.is-right {
+    top: 1.45rem;
+    left: 19.4rem;
+  }
+
+  .peridot-analytics-node.is-bottom {
+    top: 9.25rem;
+    left: 9.7rem;
+    width: var(--analytics-cell-width);
+    transform: none;
+    z-index: 1;
+  }
+
+  .peridot-analytics-node-shell {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    min-height: var(--analytics-cell-height);
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background: transparent;
+    box-shadow: none;
+    padding: 0.98rem 0.98rem 0.9rem;
+    display: grid;
+    align-content: center;
+    gap: 0.24rem;
+    justify-items: center;
+    text-align: left;
+    overflow: hidden;
+  }
+
+  .peridot-analytics-node-shell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background: rgba(51, 183, 219, 0.92);
+    box-shadow:
+      0 0 12px rgba(51, 183, 219, 0.18),
+      0 0 24px rgba(51, 183, 219, 0.08);
+    pointer-events: none;
+  }
+
+  .peridot-analytics-node-shell::after {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    clip-path: polygon(24% 0, 76% 0, 100% 50%, 76% 100%, 24% 100%, 0 50%);
+    background: var(--analytics-surface-fill);
+    box-shadow:
+      inset 0 0 0 1px rgba(51, 183, 219, 0.18),
+      inset 0 0 30px rgba(51, 183, 219, 0.02);
+    pointer-events: none;
+  }
+
+  .peridot-analytics-node-shell > * {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 7.5rem);
+    justify-self: center;
+  }
+
+  .peridot-analytics-node-kicker {
+    font-family: var(--font-display);
+    font-size: 0.48rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(102, 255, 153, 0.7);
+  }
+
+  .peridot-analytics-node-title {
+    font-family: var(--font-display);
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: #ffdf33;
+    text-wrap: balance;
+    max-width: 100%;
+  }
+
+  .peridot-analytics-node-routine {
+    font-family: var(--font-display);
+    font-size: 0.56rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(102, 255, 153, 0.46);
+  }
+
+  .peridot-analytics-node-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2rem;
+    padding: 0.24rem 0.8rem 0.28rem;
+    border: 1px solid rgba(51, 183, 219, 0.5);
+    background: rgba(51, 183, 219, 0.06);
+    font-family: var(--font-display);
+    font-size: 0.76rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #33b7db;
+    box-shadow: 0 0 16px rgba(51, 183, 219, 0.12);
+  }
+
+  .peridot-analytics-node.is-left .peridot-analytics-node-status {
+    align-self: start;
+    transform: translateX(-0.35rem);
+  }
+
+  .peridot-analytics-node.is-right .peridot-analytics-node-status {
+    align-self: end;
+    transform: translateX(0.35rem);
+  }
+
+  .peridot-analytics-node.is-bottom .peridot-analytics-node-status {
+    order: -1;
+    margin-bottom: 0.15rem;
+  }
+
+  .peridot-analytics-node.is-bottom .peridot-analytics-node-shell {
+    min-height: var(--analytics-cell-height);
+    padding: 0.98rem 0.98rem 0.9rem;
+  }
+
+  .peridot-analytics-chart-board {
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    width: calc(100% - 2.5rem);
+    margin: 0 auto;
+    padding: 1.1rem 1.8rem 1rem 1rem;
+    border: 0;
+    background: var(--analytics-surface-fill);
+    box-shadow: none;
+  }
+
+  .peridot-analytics-shell .peridot-panel-soft,
+  .peridot-analytics-shell .peridot-panel-deep {
+    background: var(--analytics-surface-fill);
+  }
+
+  .peridot-analytics-chart-board::before,
+  .peridot-analytics-chart-board::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .peridot-analytics-chart-board::before {
+    content: none;
+  }
+
+  .peridot-analytics-chart-board::after {
+    content: none;
+  }
+
+  .peridot-analytics-chart-frame {
+    position: relative;
+    overflow: visible;
+    min-height: 15rem;
+    padding: 0.2rem 0.1rem 0.1rem;
+  }
+
+  .peridot-analytics-chart-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .peridot-analytics-chart-grid-line {
+    stroke: rgba(51, 183, 219, 0.13);
+    stroke-width: 1;
+  }
+
+  .peridot-analytics-chart-grid-label {
+    fill: rgba(191, 255, 216, 0.46);
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .peridot-analytics-chart-line-glow,
+  .peridot-analytics-chart-line {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    path-length: 1;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: peridot-analytics-chart-line 2.6s cubic-bezier(0.2, 0.9, 0.2, 1) forwards;
+  }
+
+  .peridot-analytics-chart-line-glow {
+    stroke: rgba(51, 183, 219, 0.34);
+    stroke-width: 10;
+    filter: blur(5px);
+  }
+
+  .peridot-analytics-chart-line {
+    stroke: url(#peridotAnalyticsLine);
+    stroke-width: 2.2;
+    opacity: 0.18;
+    filter: drop-shadow(0 0 6px rgba(51, 183, 219, 0.12));
+    animation:
+      peridot-analytics-chart-line 2.6s cubic-bezier(0.2, 0.9, 0.2, 1) forwards,
+      peridot-analytics-chart-line-live 3.2s ease-in-out infinite 2.6s;
+  }
+
+  .peridot-analytics-chart-bar {
+    opacity: 0;
+    animation: peridot-analytics-chart-bar-rise 0.9s ease-out forwards;
+    filter: drop-shadow(0 0 10px rgba(51, 183, 219, 0.18));
+  }
+
+  .peridot-analytics-chart-segment-beam {
+    fill: none;
+    stroke: rgba(255, 223, 51, 0.92);
+    stroke-width: 3.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    path-length: 1;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    opacity: 0;
+    animation: peridot-analytics-chart-segment-beam 1.92s linear infinite;
+    filter: drop-shadow(0 0 14px rgba(255, 223, 51, 0.52));
+  }
+
+  .peridot-analytics-chart-point {
+    fill: #33b7db;
+    stroke: rgba(2, 10, 8, 0.96);
+    stroke-width: 2;
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0;
+    animation: peridot-analytics-chart-point 0.9s ease-out forwards;
+  }
+
+  .peridot-analytics-chart-point-ring {
+    fill: none;
+    stroke: rgba(51, 183, 219, 0.54);
+    stroke-width: 1.5;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: peridot-analytics-chart-point-ring 2.8s ease-out infinite;
+  }
+
+  .peridot-analytics-chart-point-hit {
+    cursor: pointer;
+  }
+
+  .peridot-analytics-chart-point-label {
+    pointer-events: none;
+  }
+
+  .peridot-analytics-chart-point-label-box {
+    fill: #66ff99;
+    stroke: none;
+  }
+
+  .peridot-analytics-chart-point-label-text {
+    font-family: var(--font-display);
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+    font-weight: 700;
+    text-transform: uppercase;
+    fill: #050705;
+  }
+
+  .peridot-analytics-chart-readout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.55rem;
+    padding: 0.65rem 0 0 0;
+    border-top: 1px solid rgba(51, 183, 219, 0.14);
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .peridot-analytics-chart-readout span {
+    font-size: 0.66rem;
+    letter-spacing: 0.24em;
+    color: rgba(191, 255, 216, 0.58);
+  }
+
+  .peridot-analytics-chart-readout strong {
+    font-size: 0.82rem;
+    letter-spacing: 0.24em;
+    color: #33b7db;
+    text-shadow: 0 0 14px rgba(51, 183, 219, 0.18);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .peridot-analytics-chart-dates {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  .peridot-analytics-chart-dates span:first-child {
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .peridot-analytics-chart-dates span:last-child {
+    justify-self: end;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .peridot-analytics-chart-scan {
+    position: absolute;
+    inset: 0 auto 0 -10%;
+    width: 16%;
+    background: linear-gradient(90deg, transparent, rgba(51, 183, 219, 0.18), transparent);
+    filter: blur(3px);
+    opacity: 0.5;
+    animation: peridot-analytics-chart-scan 3.4s linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes peridot-analytics-chart-line {
+    0% {
+      stroke-dashoffset: 1;
+    }
+
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes peridot-analytics-chart-bar-rise {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    100% {
+      opacity: 0.82;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes peridot-analytics-chart-line-live {
+    0%,
+    100% {
+      opacity: 0.12;
+      filter: drop-shadow(0 0 6px rgba(51, 183, 219, 0.12));
+    }
+
+    50% {
+      opacity: 0.22;
+      filter: drop-shadow(0 0 10px rgba(207, 255, 247, 0.2));
+    }
+  }
+
+  @keyframes peridot-analytics-chart-segment-beam {
+    0% {
+      stroke-dashoffset: 1;
+      opacity: 0;
+    }
+
+    12% {
+      opacity: 1;
+    }
+
+    42% {
+      opacity: 1;
+      stroke-dashoffset: 0;
+    }
+
+    54% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 0;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes peridot-analytics-chart-point {
+    0% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+
+    55% {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    75% {
+      transform: scale(1.2);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes peridot-analytics-chart-point-ring {
+    0% {
+      opacity: 0;
+      transform: scale(0.32);
+    }
+
+    30% {
+      opacity: 0.7;
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale(1.9);
+    }
+  }
+
+  @keyframes peridot-analytics-chart-scan {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+
+    10% {
+      opacity: 0.52;
+    }
+
+    88% {
+      opacity: 0.32;
+    }
+
+    100% {
+      transform: translateX(760%);
+      opacity: 0;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .peridot-analytics-system-layout {
+      position: relative;
+      display: block;
+      min-height: 43rem;
+    }
+
+    .peridot-analytics-system-cluster-block {
+      width: min(100%, 31rem);
+      margin: 0 auto;
+    }
+
+    .peridot-analytics-system-chart-slot {
+      width: 100%;
+      margin: 1.15rem auto 0;
+    }
+
+    .peridot-analytics-system-chart-slot .peridot-analytics-section--chart {
+      position: relative;
+      left: 50%;
+      width: var(--analytics-wide-width);
+      max-width: none;
+      margin: 0;
+      transform: translateX(-50%);
+    }
+
+    .peridot-analytics-system-side {
+      position: absolute;
+      top: 5.85rem;
+      min-height: 0;
+      padding-top: 0;
+      align-content: start;
+      width: min(100%, 12.5rem);
+    }
+
+    .peridot-analytics-system-side:not(.is-right) {
+      left: 0;
+    }
+
+    .peridot-analytics-system-side.is-right {
+      right: 0;
+    }
+  }
+
+  @media (max-width: 1279px) {
+    .peridot-analytics-lower {
+      width: 100%;
+      margin: var(--analytics-chart-gap, 1.5rem) 0 0;
+    }
+
+    .peridot-analytics-lower-side {
+      width: 100%;
+    }
+
+    .peridot-analytics-system-layout {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .peridot-analytics-system-cluster-block,
+    .peridot-analytics-system-chart-slot .peridot-analytics-section--chart,
+    .peridot-analytics-chart-slot {
+      width: 100%;
+      max-width: 100%;
+      position: static;
+      margin: 2rem 0 0;
+      transform: none;
+      left: auto;
+    }
+
+    .peridot-analytics-system-side {
+      min-height: 0;
+      padding-top: 0;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .peridot-analytics-stat-grid--inline {
+      width: 100%;
+    }
+
+    .peridot-analytics-system-side.is-right {
+      order: 3;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .peridot-analytics-stat-grid--chart {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 900px) {
+    .peridot-analytics-shell {
+      --analytics-cell-width: clamp(7.25rem, 30vw, 8.75rem);
+      --analytics-cell-height: clamp(5.9rem, 24vw, 7rem);
+      --analytics-cell-content-width: clamp(4.8rem, 20vw, 5.8rem);
+      --analytics-chart-gap: 1.1rem;
+    }
+
+    .peridot-analytics-system {
+      padding: 1.35rem 0 1.5rem;
+    }
+
+    .peridot-analytics-system-layout {
+      grid-template-columns: repeat(2, var(--analytics-side-cell-width));
+      grid-template-areas:
+        'cluster cluster'
+        'left right'
+        'chart chart';
+      justify-content: center;
+      column-gap: 0;
+      row-gap: 1.8rem;
+      align-items: start;
+    }
+
+    .peridot-analytics-system-feed {
+      grid-template-columns: repeat(16, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    .peridot-analytics-system-cluster {
+      position: relative;
+      display: block;
+      width: min(100%, 20rem);
+      height: 15.9rem;
+      margin: 1rem auto 0;
+    }
+
+    .peridot-analytics-cluster-link {
+      display: none;
+    }
+
+    .peridot-analytics-system-node-row {
+      display: contents;
+    }
+
+    .peridot-analytics-node {
+      position: absolute;
+      width: var(--analytics-cell-width);
+      margin: 0;
+    }
+
+    .peridot-analytics-node.is-left {
+      top: 0.65rem;
+      left: -0.3rem;
+    }
+
+    .peridot-analytics-node.is-right {
+      top: 0.65rem;
+      right: -0.3rem;
+      left: auto;
+    }
+
+    .peridot-analytics-system-bottom {
+      display: contents;
+    }
+
+    .peridot-analytics-node.is-bottom {
+      top: 6.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .peridot-analytics-node-shell {
+      min-height: var(--analytics-cell-height);
+      padding: 0.82rem 0.78rem 0.76rem;
+    }
+
+    .peridot-analytics-node-title {
+      font-size: 0.64rem;
+      line-height: 0.9;
+    }
+
+    .peridot-analytics-node-routine {
+      font-size: 0.39rem;
+      letter-spacing: 0.1em;
+    }
+
+    .peridot-analytics-node-kicker {
+      font-size: 0.4rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-analytics-node-status {
+      min-height: 1.6rem;
+      padding: 0.18rem 0.5rem 0.22rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+    }
+
+    .peridot-analytics-node.is-left .peridot-analytics-node-status {
+      transform: translateX(-0.15rem);
+    }
+
+    .peridot-analytics-node.is-right .peridot-analytics-node-status {
+      transform: translateX(0.15rem);
+    }
+
+    .peridot-analytics-system-side {
+      --analytics-side-cell-width: clamp(6.75rem, 30vw, 7.85rem);
+      --analytics-side-cell-height: clamp(5.2rem, 22vw, 6.2rem);
+      --analytics-side-cell-content-width: clamp(4.4rem, 20vw, 5.2rem);
+      grid-template-columns: minmax(0, 1fr);
+      min-height: 0;
+      padding-top: 0;
+      width: 100%;
+      max-width: var(--analytics-side-cell-width);
+      justify-self: center;
+      justify-items: center;
+      gap: 0;
+      position: relative;
+    }
+
+    .peridot-analytics-system-side:not(.is-right) {
+      grid-area: left;
+      justify-self: end;
+      transform: translateX(0.42rem);
+    }
+
+    .peridot-analytics-system-side.is-right {
+      grid-area: right;
+      order: initial;
+      justify-self: start;
+      margin-top: 3.5rem;
+      transform: translateX(-0.42rem);
+    }
+
+    .peridot-analytics-stat-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .peridot-analytics-stat-cell {
+      min-height: var(--analytics-cell-height);
+    }
+
+    .peridot-analytics-system-side .peridot-analytics-stat-cell {
+      width: var(--analytics-side-cell-width);
+      min-height: var(--analytics-side-cell-height);
+      padding: 0.78rem 0.72rem 0.74rem;
+    }
+
+    .peridot-analytics-system-side .peridot-analytics-stat-cell > * {
+      width: min(100%, var(--analytics-side-cell-content-width));
+    }
+
+    .peridot-analytics-system-side .peridot-analytics-stat-kicker {
+      font-size: 0.47rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-analytics-system-side .peridot-analytics-stat-value {
+      font-size: 1rem;
+    }
+
+    .peridot-analytics-system-cluster-block {
+      grid-area: cluster;
+      display: grid;
+      gap: 0.35rem;
+      width: 100%;
+      max-width: none;
+      padding-bottom: 1.5rem;
+    }
+
+    .peridot-analytics-system-chart-slot {
+      grid-area: chart;
+      width: 100%;
+    }
+
+    .peridot-analytics-system-chart-slot .peridot-analytics-section--chart {
+      margin-top: 0;
+    }
+
+    .peridot-analytics-chart-panel {
+      padding: 0.8rem !important;
+    }
+
+    .peridot-analytics-chart-board {
+      width: 100%;
+      padding: 0.8rem 0.75rem 0.85rem;
+    }
+
+    .peridot-analytics-chart-frame {
+      min-height: 0;
+      padding: 0.1rem 0;
+    }
+
+    .peridot-analytics-chart-svg {
+      min-height: 11.75rem;
+    }
+
+    .peridot-analytics-chart-readout {
+      gap: 0.75rem;
+    }
+
+    .peridot-analytics-chart-readout span {
+      font-size: 0.56rem;
+      letter-spacing: 0.18em;
+    }
+
+    .peridot-analytics-chart-readout strong {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-analytics-chart-dates {
+      gap: 0.7rem;
+    }
+
+    .peridot-analytics-chart-dates span {
+      font-size: 0.58rem;
+      letter-spacing: 0.14em;
+    }
+  }
+
   .peridot-shell :is([class*='text-xs'], [class*='text-[11px]']),
   .zune-bg :is([class*='text-xs'], [class*='text-[11px]']) {
     line-height: 1.5;
@@ -776,8 +4931,8 @@
 
   .peridot-task-card {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(232, 247, 161, 0.2)),
-      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(207, 234, 122, 0.08));
+      linear-gradient(180deg, rgba(255, 223, 51, 0.16), rgba(255, 223, 51, 0.2)),
+      linear-gradient(135deg, rgba(255, 223, 51, 0.18), rgba(255, 223, 51, 0.08));
     border: 1px solid var(--peridot-border);
     box-shadow: 0 14px 32px rgba(145, 169, 80, 0.08);
     backdrop-filter: blur(18px) saturate(150%);
@@ -785,16 +4940,16 @@
   }
 
   .peridot-task-complete {
-    background: linear-gradient(180deg, rgba(232, 247, 161, 0.96), rgba(239, 245, 194, 0.96));
-    border: 1px solid rgba(127, 191, 63, 0.28);
+    background: linear-gradient(180deg, rgba(255, 223, 51, 0.96), rgba(255, 223, 51, 0.96));
+    border: 1px solid rgba(102, 255, 153, 0.28);
     box-shadow:
-      0 0 0 1px rgba(232, 247, 161, 0.6),
-      0 20px 40px rgba(159, 204, 59, 0.14);
+      0 0 0 1px rgba(255, 223, 51, 0.6),
+      0 20px 40px rgba(102, 255, 153, 0.14);
     animation: peridot-complete-pulse 1s ease;
   }
 
   .dark .peridot-task-complete {
-    background: linear-gradient(180deg, rgba(127, 191, 63, 0.22), rgba(159, 204, 59, 0.18));
+    background: linear-gradient(180deg, rgba(102, 255, 153, 0.22), rgba(102, 255, 153, 0.18));
   }
 
   .peridot-shell input[type='checkbox'],
@@ -871,14 +5026,14 @@
   .peridot-shell [class*='bg-black/'],
   .zune-bg [class*='bg-white/'],
   .zune-bg [class*='bg-black/'] {
-    background-color: rgba(255, 255, 255, 0.8) !important;
+    background-color: rgba(255, 223, 51, 0.8) !important;
   }
 
   .dark .peridot-shell [class*='bg-white/'],
   .dark .peridot-shell [class*='bg-black/'],
   .dark .zune-bg [class*='bg-white/'],
   .dark .zune-bg [class*='bg-black/'] {
-    background-color: rgba(255, 255, 255, 0.04) !important;
+    background-color: rgba(255, 223, 51, 0.04) !important;
   }
 
   .peridot-shell [class*='bg-emerald-300'],
@@ -889,8 +5044,8 @@
   .zune-bg [class*='bg-lime-300'],
   .zune-bg [class*='bg-teal-300'],
   .zune-bg [class*='bg-cyan-300'] {
-    background: linear-gradient(90deg, var(--peridot-primary), var(--peridot-primary-soft)) !important;
-    color: var(--peridot-text) !important;
+    background: var(--peridot-primary) !important;
+    color: rgba(30, 36, 18, 0.96) !important;
   }
 
   .peridot-shell .rounded-2xl,
@@ -989,17 +5144,1698 @@
 @keyframes peridot-complete-pulse {
   0% {
     box-shadow:
-      0 0 0 0 rgba(232, 247, 161, 0.72),
-      0 20px 40px rgba(159, 204, 59, 0.14);
+      0 0 0 0 rgba(255, 223, 51, 0.72),
+      0 20px 40px rgba(102, 255, 153, 0.14);
   }
   70% {
     box-shadow:
-      0 0 0 12px rgba(232, 247, 161, 0),
-      0 20px 40px rgba(159, 204, 59, 0.18);
+      0 0 0 12px rgba(255, 223, 51, 0),
+      0 20px 40px rgba(102, 255, 153, 0.18);
   }
   100% {
     box-shadow:
-      0 0 0 0 rgba(232, 247, 161, 0),
-      0 20px 40px rgba(159, 204, 59, 0.14);
+      0 0 0 0 rgba(255, 223, 51, 0),
+      0 20px 40px rgba(102, 255, 153, 0.14);
   }
 }
+
+  .peridot-calendar-scene {
+    position: relative;
+    overflow: hidden;
+    min-height: calc(100svh - 12rem);
+    background: #020202;
+  }
+
+  .peridot-calendar-fullscreen {
+    min-height: calc(100svh - 4.5rem);
+    background: #020202;
+    color: #ffdf33;
+  }
+
+  .peridot-calendar-meta {
+    padding: 1.5rem 1.75rem 0;
+  }
+
+  .peridot-calendar-map {
+    position: relative;
+    padding: 1rem 1rem 6rem;
+  }
+
+  .peridot-calendar-layout-shell {
+    display: grid;
+    grid-template-columns: minmax(0, 34rem) minmax(18rem, 24rem);
+    gap: 2rem;
+    align-items: start;
+    padding: 0 2rem 6.5rem;
+  }
+
+  .peridot-calendar-node {
+    position: absolute;
+    width: 26.25rem;
+  }
+
+  .peridot-routine-cluster {
+    position: relative;
+    width: 26.25rem;
+  }
+
+  .peridot-routine-cluster-svg {
+    display: block;
+    width: 26.25rem;
+    height: auto;
+    overflow: visible;
+  }
+
+  .peridot-cluster-label,
+  .peridot-cluster-date,
+  .peridot-cluster-task,
+  .peridot-cluster-routine-text,
+  .peridot-cluster-time {
+    fill: #ffdf33;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .peridot-cluster-label,
+  .peridot-cluster-date {
+    font-size: 12px;
+    letter-spacing: 8px;
+  }
+
+  .peridot-cluster-time {
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+
+  .peridot-cluster-routine-text,
+  .peridot-cluster-task-text {
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+
+  .peridot-cluster-task-hitbox {
+    position: absolute;
+    left: 134px;
+    background: transparent;
+    clip-path: polygon(22% 0, 100% 0, 78% 100%, 0 100%);
+  }
+
+  .peridot-cluster-task-hitbox.is-selected {
+    outline: 1px solid rgba(102, 255, 153, 0.8);
+    outline-offset: 2px;
+  }
+
+  .peridot-task-detail-panel {
+    position: sticky;
+    top: 1.5rem;
+    border: 0;
+    background: #020202;
+    padding: 1.25rem;
+    min-height: 16rem;
+    backdrop-filter: none;
+  }
+
+  .peridot-calendar-footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #39ff14;
+    padding: 0.45rem 1.5rem 0.2rem;
+  }
+
+  .peridot-calendar-footer-wordmark {
+    color: rgba(68, 68, 68, 0.9);
+    font-size: clamp(2.4rem, 8vw, 4.4rem);
+    line-height: 1;
+    letter-spacing: 0.42em;
+    font-weight: 700;
+  }
+
+  @media (max-width: 767px) {
+    .peridot-calendar-scene {
+      min-height: 34rem;
+      border: 0;
+      border-radius: 1.25rem;
+    }
+
+    .peridot-calendar-meta {
+      padding: 1.2rem 1rem 0;
+    }
+
+    .peridot-calendar-map {
+      padding: 1.25rem 0.85rem 5.5rem;
+    }
+
+    .peridot-calendar-layout-shell {
+      grid-template-columns: 1fr;
+      padding: 0 0.85rem 5.5rem;
+    }
+
+    .peridot-calendar-node {
+      position: relative;
+      inset: auto;
+      left: 0 !important;
+      top: 0 !important;
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    .peridot-routine-cluster,
+    .peridot-routine-cluster-svg {
+      width: 100%;
+      max-width: 26.25rem;
+    }
+
+    .peridot-task-detail-panel {
+      position: static;
+    }
+
+    .peridot-calendar-footer-wordmark {
+      letter-spacing: 0.22em;
+      font-size: clamp(2rem, 12vw, 3.4rem);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .peridot-calendar-scene {
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+      border-bottom: 0;
+    }
+  }
+
+  .peridot-static-calendar-page {
+    min-height: calc(100svh - 58px);
+    background: #000;
+    color: #ffdf33;
+    padding: 0.35rem;
+  }
+
+  .peridot-static-calendar-frame {
+    position: relative;
+    min-height: calc(100svh - 58px - 0.7rem);
+    border: 0;
+    background: #000;
+    overflow: hidden;
+  }
+
+  .peridot-static-calendar-label {
+    padding: 1.4rem 0 0 4.2rem;
+    color: rgba(255, 223, 51, 0.48);
+    font-size: 12px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+  }
+
+  .peridot-static-calendar-ui {
+    padding-left: 4.2rem;
+    margin-top: 1rem;
+    color: rgba(255, 223, 51, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.25;
+    letter-spacing: 0.38rem;
+    text-transform: uppercase;
+    white-space: pre-wrap;
+  }
+
+  .peridot-static-calendar-canvas {
+    position: relative;
+    min-height: 48rem;
+    margin-top: 2.8rem;
+  }
+
+  .peridot-live-canvas-wrap {
+    display: grid;
+    gap: 2rem;
+    min-height: calc(100svh - 18rem);
+    padding: 2.8rem 4.2rem 8.5rem;
+  }
+
+  .peridot-live-stage {
+    position: relative;
+    min-height: calc(100svh - 18rem);
+    padding: 3rem 4.2rem 8.5rem;
+  }
+
+  .peridot-live-cluster-board {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 2.5rem 4.2rem;
+    min-height: 22rem;
+    padding-right: min(38rem, 42vw);
+  }
+
+  .peridot-live-cluster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 23rem), max-content));
+    gap: 3rem 4.25rem;
+    align-content: start;
+    justify-content: start;
+    min-height: 18rem;
+  }
+
+  .peridot-live-cluster-shell {
+    appearance: none;
+    display: block;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+    max-width: 100%;
+  }
+
+  .peridot-live-cluster-shell.is-selected {
+    filter: drop-shadow(0 0 14px rgba(102, 255, 153, 0.12));
+  }
+
+  .peridot-live-cluster-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .peridot-live-cluster-hit {
+    cursor: pointer;
+  }
+
+  .peridot-live-tag {
+    fill: #bd0000;
+    transition:
+      fill 180ms ease,
+      filter 180ms ease,
+      opacity 180ms ease;
+  }
+
+  .peridot-live-tag.is-routine {
+    fill: #bd0000;
+  }
+
+  .peridot-live-tag.is-editing,
+  .peridot-live-tag.is-selected-flow,
+  .peridot-live-tag.is-routine.is-editing {
+    fill: #33b7db;
+    filter: drop-shadow(0 0 10px rgba(51, 183, 219, 0.24));
+  }
+
+  .peridot-live-tag.is-selected {
+    fill: #bd0000;
+    filter: drop-shadow(0 0 10px rgba(102, 255, 153, 0.18));
+  }
+
+  .peridot-live-tag.is-complete {
+    fill: #66ff99;
+    opacity: 1;
+  }
+
+  .peridot-live-time-value {
+    fill: #ffdf33;
+    font-family: var(--font-display);
+    font-size: 24px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .peridot-live-time-label {
+    font-size: 18px;
+    letter-spacing: 0.1em;
+  }
+
+  .peridot-live-detail-panel {
+    position: absolute;
+    top: 3rem;
+    right: 4.2rem;
+    width: min(100%, 72rem);
+    max-width: min(30rem, calc(100% - 8.4rem));
+    max-height: calc(100svh - 19rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    backdrop-filter: none;
+  }
+
+  .peridot-live-detail-panel--inline {
+    display: none;
+  }
+
+  .peridot-live-detail-meta {
+    color: rgba(255, 223, 51, 0.6);
+    font-size: 12px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+  }
+
+  .peridot-live-detail-content {
+    display: grid;
+    gap: 1rem;
+    margin-top: 0.9rem;
+    min-width: 0;
+  }
+
+  .peridot-live-detail-header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .peridot-live-detail-time {
+    color: rgba(102, 255, 153, 0.86);
+    font-size: 12px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .peridot-live-detail-title {
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+    color: #ffdf33;
+    font-size: clamp(1.35rem, 2vw, 1.8rem);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    overflow-wrap: anywhere;
+  }
+
+  .peridot-live-detail-routine {
+    margin-top: 0.45rem;
+    color: rgba(255, 223, 51, 0.62);
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .peridot-live-complete-button {
+    appearance: none;
+    flex-shrink: 0;
+    border: 1px solid rgba(102, 255, 153, 0.24);
+    background: rgba(255, 223, 51, 0.06);
+    color: #ffdf33;
+    min-height: 2.75rem;
+    padding: 0.8rem 1rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .peridot-live-complete-button.is-complete {
+    border-color: rgba(102, 255, 153, 0.72);
+    background: #66ff99;
+    color: rgba(42, 52, 20, 0.96);
+  }
+
+  .peridot-live-entry-description {
+    margin: 0;
+    color: rgba(255, 223, 51, 0.68);
+    max-width: 62ch;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .peridot-live-copy-block {
+    display: grid;
+    gap: 0.6rem;
+    max-width: 75ch;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    color: rgba(255, 223, 51, 0.76);
+    font-size: 0.92rem;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+  }
+
+  .peridot-live-copy-block p {
+    margin: 0;
+  }
+
+  .peridot-live-copy-block.is-empty {
+    color: rgba(255, 223, 51, 0.48);
+  }
+
+  .peridot-live-reference-card {
+    overflow: hidden;
+    width: min(100%, 52rem);
+    max-width: 100%;
+    border: 1px solid rgba(255, 223, 51, 0.08);
+    background: rgba(255, 223, 51, 0.03);
+  }
+
+  .peridot-live-video-card {
+    width: min(100%, 52rem);
+    max-width: 100%;
+    border: 1px solid rgba(102, 255, 153, 0.16);
+    background:
+      linear-gradient(180deg, rgba(6, 6, 6, 0.98), rgba(3, 3, 3, 0.96)),
+      radial-gradient(circle at 100% 0%, rgba(255, 223, 51, 0.06), transparent 24%);
+    overflow: hidden;
+  }
+
+  .peridot-live-video-hud {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.72rem 0.85rem;
+    border-bottom: 1px solid rgba(102, 255, 153, 0.12);
+    background: rgba(255, 223, 51, 0.04);
+  }
+
+  .peridot-live-video-kicker {
+    color: rgba(255, 223, 51, 0.64);
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .peridot-live-video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-width: 0;
+    color: #66ff99;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .peridot-live-video-frame {
+    width: 100%;
+    background: #000;
+  }
+
+  .peridot-live-video-frame iframe {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    background: #000;
+  }
+
+  .peridot-live-reference-image {
+    display: block;
+    width: 100%;
+    max-height: 32rem;
+    object-fit: cover;
+  }
+
+  .peridot-live-link-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: fit-content;
+    border: 0;
+    background: transparent;
+    color: #ffdf33;
+    padding: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  .peridot-live-detail-footer,
+  .peridot-live-detail-empty,
+  .peridot-live-error,
+  .peridot-live-status {
+    color: rgba(255, 223, 51, 0.56);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .peridot-live-status {
+    padding-top: 8rem;
+  }
+
+  .peridot-live-error {
+    color: rgba(255, 142, 142, 0.88);
+  }
+
+  .peridot-live-inline-button,
+  .peridot-live-inline-link {
+    display: block;
+    width: fit-content;
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 223, 51, 0.9);
+    padding: 0;
+    text-align: left;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .peridot-live-inline-link:hover,
+  .peridot-live-inline-button:hover {
+    color: #ffdf33;
+  }
+
+  .peridot-live-controls-panel {
+    width: min(100% - 8.4rem, 28rem);
+    margin-left: 4.2rem;
+    margin-top: 1.25rem;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    backdrop-filter: none;
+  }
+
+  .peridot-live-controls-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .peridot-live-controls-nav {
+    display: inline-flex;
+    gap: 0.4rem;
+  }
+
+  .peridot-live-control-icon {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 223, 51, 0.82);
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.72rem;
+  }
+
+  .peridot-live-control-icon:hover {
+    color: #ffdf33;
+  }
+
+  .peridot-live-controls-month {
+    color: rgba(255, 223, 51, 0.82);
+    font-size: 0.88rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .peridot-live-flow-toggles {
+    width: min(100% - 8.4rem, 60rem);
+    margin-left: 4.2rem;
+    margin-top: 1.25rem;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .peridot-live-flow-toggles-label {
+    color: rgba(255, 223, 51, 0.44);
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
+  .peridot-live-flow-toggles-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.6rem 0.85rem;
+  }
+
+  .peridot-live-flow-toggle {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.08rem 0.7rem 0.14rem;
+    color: #66ff99;
+    font-family: var(--font-display);
+    font-size: 0.84rem;
+    font-weight: 700;
+    line-height: 0.88;
+    letter-spacing: 0.12em;
+    text-align: left;
+    text-transform: uppercase;
+    transition: color 160ms ease, opacity 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+  }
+
+  .peridot-live-flow-toggle.is-active {
+    color: #050705;
+    background: #66ff99;
+    text-shadow: none;
+    box-shadow: 0 0 18px rgba(102, 255, 153, 0.14);
+  }
+
+  .peridot-live-flow-toggle.is-hidden {
+    color: rgba(255, 223, 51, 0.34);
+  }
+
+  .peridot-live-flow-toggle:hover {
+    color: #ffdf33;
+  }
+
+  .peridot-live-calendar-mini {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 0.45rem;
+  }
+
+  .peridot-live-mini-weekday {
+    color: rgba(255, 223, 51, 0.44);
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .peridot-live-mini-day {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 223, 51, 0.78);
+    min-height: 2.3rem;
+    font-size: 0.82rem;
+  }
+
+  .peridot-live-mini-day.is-active {
+    color: #66ff99;
+    text-decoration: underline;
+    text-underline-offset: 0.18rem;
+  }
+
+  .peridot-live-mini-day.is-today {
+    color: #d8ffb3;
+  }
+
+  .peridot-live-mini-day.is-outside {
+    color: rgba(255, 223, 51, 0.32);
+  }
+
+  .peridot-static-cluster {
+    position: absolute;
+    width: 320px;
+    height: 220px;
+    overflow: visible;
+  }
+
+  .peridot-static-cluster-label,
+  .peridot-static-cluster-routine,
+  .peridot-static-cluster-task {
+    fill: #ffdf33;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .peridot-static-cluster-label {
+    font-size: 12px;
+    letter-spacing: 0.5em;
+  }
+
+  .peridot-static-cluster-routine,
+  .peridot-static-cluster-task {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .peridot-static-cluster-routine.is-complete,
+  .peridot-static-cluster-task.is-complete,
+  .peridot-dashboard-tag-text.is-complete {
+    fill: #000;
+  }
+
+  .peridot-static-calendar-footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: #66ff99;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.2rem 0 2rem;
+  }
+
+  .peridot-static-calendar-wordmark {
+    color: #000;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: 0.44em;
+    text-transform: uppercase;
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  .peridot-static-calendar-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    background: transparent;
+    color: #000;
+  }
+
+  .peridot-dashboard-page {
+    min-height: calc(100svh - 58px);
+    overflow-x: hidden;
+    background: #020202;
+    color: #ffdf33;
+  }
+
+  .peridot-dashboard-frame {
+    position: relative;
+    min-height: calc(100svh - 58px);
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .peridot-dashboard-main {
+    box-sizing: border-box;
+    min-height: calc(100svh - 5.75rem);
+    background: #020202;
+    padding: 5rem 6.5rem 4.5rem;
+    overflow-x: hidden;
+  }
+
+  .peridot-dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(18rem, 30rem) minmax(0, 1fr);
+    gap: 4rem 6rem;
+    align-items: start;
+  }
+
+  .peridot-dashboard-left {
+    display: grid;
+    gap: 2.6rem;
+    align-content: start;
+  }
+
+  .peridot-dashboard-identity,
+  .peridot-dashboard-nav {
+    border: 1px solid rgba(102, 255, 153, 0.82);
+    padding: 1.2rem 0.95rem 1.2rem 1.35rem;
+  }
+
+  .peridot-dashboard-identity-name {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 5rem);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+
+  .peridot-dashboard-identity-meta {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 0.85rem;
+    padding: 0.18rem 0.62rem 0.24rem;
+    font-family: var(--font-display);
+    font-size: clamp(0.58rem, 0.82vw, 0.76rem);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 0.92;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    color: #050705;
+    background: #66ff99;
+  }
+
+  .peridot-dashboard-nav {
+    display: grid;
+    gap: 0.45rem;
+    max-width: 20.5rem;
+  }
+
+  .peridot-dashboard-nav-link {
+    font-family: var(--font-display);
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #ffdf33;
+    text-decoration: none;
+    transition:
+      color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .peridot-dashboard-nav-link:hover {
+    color: #66ff99;
+    transform: translateX(4px);
+  }
+
+  .peridot-dashboard-right {
+    display: grid;
+    gap: 2.6rem;
+    align-content: start;
+    justify-items: center;
+    padding-top: 8rem;
+  }
+
+  .peridot-dashboard-flows-title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5.3rem);
+    font-weight: 700;
+    line-height: 0.82;
+    text-transform: uppercase;
+    color: #050705;
+    background: #66ff99;
+    padding: 0.05rem 1.35rem 0.12rem;
+  }
+
+  .peridot-dashboard-flows {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.8rem 4rem;
+    width: 100%;
+    min-height: 18rem;
+  }
+
+  .peridot-dashboard-cluster {
+    display: block;
+    text-decoration: none;
+    max-width: 100%;
+  }
+
+  .peridot-dashboard-cluster-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .peridot-dashboard-time-label,
+  .peridot-dashboard-tag-text {
+    fill: #ffdf33;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+  }
+
+  .peridot-dashboard-time-label {
+    font-size: 14px;
+    letter-spacing: 0.42em;
+  }
+
+  .peridot-dashboard-tag-text {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  .peridot-dashboard-empty {
+    display: grid;
+    place-items: center;
+    min-height: 12rem;
+    width: min(100%, 24rem);
+    border: 1px solid rgba(102, 255, 153, 0.16);
+    color: rgba(255, 223, 51, 0.72);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .peridot-dashboard-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(16rem, 22rem));
+    gap: 5rem 9rem;
+    align-items: end;
+    margin-top: 3.75rem;
+  }
+
+  .peridot-dashboard-metric {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 1.2rem;
+    min-height: 22rem;
+    text-decoration: none;
+  }
+
+  .peridot-dashboard-metric-link:hover .peridot-dashboard-metric-label {
+    color: #66ff99;
+  }
+
+  .peridot-dashboard-bars {
+    display: grid;
+    align-content: end;
+    gap: 1rem;
+    width: 100%;
+    min-height: 18rem;
+  }
+
+  .peridot-dashboard-bar {
+    display: block;
+    height: 1.55rem;
+    width: 100%;
+  }
+
+  .peridot-dashboard-bar.is-task-link {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    height: auto;
+    min-height: 2.1rem;
+    padding: 0.3rem 0.8rem 0.34rem;
+    overflow: hidden;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      transform 180ms ease,
+      filter 180ms ease;
+  }
+
+  .peridot-dashboard-bar.is-task-link:hover {
+    filter: brightness(1.08);
+    transform: translateX(4px);
+  }
+
+  .peridot-dashboard-bar.is-task-link:focus-visible {
+    outline: 1px solid #ffdf33;
+    outline-offset: 2px;
+  }
+
+  .peridot-dashboard-bar.is-green {
+    background: #66ff99;
+  }
+
+  .peridot-dashboard-bar.is-red {
+    background: #bd0000;
+  }
+
+  .peridot-dashboard-bar.is-task-link.is-green {
+    color: #040504;
+  }
+
+  .peridot-dashboard-bar.is-task-link.is-red {
+    color: #ffdf33;
+  }
+
+  .peridot-dashboard-bar.is-blinking {
+    animation: peridot-dashboard-task-blink 0.9s steps(2, start) infinite;
+  }
+
+  .peridot-dashboard-bar-label {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .peridot-dashboard-metric-label {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    letter-spacing: 0.48em;
+    text-transform: uppercase;
+    color: #ffdf33;
+    transition: color 180ms ease;
+  }
+
+  .peridot-dashboard-metric-label-link {
+    text-decoration: none;
+  }
+
+  .peridot-dashboard-metric-label-link:hover .peridot-dashboard-metric-label {
+    color: #66ff99;
+  }
+
+  .peridot-dashboard-metric-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .peridot-dashboard-metric-count {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #66ff99;
+    white-space: nowrap;
+  }
+
+  .peridot-dashboard-alert {
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #bd0000;
+    white-space: nowrap;
+    animation: peridot-dashboard-alert-blink 0.9s steps(2, start) infinite;
+  }
+
+  .peridot-dashboard-alert.is-complete {
+    color: #66ff99;
+    animation: none;
+    text-shadow: none;
+  }
+
+  .peridot-dashboard-empty--metric {
+    display: flex;
+    align-items: center;
+    min-height: 2.1rem;
+    width: 100%;
+  }
+
+  .peridot-dashboard-footer {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 80;
+    height: 58px;
+    background: #66ff99;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.2rem 0 2rem;
+  }
+
+  .peridot-dashboard-wordmark {
+    color: #000;
+    font-size: 56px;
+    line-height: 1;
+    letter-spacing: 0.44em;
+    text-transform: uppercase;
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  .peridot-dashboard-footer-menu {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: rgba(255, 223, 51, 0.08);
+    color: #000;
+    text-decoration: none;
+  }
+
+  .peridot-dashboard-mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: grid;
+    align-items: stretch;
+    justify-items: stretch;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(12px);
+  }
+
+  .peridot-dashboard-mobile-menu-panel {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 17rem;
+    border: 1px solid rgba(102, 255, 153, 0.18);
+    background: rgba(2, 2, 2, 0.96);
+    padding: 0.95rem 1rem 1rem;
+  }
+
+  .peridot-dashboard-mobile-menu-link {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #ffdf33;
+    text-decoration: none;
+  }
+
+  @keyframes peridot-dashboard-alert-blink {
+    0%,
+    48% {
+      opacity: 1;
+      text-shadow: 0 0 10px rgba(189, 0, 0, 0.38);
+    }
+
+    49%,
+    100% {
+      opacity: 0.28;
+      text-shadow: none;
+    }
+  }
+
+  @keyframes peridot-dashboard-task-blink {
+    0%,
+    48% {
+      opacity: 1;
+      box-shadow: 0 0 10px rgba(189, 0, 0, 0.28);
+    }
+
+    49%,
+    100% {
+      opacity: 0.36;
+      box-shadow: none;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1199px) {
+    .peridot-dashboard-nav {
+      display: none;
+    }
+
+    .peridot-dashboard-left {
+      gap: 0;
+    }
+
+    .peridot-dashboard-metrics {
+      grid-template-columns: 248px 248px;
+      gap: 3rem 4rem;
+      align-items: start;
+      margin-top: 2.25rem;
+    }
+
+    .peridot-dashboard-metric {
+      grid-template-rows: auto minmax(0, 1fr);
+      align-content: start;
+      min-height: 0;
+    }
+
+    .peridot-dashboard-bars {
+      order: 2;
+      width: min(100%, 14.5rem);
+      min-height: 0;
+      align-content: start;
+    }
+
+    .peridot-dashboard-metric-meta {
+      order: 1;
+      width: min(100%, 14.5rem);
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.42rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .peridot-dashboard-main {
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: calc(100svh - 58px);
+      min-height: calc(100svh - 58px);
+      padding: 0 0 4.5rem;
+    }
+
+    .peridot-dashboard-grid {
+      position: relative;
+      display: block;
+      min-height: 770px;
+    }
+
+    .peridot-dashboard-left {
+      position: absolute;
+      top: 86px;
+      left: 100px;
+      width: 500px;
+      gap: 2.55rem;
+    }
+
+    .peridot-dashboard-identity {
+      width: 500px;
+      min-height: 150px;
+      padding: 1rem 1rem 1.05rem 1.35rem;
+    }
+
+    .peridot-dashboard-identity-name {
+      font-size: 5rem;
+    }
+
+    .peridot-dashboard-identity-meta {
+      margin-top: 1.1rem;
+      padding: 0.18rem 0.7rem 0.24rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-dashboard-nav {
+      display: none;
+    }
+
+    .peridot-dashboard-nav-link {
+      font-size: 1.82rem;
+      letter-spacing: 0.18em;
+    }
+
+    .peridot-dashboard-right {
+      position: absolute;
+      top: 236px;
+      left: 57.5%;
+      width: min(760px, calc(100% - 57.5% - 70px));
+      gap: 2.5rem;
+      justify-items: start;
+      padding-top: 0;
+    }
+
+    .peridot-dashboard-flows-title {
+      margin-left: 102px;
+      font-size: 4rem;
+      line-height: 0.8;
+      padding: 0.02rem 1.2rem 0.08rem;
+    }
+
+    .peridot-dashboard-flows {
+      justify-content: flex-start;
+      gap: 2.5rem 4.4rem;
+      margin-left: 92px;
+      min-height: 260px;
+    }
+
+    .peridot-dashboard-metrics {
+      position: absolute;
+      left: 100px;
+      top: 430px;
+      bottom: auto;
+      transform: none;
+      width: max-content;
+      grid-template-columns: 248px 248px;
+      justify-content: center;
+      align-items: start;
+      gap: 8.5rem 4rem;
+      margin-top: 0;
+    }
+
+    .peridot-dashboard-metric {
+      align-self: start;
+      grid-template-rows: auto minmax(0, 1fr);
+      align-content: start;
+      min-height: 24rem;
+    }
+
+    .peridot-dashboard-bars {
+      order: 2;
+      width: min(100%, 14.5rem);
+      justify-self: start;
+      align-content: start;
+      gap: 0.85rem;
+      min-height: 0;
+    }
+
+    .peridot-dashboard-metric-meta {
+      order: 1;
+      width: min(100%, 14.5rem);
+      align-items: flex-start;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0.42rem;
+    }
+
+    .peridot-dashboard-metric-label {
+      font-size: 0.88rem;
+      letter-spacing: 0.28em;
+    }
+
+    .peridot-dashboard-metric-count,
+    .peridot-dashboard-alert {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+    }
+
+    .peridot-dashboard-bar {
+      height: 1.52rem;
+      width: 100%;
+    }
+
+    .peridot-dashboard-bar.is-task-link {
+      min-height: 2rem;
+      padding: 0.28rem 0.72rem 0.32rem;
+      font-size: 0.68rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    html,
+    body {
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .peridot-page-chrome {
+      height: 100svh;
+      min-height: 100svh;
+      overflow: hidden;
+    }
+
+    .peridot-page-chrome-content {
+      box-sizing: border-box;
+      height: 100svh;
+      min-height: calc(100svh - var(--peridot-page-chrome-bar-height));
+      padding-top: var(--peridot-page-chrome-bar-height);
+      padding-bottom: 0;
+      overflow-y: auto;
+      overflow-x: clip;
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .peridot-page-chrome-bar {
+      top: 0;
+      bottom: auto;
+      padding: 0 0.8rem 0 0.95rem;
+    }
+
+    .peridot-page-chrome-wordmark {
+      font-size: 1.65rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-mobile-nav-topbar {
+      padding: 0 0.8rem 0 0.95rem;
+    }
+
+    .peridot-mobile-nav-wordmark {
+      font-size: 1.65rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-page-chrome-menu {
+      inset: var(--peridot-page-chrome-bar-height) 0 0;
+      align-items: start;
+      justify-items: stretch;
+      padding: 0.85rem;
+    }
+
+    .peridot-page-chrome-menu-panel {
+      min-width: 0;
+    }
+
+    .peridot-dashboard-frame {
+      padding: 0;
+    }
+
+    .peridot-dashboard-main {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: calc(100svh - 4.5rem);
+      padding: 0.7rem 0.9rem 2.5rem;
+    }
+
+    .peridot-dashboard-grid {
+      display: contents;
+    }
+
+    .peridot-dashboard-right {
+      order: 2;
+      width: 100%;
+      min-width: 0;
+      justify-items: start;
+      padding-top: 0;
+      margin-top: 0;
+      gap: 0.8rem;
+    }
+
+    .peridot-dashboard-left {
+      order: 1;
+      width: 100%;
+      min-width: 0;
+      gap: 0.9rem;
+      justify-items: start;
+    }
+
+    .peridot-dashboard-identity {
+      width: min(100%, 20.5rem);
+      min-width: 0;
+      padding: 0.55rem 0.75rem 0.7rem;
+    }
+
+    .peridot-dashboard-nav {
+      width: min(100%, 20.5rem);
+      min-width: 0;
+      padding: 0.65rem 0.65rem 0.75rem 0.85rem;
+    }
+
+    .peridot-dashboard-identity-name {
+      font-size: clamp(1.15rem, 10vw, 2rem);
+    }
+
+    .peridot-dashboard-identity-meta {
+      margin-top: 0.42rem;
+      padding: 0.16rem 0.38rem 0.18rem;
+      font-size: 0.4rem;
+      letter-spacing: 0.1em;
+      line-height: 0.92;
+      white-space: nowrap;
+    }
+
+    .peridot-dashboard-nav {
+      display: none;
+    }
+
+    .peridot-dashboard-nav-link {
+      font-size: clamp(1.75rem, 10vw, 2.35rem);
+      letter-spacing: 0.12em;
+      line-height: 0.92;
+      word-break: break-word;
+    }
+
+    .peridot-dashboard-flows-title {
+      max-width: 100%;
+      font-size: clamp(2.6rem, 14vw, 4rem);
+      line-height: 0.84;
+      padding: 0.02rem 0.8rem 0.08rem;
+      white-space: nowrap;
+    }
+
+    .peridot-dashboard-flows {
+      justify-content: flex-start;
+      width: 100%;
+      min-width: 0;
+      gap: 0.85rem;
+      min-height: 0;
+    }
+
+    .peridot-dashboard-cluster {
+      width: 100% !important;
+    }
+
+    .peridot-dashboard-metrics {
+      order: 3;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      margin-top: 0;
+    }
+
+    .peridot-dashboard-metric {
+      width: 100%;
+      gap: 0.85rem;
+    }
+
+    .peridot-dashboard-metric--tasks {
+      order: 1;
+    }
+
+    .peridot-dashboard-metric--routines {
+      order: 2;
+      min-height: auto;
+    }
+
+    .peridot-dashboard-metric--routines .peridot-dashboard-bars {
+      min-height: 0;
+      gap: 0.7rem;
+    }
+
+    .peridot-dashboard-bars {
+      width: min(100%, 16rem);
+      min-height: 0;
+      justify-self: start;
+      align-content: start;
+    }
+
+    .peridot-dashboard-metric-meta {
+      order: -1;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.45rem;
+    }
+
+    .peridot-dashboard-bar.is-task-link {
+      min-height: 2rem;
+      padding: 0.28rem 0.65rem 0.32rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+    }
+
+    .peridot-dashboard-time-label {
+      font-size: 12px;
+      letter-spacing: 0.34em;
+    }
+
+    .peridot-dashboard-tag-text {
+      font-size: 11px;
+    }
+
+    .peridot-dashboard-wordmark {
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 1.55rem;
+      letter-spacing: 0.14em;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .peridot-dashboard-footer {
+      position: fixed;
+      top: 0;
+      bottom: auto;
+      gap: 0.75rem;
+      padding: 0 0.75rem 0 0.9rem;
+      z-index: 80;
+    }
+
+    .peridot-dashboard-footer-menu {
+      flex: 0 0 auto;
+      width: 2.15rem;
+      height: 2.15rem;
+    }
+
+    .peridot-dashboard-mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 95;
+      display: grid;
+      align-items: stretch;
+      justify-items: stretch;
+      padding: 0;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .peridot-dashboard-mobile-menu-panel {
+      display: grid;
+      gap: 0.35rem;
+      border: 1px solid rgba(102, 255, 153, 0.18);
+      background: rgba(2, 2, 2, 0.96);
+      padding: 0.95rem 1rem 1rem;
+    }
+
+    .peridot-dashboard-mobile-menu-link {
+      font-family: var(--font-display);
+      font-size: clamp(1.55rem, 8vw, 2.1rem);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #ffdf33;
+      text-decoration: none;
+    }
+
+    .peridot-static-calendar-label,
+    .peridot-static-calendar-ui {
+      padding-left: 1.2rem;
+    }
+
+    .peridot-static-calendar-frame {
+      padding-top: 0;
+    }
+
+    .peridot-live-canvas-wrap {
+      padding: 1.8rem 1.2rem 7rem;
+      gap: 1.4rem;
+      min-height: calc(100svh - 15rem);
+    }
+
+    .peridot-live-stage {
+      min-height: calc(100svh - 15rem);
+      padding: 1.8rem 1.2rem 7rem;
+    }
+
+    .peridot-live-cluster-board {
+      gap: 1.8rem;
+      padding-right: 0;
+    }
+
+    .peridot-live-cluster-grid {
+      gap: 1.8rem;
+    }
+
+    .peridot-live-controls-panel {
+      width: calc(100% - 2.4rem);
+      margin-left: 1.2rem;
+    }
+
+    .peridot-live-detail-panel--desktop {
+      display: none;
+    }
+
+    .peridot-live-detail-panel--inline {
+      display: block;
+      position: static;
+      width: 100%;
+      max-width: 100%;
+      max-height: none;
+      flex-basis: 100%;
+      margin-top: 0.15rem;
+      padding: 1rem 0 0;
+    }
+
+    .peridot-live-video-hud {
+      flex-wrap: wrap;
+      align-items: start;
+    }
+
+    .peridot-live-video-link {
+      white-space: normal;
+    }
+
+    .peridot-live-detail-header {
+      flex-direction: column;
+    }
+
+    .peridot-static-calendar-ui {
+      font-size: 0.72rem;
+      letter-spacing: 0.22rem;
+    }
+
+    .peridot-static-cluster {
+      transform: scale(0.82);
+      transform-origin: top left;
+    }
+
+    .peridot-static-calendar-wordmark {
+      font-size: 2.2rem;
+      letter-spacing: 0.28rem;
+    }
+
+    .peridot-static-calendar-footer {
+      top: 0;
+      bottom: auto;
+      padding-left: 1rem;
+      z-index: 80;
+    }
+  }
+
+
+

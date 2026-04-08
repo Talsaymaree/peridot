@@ -1,6 +1,8 @@
 import type {
   AnalyticsSummary,
   CompletionItem,
+  InboxTaskInput,
+  InboxTaskRecord,
   RoutineInput,
   RoutineRecord,
   WorkspaceProfileSummary,
@@ -11,6 +13,7 @@ const WORKSPACE_CHANGE_EVENT = 'peridot:server-workspace-changed'
 
 export type WorkspaceChangeReason =
   | 'profile-created'
+  | 'profile-deleted'
   | 'profile-selected'
   | 'workspace-name-updated'
   | 'workspace-imported'
@@ -18,6 +21,9 @@ export type WorkspaceChangeReason =
   | 'routine-created'
   | 'routine-updated'
   | 'routine-deleted'
+  | 'inbox-task-created'
+  | 'inbox-task-updated'
+  | 'inbox-task-deleted'
 
 type CompletionSaveResult = {
   date: string
@@ -117,6 +123,18 @@ export async function createProfile(name: string) {
   return result
 }
 
+export async function removeProfile(profileId: string) {
+  const result = await readJson<{
+    success: boolean
+    activeProfileId: string
+  }>(`/api/profiles/${encodeURIComponent(profileId)}`, {
+    method: 'DELETE',
+  })
+
+  emitWorkspaceChange('profile-deleted')
+  return result
+}
+
 export async function selectProfile(profileId: string) {
   const result = await readJson<{
     activeProfileId: string
@@ -208,5 +226,38 @@ export async function removeRoutine(routineId: string) {
   })
 
   emitWorkspaceChange('routine-deleted')
+  return result
+}
+
+export async function fetchInboxTasks() {
+  return readJson<InboxTaskRecord[]>('/api/inbox-tasks')
+}
+
+export async function createInboxTask(input: InboxTaskInput) {
+  const result = await readJson<InboxTaskRecord>('/api/inbox-tasks', {
+    method: 'POST',
+    body: JSON.stringify(input),
+  })
+
+  emitWorkspaceChange('inbox-task-created')
+  return result
+}
+
+export async function updateInboxTask(taskId: string, input: InboxTaskInput) {
+  const result = await readJson<InboxTaskRecord>(`/api/inbox-tasks/${taskId}`, {
+    method: 'PATCH',
+    body: JSON.stringify(input),
+  })
+
+  emitWorkspaceChange('inbox-task-updated')
+  return result
+}
+
+export async function removeInboxTask(taskId: string) {
+  const result = await readJson<{ success: boolean }>(`/api/inbox-tasks/${taskId}`, {
+    method: 'DELETE',
+  })
+
+  emitWorkspaceChange('inbox-task-deleted')
   return result
 }

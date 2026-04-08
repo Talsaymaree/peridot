@@ -1,20 +1,12 @@
 export const REGIMEN_TINTS = [
-  { label: 'Peridot', value: '#9FCC3B' },
-  { label: 'Lime', value: '#CFEA7A' },
-  { label: 'Glow', value: '#E8F7A1' },
-  { label: 'Emerald', value: '#7FBF3F' },
-  { label: 'Teal', value: '#53B8A6' },
-  { label: 'Sky', value: '#76C7F2' },
-  { label: 'Peach', value: '#E9B66E' },
-  { label: 'Coral', value: '#D96B4A' },
+  { label: 'Peridot', value: '#3AFF00' },
 ] as const
 
 export const DEFAULT_REGIMEN_TINT = REGIMEN_TINTS[0].value
 
 function normalizeHex(hex: string | null | undefined) {
-  if (!hex) return DEFAULT_REGIMEN_TINT
-  const trimmed = hex.trim()
-  return /^#[0-9a-fA-F]{6}$/.test(trimmed) ? trimmed.toUpperCase() : DEFAULT_REGIMEN_TINT
+  void hex
+  return DEFAULT_REGIMEN_TINT
 }
 
 function hexToRgb(hex: string) {

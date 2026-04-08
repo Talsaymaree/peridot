@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { type ReactNode, type RefObject, Suspense, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { PeridotPageChrome } from '@/components/layout/peridot-page-chrome'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { ChevronDown, ChevronUp, Copy, ExternalLink, Image as ImageIcon, Link2, Pencil, PlayCircle, Plus, Trash2, X } from 'lucide-react'
-import { DEFAULT_REGIMEN_TINT, REGIMEN_TINTS, getRegimenTint, getRegimenTintMeta, tintRgba } from '@/lib/regimen-tints'
+import { Copy, ExternalLink, Image as ImageIcon, Link2, Pencil, PlayCircle, Plus, Trash2, X } from 'lucide-react'
+import { DEFAULT_REGIMEN_TINT, getRegimenTint } from '@/lib/regimen-tints'
 import {
   createRoutine,
   fetchWorkspace,
@@ -98,10 +100,141 @@ const parseRecurrenceDays = (days: string | null) => days?.split(',').map((day) 
 const countFilledDraftTasks = (tasks: TaskDraft[]) => tasks.filter((task) => task.title.trim()).length
 const getDraftRegimenTitle = (regimen: RegimenDraft, index: number) => regimen.title.trim() || `Untitled flow ${index + 1}`
 const cadenceFromRepeat = (repeat: string) => repeat === 'NONE' ? 'CUSTOM' : repeat
+const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
 const getDraftRegimenDaySummary = (regimen: RegimenDraft) => {
   if (regimen.recurrenceDays.length === 0) return 'Pick the days this flow should appear.'
   const days = regimen.recurrenceDays.map(formatWeekday)
   return days.length <= 3 ? days.join(', ') : `${days.slice(0, 3).join(', ')} +${days.length - 3}`
+}
+
+function timeLabel(value: string) {
+  const [hoursText, minutesText] = value.split(':')
+  const hours = Number(hoursText)
+  const minutes = minutesText || '00'
+
+  if (Number.isNaN(hours)) return value
+  if (hours === 0) return `12:${minutes} AM`
+  if (hours < 12) return `${hours}:${minutes} AM`
+  if (hours === 12) return `12:${minutes} PM`
+  return `${hours - 12}:${minutes} PM`
+}
+
+function tagAngle(width: number) {
+  return -(Math.atan2(48, width) * 180) / Math.PI
+}
+
+function BuilderFlowPreview({
+  regimen,
+  regimenIndex,
+  activeTaskIndex,
+  onSelectTask,
+  previewTaskCount,
+  isEditingFlow,
+  onSelectFlow,
+  showDays,
+}: {
+  regimen: RegimenDraft
+  regimenIndex: number
+  activeTaskIndex: number
+  onSelectTask: (index: number) => void
+  previewTaskCount?: number
+  isEditingFlow?: boolean
+  onSelectFlow?: () => void
+  showDays?: boolean
+}) {
+  const routineTitle = getDraftRegimenTitle(regimen, regimenIndex)
+  const taskTitles = regimen.tasks.map((task, index) => task.title.trim() || `Task ${index + 1}`).slice(0, previewTaskCount ?? regimen.tasks.length)
+  const longestWidth = Math.max(
+    clamp(150 + routineTitle.length * 7, 170, 340),
+    ...taskTitles.map((title) => clamp(138 + title.length * 6, 160, 340)),
+    170,
+  )
+  const recurrenceDays = regimen.recurrenceDays.length > 0 ? regimen.recurrenceDays : Object.keys(regimen.recurrenceTimes)
+  const previewDay = recurrenceDays[0]
+  const previewTime = previewDay ? regimen.recurrenceTimes[previewDay] || '09:00' : '09:00'
+  const daySummary = recurrenceDays.length > 0
+    ? recurrenceDays.map(formatWeekday).join(' ')
+    : 'Custom'
+  const routineTextX = longestWidth / 2
+  const angle = tagAngle(longestWidth)
+  const timeLineWidth = 118
+  const routineY = 62
+  const taskStartY = 126
+  const taskStep = 62
+  const verticalX = 118 + longestWidth - 14
+  const verticalEndY = taskStartY + Math.max(taskTitles.length - 1, 0) * taskStep + 34
+  const viewWidth = 118 + longestWidth + 28
+  const viewHeight = Math.max(248, taskStartY + Math.max(taskTitles.length - 1, 0) * taskStep + 122)
+
+  return (
+    <div className="peridot-routines-builder-preview-shell" style={{ width: `${viewWidth}px` }}>
+      <svg className="peridot-live-cluster-svg" viewBox={`0 0 ${viewWidth} ${viewHeight}`}>
+        <text x="6" y="118" className="peridot-live-time-value peridot-live-time-label">{timeLabel(previewTime)}</text>
+        <rect x="0" y="126" width={timeLineWidth} height="3" fill="#66ff99" />
+        {showDays ? (
+          <text x="0" y="148" className="peridot-routines-day-label">{daySummary}</text>
+        ) : null}
+        <line x1={verticalX} y1="88" x2={verticalX} y2={verticalEndY} stroke="#66ff99" strokeWidth="3" />
+
+        <g
+          transform={`translate(118 ${routineY})`}
+          className={onSelectFlow ? 'peridot-live-cluster-hit' : undefined}
+          role={onSelectFlow ? 'button' : undefined}
+          tabIndex={onSelectFlow ? 0 : undefined}
+          onClick={onSelectFlow}
+          onKeyDown={onSelectFlow ? (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              onSelectFlow()
+            }
+          } : undefined}
+        >
+          <polygon
+            points={`0,48 ${longestWidth},0 ${longestWidth},32 0,80`}
+            className={isEditingFlow ? 'peridot-live-tag is-routine is-editing' : 'peridot-live-tag is-routine'}
+          />
+          <text
+            x={routineTextX}
+            y="40"
+            className="peridot-static-cluster-routine"
+            transform={`rotate(${angle} ${routineTextX} 40)`}
+          >
+            {routineTitle}
+          </text>
+        </g>
+
+        {taskTitles.map((title, index) => (
+          <g
+            key={`builder-preview-task-${index}`}
+            transform={`translate(118 ${taskStartY + index * taskStep})`}
+            className="peridot-live-cluster-hit"
+            role="button"
+            tabIndex={0}
+            onClick={() => onSelectTask(index)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                onSelectTask(index)
+              }
+            }}
+          >
+            <polygon
+              points={`0,48 ${longestWidth},0 ${longestWidth},32 0,80`}
+              className={index === activeTaskIndex ? 'peridot-live-tag is-editing' : 'peridot-live-tag'}
+            />
+            <text
+              x={routineTextX}
+              y="40"
+              className="peridot-static-cluster-task"
+              transform={`rotate(${angle} ${routineTextX} 40)`}
+            >
+              {title}
+            </text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  )
 }
 
 function routineToDraft(routine: Routine): RoutineDraft {
@@ -134,6 +267,29 @@ function routineToDraft(routine: Routine): RoutineDraft {
   }
 }
 
+function regimenToDraft(regimen: Regimen): RegimenDraft {
+  return {
+    title: regimen.title,
+    description: regimen.description || '',
+    cadence: regimen.cadence,
+    colorTint: getRegimenTint(regimen.colorTint),
+    recurrenceType: regimen.recurrenceType || 'NONE',
+    recurrenceDays: parseRecurrenceDays(regimen.recurrenceDays),
+    recurrenceTimes: parseRecurrenceTimes(regimen.recurrenceTimes),
+    tasks: regimen.tasks.length > 0
+      ? regimen.tasks.map((task) => ({
+          title: task.title,
+          description: task.description || '',
+          priority: task.priority,
+          status: task.status,
+          dueLabel: task.dueLabel || '',
+          referenceUrl: task.referenceUrl || '',
+          referenceLabel: task.referenceLabel || '',
+        }))
+      : [emptyTask()],
+  }
+}
+
 function getYouTubeEmbedUrl(url: string) {
   try {
     const parsed = new URL(url)
@@ -154,8 +310,8 @@ function ReferencePreview({ url, label }: { url: string | null, label: string | 
   const title = label || 'Task reference'
   if (embed) {
     return (
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-black/30 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
-        <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3 text-sm text-white/70">
+      <div className="overflow-hidden rounded-2xl border border-[#33b7db]/10 bg-black/30 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
+        <div className="flex items-center gap-2 border-b border-[#33b7db]/10 px-4 py-3 text-sm text-[#ffdf33]/70">
           <PlayCircle className="h-4 w-4" />
           <span>{title}</span>
         </div>
@@ -171,9 +327,9 @@ function ReferencePreview({ url, label }: { url: string | null, label: string | 
     )
   }
   if (/\.(png|jpe?g|gif|webp|svg|avif)(\?.*)?$/i.test(url)) {
-    return <div className="overflow-hidden rounded-xl border border-white/10 bg-white/5"><div className="flex items-center gap-2 border-b border-white/10 px-4 py-3 text-sm text-white/70"><ImageIcon className="h-4 w-4" /><span>{title}</span></div><img src={url} alt={title} className="h-64 w-full object-cover" /></div>
+    return <div className="overflow-hidden rounded-xl border border-[#33b7db]/10 bg-[#33b7db]/5"><div className="flex items-center gap-2 border-b border-[#33b7db]/10 px-4 py-3 text-sm text-[#ffdf33]/70"><ImageIcon className="h-4 w-4" /><span>{title}</span></div><img src={url} alt={title} className="h-64 w-full object-cover" /></div>
   }
-  return <a href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-white"><div className="flex items-center gap-3"><Link2 className="h-5 w-5 text-white/70" /><div><div className="font-medium">{title}</div><div className="text-sm text-white/60">{url}</div></div></div><ExternalLink className="h-4 w-4 text-white/60" /></a>
+  return <a href={url} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-xl border border-[#33b7db]/10 bg-[#33b7db]/5 px-4 py-4 text-[#ffdf33]"><div className="flex items-center gap-3"><Link2 className="h-5 w-5 text-[#ffdf33]/70" /><div><div className="font-medium">{title}</div><div className="text-sm text-[#ffdf33]/60">{url}</div></div></div><ExternalLink className="h-4 w-4 text-[#ffdf33]/60" /></a>
 }
 
 function duplicateRegimenDraft(regimen: RegimenDraft): RegimenDraft {
@@ -186,8 +342,167 @@ function duplicateRegimenDraft(regimen: RegimenDraft): RegimenDraft {
   }
 }
 
-export default function RoutinesPage() {
+type CommandDeckAction = {
+  label: string
+  icon: ReactNode
+  onClick: () => void
+  disabled?: boolean
+  variantClassName: string
+}
+
+function PeridotCommandDeck({
+  ariaLabel,
+  hubLabel,
+  topAction,
+  leftAction,
+  rightAction,
+  className,
+}: {
+  ariaLabel: string
+  hubLabel: string
+  topAction: CommandDeckAction
+  leftAction: CommandDeckAction
+  rightAction: CommandDeckAction
+  className?: string
+}) {
+  const actions = [
+    { ...topAction, positionClassName: 'peridot-routine-command--top' },
+    { ...leftAction, positionClassName: 'peridot-routine-command--left' },
+    { ...rightAction, positionClassName: 'peridot-routine-command--right' },
+  ]
+  const deckId = useId().replace(/:/g, '')
+  const cyanGlowId = `${deckId}-peridot-routine-cyan-glow`
+  const redGlowId = `${deckId}-peridot-routine-red-glow`
+
+  return (
+    <div className={`peridot-routine-command-deck${className ? ` ${className}` : ''}`} role="group" aria-label={ariaLabel}>
+      <div className="peridot-routine-command-deck-inner">
+        <svg
+          className="peridot-routine-command-frame"
+          viewBox="0 0 400 440"
+          preserveAspectRatio="xMidYMid meet"
+          aria-hidden="true"
+        >
+          <defs>
+            <filter id={cyanGlowId} x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <filter id={redGlowId} x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <path
+            d="M112 62 H288 V188 L234 222 H166 L112 188 Z"
+            className="peridot-routine-frame-shape peridot-routine-frame-top is-cyan"
+            filter={`url(#${cyanGlowId})`}
+          />
+
+          <path
+            d="M34 248 H184 V394 H34 Z"
+            className="peridot-routine-frame-shape peridot-routine-frame-left is-cyan"
+            filter={`url(#${cyanGlowId})`}
+          />
+
+          <path
+            d="M216 248 H366 V394 H216 Z"
+            className="peridot-routine-frame-shape peridot-routine-frame-right is-cyan"
+            filter={`url(#${cyanGlowId})`}
+          />
+
+          <path
+            d="M154 248 L166 222 H234 L246 248 L216 274 H184 Z"
+            className="peridot-routine-frame-shape peridot-routine-frame-hub-plate is-cyan"
+            filter={`url(#${cyanGlowId})`}
+          />
+        </svg>
+
+        {actions.map((action) => (
+          <button
+            key={`${hubLabel}-${action.label}`}
+            type="button"
+            onClick={action.onClick}
+            disabled={action.disabled}
+            className={`peridot-routine-command ${action.positionClassName} ${action.variantClassName}`}
+          >
+            <span className="peridot-routine-command-label">{action.label}</span>
+            <span className="peridot-routine-command-badge">
+              {action.icon}
+            </span>
+          </button>
+        ))}
+
+        <div className="peridot-routine-command-hub" aria-hidden="true">
+          <span>{hubLabel}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function RoutineCommandDeck({
+  onEdit,
+  onDuplicate,
+  onDelete,
+  isDuplicating,
+  isDeleting,
+  className,
+}: {
+  onEdit: () => void
+  onDuplicate: () => void
+  onDelete: () => void
+  isDuplicating: boolean
+  isDeleting: boolean
+  className?: string
+}) {
+  return (
+    <PeridotCommandDeck
+      ariaLabel="Routine actions"
+      hubLabel="Routine"
+      className={className}
+      topAction={{
+        label: 'Edit',
+        icon: <Pencil className="h-4 w-4" />,
+        onClick: onEdit,
+        variantClassName: 'is-edit',
+      }}
+      leftAction={{
+        label: isDeleting ? 'Deleting' : 'Delete',
+        icon: <Trash2 className="h-4 w-4" />,
+        onClick: onDelete,
+        disabled: isDeleting || isDuplicating,
+        variantClassName: 'is-delete',
+      }}
+      rightAction={{
+        label: isDuplicating ? 'Duplicating' : 'Duplicate',
+        icon: <Copy className="h-4 w-4" />,
+        onClick: onDuplicate,
+        disabled: isDuplicating || isDeleting,
+        variantClassName: 'is-duplicate',
+      }}
+    />
+  )
+}
+
+function RoutinesPageContent() {
+  const searchParams = useSearchParams()
+  const requestedBuilder = searchParams.get('builder') === '1'
+  const requestedRoutineId = searchParams.get('routine')
+  const requestedRegimenId = searchParams.get('regimen')
+  const requestedTaskId = searchParams.get('task')
+  const builderInlineDetailPanelRef = useRef<HTMLElement | null>(null)
+  const liveInlineDetailPanelRef = useRef<HTMLElement | null>(null)
+  const hasHandledInlineScrollRef = useRef(false)
   const [routines, setRoutines] = useState<Routine[]>([])
+  const [selectedRoutineId, setSelectedRoutineId] = useState<string | null>(null)
   const [formData, setFormData] = useState<RoutineDraft>(emptyRoutine())
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [editingRoutineId, setEditingRoutineId] = useState<string | null>(null)
@@ -198,34 +513,11 @@ export default function RoutinesPage() {
   const [deletingRoutineId, setDeletingRoutineId] = useState<string | null>(null)
   const [duplicatingRoutineId, setDuplicatingRoutineId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [collapsedRoutines, setCollapsedRoutines] = useState<Record<string, boolean>>({})
-  const [collapsedRegimens, setCollapsedRegimens] = useState<Record<string, boolean>>({})
+  const visibleRoutines = useMemo(() => routines, [routines])
 
   useEffect(() => {
     void loadWorkspace()
   }, [])
-
-  useEffect(() => {
-    setCollapsedRoutines((current) => {
-      const next = { ...current }
-      for (const routine of routines) {
-        if (!(routine.id in next)) next[routine.id] = true
-      }
-      return next
-    })
-  }, [routines])
-
-  useEffect(() => {
-    setCollapsedRegimens((current) => {
-      const next = { ...current }
-      for (const routine of routines) {
-        for (const regimen of routine.regimens) {
-          if (!(regimen.id in next)) next[regimen.id] = true
-        }
-      }
-      return next
-    })
-  }, [routines])
 
   async function loadWorkspace() {
     setIsLoading(true)
@@ -247,6 +539,28 @@ export default function RoutinesPage() {
   }, [])
 
   useEffect(() => {
+    if (showCreateForm) return
+    if (editingRoutineId) return
+    const firstRoutine = visibleRoutines[0]
+    const firstRegimen = firstRoutine?.regimens[0]
+    if (!firstRoutine || !firstRegimen) return
+    setSelectedRoutineId(firstRoutine.id)
+    setEditingRoutineId(firstRoutine.id)
+    setFormData(routineToDraft(firstRoutine))
+    setActiveRegimenIndex(0)
+    setActiveTaskIndex(-1)
+  }, [editingRoutineId, showCreateForm, visibleRoutines])
+
+  useEffect(() => {
+    if (showCreateForm) return
+    if (visibleRoutines.length === 0) {
+      setSelectedRoutineId(null)
+      return
+    }
+    setSelectedRoutineId((current) => current && visibleRoutines.some((routine) => routine.id === current) ? current : visibleRoutines[0].id)
+  }, [showCreateForm, visibleRoutines])
+
+  useEffect(() => {
     if (!showCreateForm) return
     setActiveRegimenIndex((current) => {
       if (formData.regimens.length === 0) return 0
@@ -264,10 +578,64 @@ export default function RoutinesPage() {
     setActiveTaskIndex((current) => regimen.tasks.length === 0 ? 0 : Math.min(current, regimen.tasks.length - 1))
   }, [activeRegimenIndex, formData.regimens, showCreateForm])
 
-  const activeRoutines = useMemo(() => routines.filter((routine) => routine.isActive).length, [routines])
   const totalRegimens = useMemo(() => routines.reduce((sum, routine) => sum + routine.regimens.length, 0), [routines])
   const totalTasks = useMemo(() => routines.reduce((sum, routine) => sum + countTasks(routine.regimens), 0), [routines])
+  const selectedRegimen = formData.regimens[activeRegimenIndex] ?? null
+  const selectedTask = selectedRegimen?.tasks[activeTaskIndex] ?? null
+  const selectedPreviewTime = useMemo(() => {
+    if (!selectedRegimen) return '09:00'
+    const recurrenceDays = selectedRegimen.recurrenceDays.length > 0 ? selectedRegimen.recurrenceDays : Object.keys(selectedRegimen.recurrenceTimes)
+    const firstDay = recurrenceDays[0]
+    return firstDay ? selectedRegimen.recurrenceTimes[firstDay] || '09:00' : '09:00'
+  }, [selectedRegimen])
 
+  useEffect(() => {
+    if (!selectedRegimen || typeof window === 'undefined') return
+    if (!window.matchMedia('(max-width: 1023px)').matches) return
+
+    if (!hasHandledInlineScrollRef.current) {
+      hasHandledInlineScrollRef.current = true
+      return
+    }
+
+    const detailPanel = showCreateForm ? builderInlineDetailPanelRef.current : liveInlineDetailPanelRef.current
+    if (!detailPanel) return
+
+    const animationFrame = window.requestAnimationFrame(() => {
+      detailPanel.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    })
+
+    return () => window.cancelAnimationFrame(animationFrame)
+  }, [activeRegimenIndex, activeTaskIndex, selectedRegimen, showCreateForm])
+  useEffect(() => {
+    if (!requestedBuilder || !requestedRoutineId) return
+
+    const requestedRoutine = routines.find((routine) => routine.id === requestedRoutineId)
+    if (!requestedRoutine) return
+
+    const regimenIndex = requestedRegimenId
+      ? requestedRoutine.regimens.findIndex((regimen) => regimen.id === requestedRegimenId)
+      : 0
+    const safeRegimenIndex = regimenIndex >= 0 ? regimenIndex : 0
+    const regimen = requestedRoutine.regimens[safeRegimenIndex] ?? null
+    const taskIndex = requestedTaskId && regimen
+      ? regimen.tasks.findIndex((task) => task.id === requestedTaskId)
+      : -1
+
+    setSelectedRoutineId(requestedRoutine.id)
+    setEditingRoutineId(requestedRoutine.id)
+    setFormData(routineToDraft(requestedRoutine))
+    setActiveRegimenIndex(safeRegimenIndex)
+    setActiveTaskIndex(taskIndex >= 0 ? taskIndex : -1)
+    setShowCreateForm(true)
+  }, [requestedBuilder, requestedRegimenId, requestedRoutineId, requestedTaskId, routines])
+  const activeRoutine = useMemo(() => {
+    if (!selectedRoutineId) return visibleRoutines[0] ?? null
+    return visibleRoutines.find((routine) => routine.id === selectedRoutineId) ?? visibleRoutines[0] ?? null
+  }, [selectedRoutineId, visibleRoutines])
   const updateRegimen = (index: number, patch: Partial<RegimenDraft>) => setFormData((current) => ({ ...current, regimens: current.regimens.map((regimen, i) => i === index ? { ...regimen, ...patch } : regimen) }))
   const updateTask = (regimenIndex: number, taskIndex: number, patch: Partial<TaskDraft>) => setFormData((current) => ({ ...current, regimens: current.regimens.map((regimen, i) => i === regimenIndex ? { ...regimen, tasks: regimen.tasks.map((task, j) => j === taskIndex ? { ...task, ...patch } : task) } : regimen) }))
   const toggleRegimenDay = (regimenIndex: number, day: string) => {
@@ -294,27 +662,55 @@ export default function RoutinesPage() {
     setEditingRoutineId(null)
     setFormData(emptyRoutine())
     setActiveRegimenIndex(0)
-    setActiveTaskIndex(0)
+    setActiveTaskIndex(-1)
     setShowCreateForm(true)
   }
 
   function openEditRoutine(routine: Routine) {
     setEditingRoutineId(routine.id)
+    setSelectedRoutineId(routine.id)
     setFormData(routineToDraft(routine))
     setActiveRegimenIndex(0)
-    setActiveTaskIndex(0)
+    setActiveTaskIndex(-1)
     setShowCreateForm(true)
+  }
+
+  function selectRoutine(routine: Routine) {
+    setSelectedRoutineId(routine.id)
+    setEditingRoutineId(routine.id)
+    setFormData(routineToDraft(routine))
+    setActiveRegimenIndex(0)
+    setActiveTaskIndex(-1)
+    setShowCreateForm(false)
+  }
+
+  function selectFlowCell(routine: Routine, regimenIndex: number) {
+    setSelectedRoutineId(routine.id)
+    setEditingRoutineId(routine.id)
+    setFormData(routineToDraft(routine))
+    setActiveRegimenIndex(regimenIndex)
+    setActiveTaskIndex(-1)
+    setShowCreateForm(false)
+  }
+
+  function selectFlowTask(routine: Routine, regimenIndex: number, taskIndex: number) {
+    setSelectedRoutineId(routine.id)
+    setEditingRoutineId(routine.id)
+    setFormData(routineToDraft(routine))
+    setActiveRegimenIndex(regimenIndex)
+    setActiveTaskIndex(taskIndex)
+    setShowCreateForm(false)
   }
 
   function selectRegimen(index: number) {
     setActiveRegimenIndex(index)
-    setActiveTaskIndex(0)
+    setActiveTaskIndex(-1)
   }
 
   function addRegimen() {
     setFormData((current) => ({ ...current, regimens: [...current.regimens, emptyRegimen()] }))
     setActiveRegimenIndex(formData.regimens.length)
-    setActiveTaskIndex(0)
+    setActiveTaskIndex(-1)
   }
 
   function duplicateRegimenAt(index: number) {
@@ -323,7 +719,7 @@ export default function RoutinesPage() {
       regimens: current.regimens.flatMap((item, i) => i === index ? [item, duplicateRegimenDraft(item)] : [item]),
     }))
     setActiveRegimenIndex(index + 1)
-    setActiveTaskIndex(0)
+    setActiveTaskIndex(-1)
   }
 
   function removeRegimenAt(index: number) {
@@ -359,8 +755,31 @@ export default function RoutinesPage() {
     }
   }
 
+  function duplicateTaskInRegimen(regimenIndex: number, taskIndex: number) {
+    setFormData((current) => ({
+      ...current,
+      regimens: current.regimens.map((item, i) => (
+        i === regimenIndex
+          ? {
+              ...item,
+              tasks: item.tasks.flatMap((task, j) => (
+                j === taskIndex
+                  ? [task, { ...task, title: task.title ? `${task.title} Copy` : task.title }]
+                  : [task]
+              )),
+            }
+          : item
+      )),
+    }))
+    setActiveRegimenIndex(regimenIndex)
+    setActiveTaskIndex(taskIndex + 1)
+  }
+
   async function deleteRoutine(routineId: string) {
-    const confirmed = window.confirm('Delete this routine and all its flows and tasks?')
+    const routine = routines.find((item) => item.id === routineId)
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${routine?.title || 'this routine'}"? This will remove all flows and tasks inside it.`,
+    )
     if (!confirmed) return
 
     setDeletingRoutineId(routineId)
@@ -389,6 +808,26 @@ export default function RoutinesPage() {
     }
   }
 
+  async function saveInlineRoutine() {
+    if (!editingRoutineId) return
+    setIsSubmitting(true)
+    const payload: RoutineInput = {
+      ...formData,
+      regimens: formData.regimens
+        .map((regimen) => ({ ...regimen, tasks: regimen.tasks.filter((task) => task.title.trim()) }))
+        .filter((regimen) => regimen.title.trim() && regimen.tasks.length > 0),
+    }
+    try {
+      const updated = await updateRoutine(editingRoutineId, payload)
+      setRoutines((current) => current.map((routine) => routine.id === editingRoutineId ? updated : routine))
+      setFormData(routineToDraft(updated))
+    } catch (saveError) {
+      alert(saveError instanceof Error ? saveError.message : 'Failed to save routine')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   async function submitRoutine(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setIsSubmitting(true)
@@ -411,381 +850,595 @@ export default function RoutinesPage() {
     }
   }
 
+  function renderBuilderDetailPanel(className: string, detailPanelRef?: RefObject<HTMLElement | null>) {
+    if (!selectedRegimen) {
+      return (
+        <aside ref={detailPanelRef} className={className}>
+          <div className="peridot-routines-editor-empty">
+            Select a flow cell to shape that part of the routine.
+          </div>
+        </aside>
+      )
+    }
+
+    return (
+      <aside ref={detailPanelRef} className={className}>
+        <div className="peridot-routines-editor-meta">{selectedTask ? 'TASK DETAIL' : 'FLOW DETAIL'}</div>
+        <div className="peridot-live-detail-content">
+          <div className="peridot-live-detail-header">
+            <div>
+              <div className="peridot-live-detail-time">{timeLabel(selectedPreviewTime)}</div>
+              <h2 className="peridot-live-detail-title">
+                {selectedTask
+                  ? (selectedTask.title.trim() || `Task ${activeTaskIndex + 1}`)
+                  : (selectedRegimen.title.trim() || `Flow ${activeRegimenIndex + 1}`)}
+              </h2>
+              {!selectedTask ? (
+                <div className="peridot-live-detail-routine">
+                  {formData.name.trim() || 'Untitled routine'}
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          {!selectedTask ? (
+            <div className="peridot-routines-editor-section">
+              <div className="peridot-routines-editor-label">Flow</div>
+              <p className="peridot-routines-builder-edit-note">Select a task tag to edit it, or use Add Task to add another task inside this flow.</p>
+              <div className="peridot-routines-builder-command-shell">
+                <PeridotCommandDeck
+                  ariaLabel="Flow actions"
+                  hubLabel="Flow"
+                  className="peridot-routines-builder-command-deck"
+                  topAction={{
+                    label: 'Add',
+                    icon: <Plus className="h-4 w-4" />,
+                    onClick: addRegimen,
+                    variantClassName: 'is-add',
+                  }}
+                  leftAction={{
+                    label: 'Delete',
+                    icon: <Trash2 className="h-4 w-4" />,
+                    onClick: () => removeRegimenAt(activeRegimenIndex),
+                    disabled: formData.regimens.length <= 1,
+                    variantClassName: 'is-delete',
+                  }}
+                  rightAction={{
+                    label: 'Duplicate',
+                    icon: <Copy className="h-4 w-4" />,
+                    onClick: () => duplicateRegimenAt(activeRegimenIndex),
+                    variantClassName: 'is-duplicate',
+                  }}
+                />
+              </div>
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Flow Title</label>
+              <Input value={selectedRegimen.title} onChange={(event) => updateRegimen(activeRegimenIndex, { title: event.target.value })} className="peridot-control h-11" />
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Flow Description</label>
+              <Textarea value={selectedRegimen.description} onChange={(event) => updateRegimen(activeRegimenIndex, { description: event.target.value })} className="peridot-control min-h-[110px]" rows={3} />
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Repeat</label>
+              <select value={selectedRegimen.recurrenceType} onChange={(event) => updateRegimen(activeRegimenIndex, { recurrenceType: event.target.value, cadence: cadenceFromRepeat(event.target.value) })} className="peridot-control h-11 w-full px-3 outline-none">
+                {recurrenceOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}
+              </select>
+              <label className="mb-3 mt-5 block text-sm font-medium text-[#ffdf33]/90">Days Of Week</label>
+              <div className="flex flex-wrap gap-2">
+                {weekdays.map((day) => {
+                  const selected = selectedRegimen.recurrenceDays.includes(day)
+                  return <button key={day} type="button" onClick={() => toggleRegimenDay(activeRegimenIndex, day)} className={`px-3 py-2 text-sm ${selected ? 'peridot-chip-active' : 'peridot-chip'}`}>{formatWeekday(day)}</button>
+                })}
+              </div>
+              {selectedRegimen.recurrenceDays.length > 0 ? (
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  {selectedRegimen.recurrenceDays.map((day) => (
+                    <div key={day}>
+                      <label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">{formatWeekday(day)}</label>
+                      <Input type="time" value={selectedRegimen.recurrenceTimes[day] || '09:00'} onChange={(event) => updateRegimenTime(activeRegimenIndex, day, event.target.value)} className="peridot-control h-11" />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className="peridot-routines-editor-section">
+              <div className="peridot-routines-editor-label">Task {activeTaskIndex + 1}</div>
+              <p className="peridot-routines-builder-edit-note">{selectedTask.title.trim() || 'Give this task a title, notes, and reference media.'}</p>
+              <div className="peridot-routines-builder-command-shell">
+                <PeridotCommandDeck
+                  ariaLabel="Task actions"
+                  hubLabel="Task"
+                  className="peridot-routines-builder-command-deck"
+                  topAction={{
+                    label: 'Add',
+                    icon: <Plus className="h-4 w-4" />,
+                    onClick: () => addTaskToRegimen(activeRegimenIndex),
+                    variantClassName: 'is-add',
+                  }}
+                  leftAction={{
+                    label: 'Delete',
+                    icon: <Trash2 className="h-4 w-4" />,
+                    onClick: () => removeTaskFromRegimen(activeRegimenIndex, activeTaskIndex),
+                    disabled: selectedRegimen.tasks.length <= 1,
+                    variantClassName: 'is-delete',
+                  }}
+                  rightAction={{
+                    label: 'Duplicate',
+                    icon: <Copy className="h-4 w-4" />,
+                    onClick: () => duplicateTaskInRegimen(activeRegimenIndex, activeTaskIndex),
+                    variantClassName: 'is-duplicate',
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveTaskIndex(-1)}
+                className="peridot-live-inline-button mt-4"
+              >
+                Back To Flow
+              </button>
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Task Title</label>
+              <Input value={selectedTask.title} onChange={(event) => updateTask(activeRegimenIndex, activeTaskIndex, { title: event.target.value })} className="peridot-control h-11" />
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Task Description</label>
+              <Textarea value={selectedTask.description} onChange={(event) => updateTask(activeRegimenIndex, activeTaskIndex, { description: event.target.value })} className="peridot-control min-h-[120px]" rows={4} />
+              <div className="peridot-routines-editor-section">
+                <div className="peridot-routines-editor-label">Reference Media</div>
+                <p className="peridot-routines-builder-edit-note">Paste a YouTube, image, or supporting link for this task.</p>
+                <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Reference URL</label>
+                <Input value={selectedTask.referenceUrl} onChange={(event) => updateTask(activeRegimenIndex, activeTaskIndex, { referenceUrl: event.target.value })} className="peridot-control h-11" />
+                <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Reference Label</label>
+                <Input value={selectedTask.referenceLabel} onChange={(event) => updateTask(activeRegimenIndex, activeTaskIndex, { referenceLabel: event.target.value })} className="peridot-control h-11" />
+                {selectedTask.referenceUrl.trim() ? <div className="mt-5"><ReferencePreview url={selectedTask.referenceUrl} label={selectedTask.referenceLabel} /></div> : null}
+              </div>
+            </div>
+          )}
+        </div>
+      </aside>
+    )
+  }
+
+  function renderLiveDetailPanel(className: string, detailPanelRef?: RefObject<HTMLElement | null>) {
+    if (!(selectedRegimen && editingRoutineId)) {
+      return (
+        <aside ref={detailPanelRef} className={className}>
+          <div className="peridot-routines-editor-empty">
+            Select a flow cell to edit that routine and its selected task here.
+          </div>
+        </aside>
+      )
+    }
+
+    return (
+      <aside ref={detailPanelRef} className={className}>
+        <div className="peridot-routines-editor-meta">{selectedTask ? 'TASK DETAIL' : 'FLOW DETAIL'}</div>
+        <div className="peridot-live-detail-content">
+          <div className="peridot-live-detail-header">
+            <div>
+              <div className="peridot-live-detail-time">{timeLabel(selectedPreviewTime)}</div>
+              <h2 className="peridot-live-detail-title">
+                {selectedTask
+                  ? (selectedTask.title.trim() || `Task ${activeTaskIndex + 1}`)
+                  : (selectedRegimen.title.trim() || `Flow ${activeRegimenIndex + 1}`)}
+              </h2>
+              {!selectedTask ? (
+                <div className="peridot-live-detail-routine">
+                  {formData.name || 'Untitled routine'}
+                </div>
+              ) : null}
+            </div>
+            <button
+              type="button"
+              className="peridot-live-complete-button"
+              onClick={() => void saveInlineRoutine()}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Saving...' : 'Save Flow'}
+            </button>
+          </div>
+
+          {!selectedTask ? (
+            <div className="peridot-routines-editor-section">
+              <div className="peridot-routines-editor-label">Flow</div>
+              <p className="peridot-routines-builder-edit-note">Click a task tag in the selected flow on the left to edit that task.</p>
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Flow Title</label>
+              <Input value={selectedRegimen.title} onChange={(event) => updateRegimen(activeRegimenIndex, { title: event.target.value })} className="peridot-control h-11" />
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Flow Description</label>
+              <Textarea value={selectedRegimen.description} onChange={(event) => updateRegimen(activeRegimenIndex, { description: event.target.value })} className="peridot-control min-h-[110px]" rows={3} />
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Repeat</label>
+              <select value={selectedRegimen.recurrenceType} onChange={(event) => updateRegimen(activeRegimenIndex, { recurrenceType: event.target.value, cadence: cadenceFromRepeat(event.target.value) })} className="peridot-control h-11 w-full px-3 outline-none">
+                {recurrenceOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}
+              </select>
+              <label className="mb-3 mt-5 block text-sm font-medium text-[#ffdf33]/90">Days Of Week</label>
+              <div className="flex flex-wrap gap-2">
+                {weekdays.map((day) => {
+                  const selected = selectedRegimen.recurrenceDays.includes(day)
+                  return <button key={day} type="button" onClick={() => toggleRegimenDay(activeRegimenIndex, day)} className={`px-3 py-2 text-sm ${selected ? 'peridot-chip-active' : 'peridot-chip'}`}>{formatWeekday(day)}</button>
+                })}
+              </div>
+              {selectedRegimen.recurrenceDays.length > 0 ? (
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  {selectedRegimen.recurrenceDays.map((day) => (
+                    <div key={day}>
+                      <label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">{formatWeekday(day)}</label>
+                      <Input type="time" value={selectedRegimen.recurrenceTimes[day] || '09:00'} onChange={(event) => updateRegimenTime(activeRegimenIndex, day, event.target.value)} className="peridot-control h-11" />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+            </div>
+          ) : (
+            <div className="peridot-routines-editor-section">
+              <div className="peridot-routines-editor-label">Task {activeTaskIndex + 1}</div>
+              <button
+                type="button"
+                onClick={() => setActiveTaskIndex(-1)}
+                className="peridot-live-inline-button mt-4"
+              >
+                Back To Flow
+              </button>
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Task Title</label>
+              <Input value={selectedTask.title} onChange={(event) => updateTask(activeRegimenIndex, activeTaskIndex, { title: event.target.value })} className="peridot-control h-11" />
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Task Description</label>
+              <Textarea value={selectedTask.description} onChange={(event) => updateTask(activeRegimenIndex, activeTaskIndex, { description: event.target.value })} className="peridot-control min-h-[120px]" rows={4} />
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Reference URL</label>
+              <Input value={selectedTask.referenceUrl} onChange={(event) => updateTask(activeRegimenIndex, activeTaskIndex, { referenceUrl: event.target.value })} className="peridot-control h-11" />
+              <label className="mb-2 mt-5 block text-sm font-medium text-[#ffdf33]/90">Reference Label</label>
+              <Input value={selectedTask.referenceLabel} onChange={(event) => updateTask(activeRegimenIndex, activeTaskIndex, { referenceLabel: event.target.value })} className="peridot-control h-11" />
+              {selectedTask.referenceUrl.trim() ? <div className="mt-5"><ReferencePreview url={selectedTask.referenceUrl} label={selectedTask.referenceLabel} /></div> : null}
+            </div>
+          )}
+
+          <div className="peridot-routines-editor-deck">
+            {selectedTask ? (
+              <PeridotCommandDeck
+                ariaLabel="Task actions"
+                hubLabel="Task"
+                className="peridot-routine-command-deck--detail"
+                topAction={{
+                  label: 'Add',
+                  icon: <Plus className="h-4 w-4" />,
+                  onClick: () => addTaskToRegimen(activeRegimenIndex),
+                  variantClassName: 'is-add',
+                }}
+                leftAction={{
+                  label: 'Delete',
+                  icon: <Trash2 className="h-4 w-4" />,
+                  onClick: () => removeTaskFromRegimen(activeRegimenIndex, activeTaskIndex),
+                  disabled: selectedRegimen.tasks.length <= 1,
+                  variantClassName: 'is-delete',
+                }}
+                rightAction={{
+                  label: 'Duplicate',
+                  icon: <Copy className="h-4 w-4" />,
+                  onClick: () => duplicateTaskInRegimen(activeRegimenIndex, activeTaskIndex),
+                  variantClassName: 'is-duplicate',
+                }}
+              />
+            ) : (
+              <PeridotCommandDeck
+                ariaLabel="Flow actions"
+                hubLabel="Flow"
+                className="peridot-routine-command-deck--detail"
+                topAction={{
+                  label: 'Add',
+                  icon: <Plus className="h-4 w-4" />,
+                  onClick: addRegimen,
+                  variantClassName: 'is-add',
+                }}
+                leftAction={{
+                  label: 'Delete',
+                  icon: <Trash2 className="h-4 w-4" />,
+                  onClick: () => removeRegimenAt(activeRegimenIndex),
+                  disabled: formData.regimens.length <= 1,
+                  variantClassName: 'is-delete',
+                }}
+                rightAction={{
+                  label: 'Duplicate',
+                  icon: <Copy className="h-4 w-4" />,
+                  onClick: () => duplicateRegimenAt(activeRegimenIndex),
+                  variantClassName: 'is-duplicate',
+                }}
+              />
+            )}
+          </div>
+        </div>
+      </aside>
+    )
+  }
+
   return (
-    <div className="lg:pl-80">
-      <div className="peridot-app-page peridot-shell peridot-page-gutter overflow-x-hidden py-6 sm:py-8">
-        <div className="peridot-page-frame flex flex-col">
+    <PeridotPageChrome>
+      <div className="peridot-app-page peridot-shell peridot-analytics-page peridot-routines-page peridot-page-gutter overflow-x-hidden py-6 sm:py-8">
+        <div className="peridot-stage-shell flex flex-col">
+        <section className="peridot-routines-topline">
+          <div className="peridot-eyebrow text-[11px] text-[#ffdf33]/42">Routines</div>
+          <div className="mt-4 flex flex-col gap-2 text-[#ffdf33] sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="peridot-routines-topline-label">[ALL ROUTINES]</div>
+            </div>
+            {!showCreateForm ? (
+              <button type="button" onClick={openCreateRoutine} className="peridot-routines-topline-action">
+                + Add Routine ++++++++++
+              </button>
+            ) : null}
+          </div>
+        </section>
         {showCreateForm ? (
           <section className="order-3 peridot-panel mb-8 overflow-hidden">
-            <div className="flex items-start justify-between gap-4 border-b border-[#21342b] bg-[#101a16] px-4 py-5 text-[#f7faef] sm:px-8 sm:py-6">
+            <div className="flex items-start justify-between gap-4 border-b border-[rgba(102,255,153,0.14)] bg-[#040504] px-4 py-5 text-[#ffdf33] sm:px-8 sm:py-6">
               <div>
-                <div className="peridot-eyebrow text-xs text-[#d6ef91]">Builder</div>
-                <h3 className="mt-1 text-xl font-semibold text-[#f7faef] sm:text-2xl">{editingRoutineId ? 'Edit Routine' : 'Create Routine'}</h3>
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-[#d5dfc4]">Start with the routine details, then move flow by flow instead of editing one long page.</p>
+                <div className="peridot-eyebrow text-xs text-[#66ff99]">Builder</div>
+                <h3 className="mt-1 text-xl font-semibold text-[#ffdf33] sm:text-2xl">{editingRoutineId ? 'Edit Routine' : 'Create Routine'}</h3>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-[#66ff99]">Start with the routine details, then move flow by flow instead of editing one long page.</p>
               </div>
-              <Button type="button" variant="ghost" onClick={closeBuilder} className="h-10 rounded-xl border border-emerald-200/30 bg-emerald-100/12 px-3 !text-[#f7faef] hover:bg-emerald-100/18 hover:!text-[#f7faef] [&_svg]:!text-[#f7faef]"><X className="h-4 w-4 !text-[#f7faef]" /></Button>
+              <Button type="button" variant="ghost" onClick={closeBuilder} className="zune-button h-10 px-3 !text-[#ffdf33] hover:!text-[#ffdf33] [&_svg]:!text-[#ffdf33]"><X className="h-4 w-4 !text-[#ffdf33]" /></Button>
             </div>
             <form onSubmit={submitRoutine} className="space-y-8">
               <div className="grid gap-5 px-4 pt-5 sm:px-8 sm:pt-8 md:grid-cols-2">
                 <div className="md:col-span-2 peridot-panel-soft p-5 sm:p-6">
                   <div className="mb-5">
-                    <div className="peridot-section-label text-xs text-emerald-200/60">Routine</div>
-                    <div className="mt-1 text-lg font-semibold text-white">Core Identity</div>
+                    <div className="peridot-section-label text-xs text-[#66ff99]">Routine</div>
+                    <div className="mt-1 text-lg font-semibold text-[#ffdf33]">Core Identity</div>
                   </div>
                   <div className="grid gap-5 md:grid-cols-2">
                     <div className="md:col-span-2">
-                      <label className="mb-2 block text-sm font-medium text-white/90">Routine Name</label>
+                      <label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Routine Name</label>
                       <Input value={formData.name} onChange={(event) => setFormData((current) => ({ ...current, name: event.target.value }))} className="peridot-control h-11" required />
                     </div>
                     <div className="md:col-span-2">
-                      <label className="mb-2 block text-sm font-medium text-white/90">Routine Description</label>
+                      <label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Routine Description</label>
                       <Textarea value={formData.description} onChange={(event) => setFormData((current) => ({ ...current, description: event.target.value }))} className="peridot-control min-h-[120px]" rows={4} />
                     </div>
                     <div className="max-w-sm">
-                      <label className="mb-2 block text-sm font-medium text-white/90">Category</label>
+                      <label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Category</label>
                       <select value={formData.category} onChange={(event) => setFormData((current) => ({ ...current, category: event.target.value }))} className="peridot-control h-11 w-full px-3 outline-none">{categories.map((category) => <option key={category} value={category}>{formatLabel(category)}</option>)}</select>
-        </div>
-        </div>
-        </div>
-      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <div className="space-y-5 px-4 pb-5 sm:px-8 sm:pb-8">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white">Flows</h3>
-                    <p className="mt-1 text-sm leading-6 text-white/60">Select a flow to edit it. The builder keeps one flow and one task open at a time so you are not buried in one long stack.</p>
+                    <h3 className="peridot-routines-flows-toggle is-active">Flows</h3>
+                    <p className="mt-1 text-sm leading-6 text-[#ffdf33]/60">The builder now follows the same canvas layout as your routines. Select a flow or task tag below, then edit the matching detail above the preview.</p>
                   </div>
-                  <Button type="button" variant="ghost" onClick={addRegimen} className="h-10 w-full rounded-xl border border-emerald-200/30 bg-[#243126] px-4 !text-[#f7faef] hover:bg-[#2b392d] hover:!text-[#f7faef] [&_svg]:!text-[#f7faef] sm:w-auto"><Plus className="mr-2 h-4 w-4 !text-[#f7faef]" />Add Flow</Button>
                 </div>
-                {formData.regimens.map((regimen, regimenIndex) => {
+                <div className="peridot-routines-live-shell peridot-routines-live-shell--builder">
+                  <section className="peridot-routines-canvas">
+                    <div className="peridot-routines-editor-meta">ROUTINE PREVIEW</div>
+                    <div className="peridot-routines-canvas-title">{formData.name.trim() || 'Untitled routine'}</div>
+                    {renderBuilderDetailPanel(
+                      'peridot-routines-editor peridot-routines-editor--builder',
+                      builderInlineDetailPanelRef,
+                    )}
+                    <div className="peridot-routines-flow-grid">
+                      {formData.regimens
+                        .map((regimen, regimenIndex) => ({ regimen, regimenIndex }))
+                        .sort((a, b) => {
+                          if (a.regimenIndex === activeRegimenIndex) return -1
+                          if (b.regimenIndex === activeRegimenIndex) return 1
+                          return a.regimenIndex - b.regimenIndex
+                        })
+                        .map(({ regimen, regimenIndex }) => {
+                          const isSelected = regimenIndex === activeRegimenIndex
+
+                          return (
+                            <div
+                              key={`builder-flow-${regimenIndex}`}
+                              className={`peridot-routines-flow-cell${isSelected ? ' is-selected' : ''}`}
+                            >
+                              <BuilderFlowPreview
+                                regimen={regimen}
+                                regimenIndex={regimenIndex}
+                                activeTaskIndex={isSelected ? activeTaskIndex : -1}
+                                onSelectTask={(taskIndex) => {
+                                  setActiveRegimenIndex(regimenIndex)
+                                  setActiveTaskIndex(taskIndex)
+                                }}
+                                onSelectFlow={() => selectRegimen(regimenIndex)}
+                                isEditingFlow={isSelected && activeTaskIndex < 0}
+                                showDays
+                              />
+                            </div>
+                          )
+                        })}
+                    </div>
+                  </section>
+                </div>
+                {false ? formData.regimens.map((regimen, regimenIndex) => {
                   const isActiveFlow = regimenIndex === activeRegimenIndex
-                  const tintMeta = getRegimenTintMeta(regimen.colorTint)
-                  const currentTint = getRegimenTint(regimen.colorTint)
-                  const isCustomTint = !REGIMEN_TINTS.some((tint) => tint.value === currentTint)
                   const titledTasks = countFilledDraftTasks(regimen.tasks)
+                  const activeTask = regimen.tasks[activeTaskIndex] ?? null
 
                   return (
                   <div
                     key={regimenIndex}
-                    className="peridot-panel overflow-hidden p-5 transition-colors sm:p-6"
-                    style={{
-                      background: `linear-gradient(180deg, ${tintRgba(tintMeta.value, isActiveFlow ? 0.18 : 0.1)}, ${tintRgba(tintMeta.value, isActiveFlow ? 0.08 : 0.04)})`,
-                      boxShadow: `0 0 0 1px ${tintRgba(tintMeta.value, isActiveFlow ? 0.24 : 0.14)} inset`,
-                    }}
+                    className={`peridot-panel overflow-hidden p-5 transition-colors sm:p-6 peridot-routines-builder-flow${isActiveFlow ? ' is-active' : ''}`}
                   >
-                    <div className="-mx-5 -mt-5 mb-5 border-b px-5 py-4 sm:-mx-6 sm:-mt-6 sm:px-6" style={{ borderColor: tintRgba(tintMeta.value, 0.16), backgroundColor: tintRgba(tintMeta.value, isActiveFlow ? 0.16 : 0.08) }}>
-                    <div className="flex flex-col gap-4">
+                    <div className="-mx-5 -mt-5 mb-5 border-b border-[rgba(102,255,153,0.12)] px-5 py-4 sm:-mx-6 sm:-mt-6 sm:px-6">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                       <button type="button" onClick={() => selectRegimen(regimenIndex)} className="min-w-0 flex-1 text-left">
-                        <div className="flex flex-wrap items-center gap-2.5">
-                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.18em]" style={{ borderColor: tintRgba(tintMeta.value, 0.3), backgroundColor: tintRgba(tintMeta.value, 0.22), color: '#13200f' }}>Flow {regimenIndex + 1}</span>
-                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(tintMeta.value, 0.26), backgroundColor: tintRgba(tintMeta.value, 0.18), color: '#24361b' }}>{formatLabel(regimen.cadence)}</span>
-                          <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(tintMeta.value, 0.22), backgroundColor: 'rgba(8,12,10,0.18)', color: '#eef6dc' }}>{titledTasks}/{regimen.tasks.length} titled tasks</span>
-                        </div>
-                        <div className="mt-3 flex items-start gap-3">
-                          <span className="mt-1 h-3.5 w-3.5 shrink-0 rounded-full ring-2 ring-black/10" style={{ backgroundColor: tintMeta.value }} />
-                          <div className="min-w-0">
-                            <h4 className="text-base font-semibold text-white">{getDraftRegimenTitle(regimen, regimenIndex)}</h4>
-                            <p className="mt-2 text-sm text-white/55">{isActiveFlow ? 'Editing this flow now.' : getDraftRegimenDaySummary(regimen)}</p>
-                          </div>
+                        <div className="peridot-eyebrow text-[11px] text-[#66ff99]">Flow {regimenIndex + 1}</div>
+                        <div className="mt-3 min-w-0">
+                          <h4 className="text-lg font-semibold text-[#ffdf33]">{getDraftRegimenTitle(regimen, regimenIndex)}</h4>
+                          <p className="mt-2 text-sm text-[#ffdf33]/55">{isActiveFlow ? 'Build this flow in the preview and edit the selected task beside it.' : getDraftRegimenDaySummary(regimen)}</p>
+                          <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-[#ffdf33]/38">{formatLabel(regimen.cadence)} · {titledTasks}/{regimen.tasks.length} titled</p>
                         </div>
                       </button>
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-2 sm:w-[13.5rem]">
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => duplicateRegimenAt(regimenIndex)}
-                          className="h-10 w-full rounded-xl border px-3 !text-[#f7faef] [&_svg]:!text-[#f7faef]"
-                          style={{ borderColor: tintRgba(tintMeta.value, 0.28), backgroundColor: 'rgba(26,38,30,0.78)' }}
+                          className="peridot-routines-builder-action h-10 w-full px-3 !text-[#ffdf33] [&_svg]:!text-[#ffdf33]"
                         >
-                          <Copy className="mr-2 h-4 w-4 !text-[#f7faef]" />
+                          <Copy className="mr-2 h-4 w-4 !text-[#ffdf33]" />
                           Duplicate
                         </Button>
-                        {formData.regimens.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeRegimenAt(regimenIndex)} className="h-10 w-full rounded-xl border px-3 !text-[#f7faef] [&_svg]:!text-[#f7faef]" style={{ borderColor: tintRgba(tintMeta.value, 0.22), backgroundColor: 'rgba(255,255,255,0.12)' }}><X className="mr-2 h-4 w-4 !text-[#f7faef]" />Remove</Button> : <div />}
+                        {formData.regimens.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeRegimenAt(regimenIndex)} className="peridot-routines-builder-action h-10 w-full px-3 !text-[#ffdf33] [&_svg]:!text-[#ffdf33]"><X className="mr-2 h-4 w-4 !text-[#ffdf33]" />Remove</Button> : <div />}
                       </div>
                     </div>
                     </div>
                     {isActiveFlow ? (<>
-                    <div className="grid gap-5 md:grid-cols-2">
-                      <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Flow Title</label><Input value={regimen.title} onChange={(event) => updateRegimen(regimenIndex, { title: event.target.value })} className="peridot-control h-11" /></div>
-                      <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Flow Description</label><Textarea value={regimen.description} onChange={(event) => updateRegimen(regimenIndex, { description: event.target.value })} className="peridot-control min-h-[110px]" rows={3} /></div>
-                      <div><label className="mb-2 block text-sm font-medium text-white/90">Repeat</label><select value={regimen.recurrenceType} onChange={(event) => updateRegimen(regimenIndex, { recurrenceType: event.target.value, cadence: cadenceFromRepeat(event.target.value) })} className="peridot-control h-11 w-full px-3 outline-none">{recurrenceOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}</select></div>
-                      <div className="md:col-span-2">
-                        <label className="mb-3 block text-sm font-medium text-white/90">Flow Tint</label>
-                        <div className="flex flex-wrap gap-2">
-                          {REGIMEN_TINTS.map((tint) => {
-                            const selected = currentTint === tint.value
-                            return (
-                              <button
-                                key={tint.value}
-                                type="button"
-                                onClick={() => updateRegimen(regimenIndex, { colorTint: tint.value })}
-                                className={`rounded-xl border px-3 py-2 text-sm transition-colors ${selected ? 'border-white/30 text-white' : 'border-white/10 text-white/72 hover:border-white/20 hover:text-white'}`}
-                                style={{
-                                  backgroundColor: tintRgba(tint.value, selected ? 0.26 : 0.14),
-                                  boxShadow: selected ? `0 0 0 1px ${tintRgba(tint.value, 0.45)} inset` : 'none',
-                                }}
-                              >
-                                <span className="flex items-center gap-2">
-                                  <span className="h-3 w-3 rounded-full" style={{ backgroundColor: tint.value }} />
-                                  {tint.label}
-                                </span>
-                              </button>
-                            )
-                          })}
-                          <label
-                            className={`relative inline-flex min-h-[44px] cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 text-sm transition-colors ${isCustomTint ? 'border-white/30 text-white' : 'border-white/10 text-white/72 hover:border-white/20 hover:text-white'}`}
-                            style={{
-                              backgroundColor: tintRgba(currentTint, isCustomTint ? 0.26 : 0.14),
-                              boxShadow: isCustomTint ? `0 0 0 1px ${tintRgba(currentTint, 0.45)} inset` : 'none',
-                            }}
-                          >
-                            <input
-                              type="color"
-                              value={currentTint}
-                              onChange={(event) => updateRegimen(regimenIndex, { colorTint: event.target.value.toUpperCase() })}
-                              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-                              aria-label="Choose custom flow tint"
-                            />
-                            <span className="flex items-center gap-2">
-                              <span className="h-3 w-3 rounded-full" style={{ backgroundColor: currentTint }} />
-                              <span>Custom</span>
-                            </span>
-                            <span className="text-[11px] uppercase tracking-[0.16em] text-white/55">{currentTint}</span>
-                          </label>
+                    <div className="grid gap-6 xl:grid-cols-[minmax(18rem,28rem)_minmax(0,1fr)]">
+                      <div className="peridot-routines-builder-edit">
+                        <div className="peridot-routines-builder-edit-label">Build</div>
+                        <div className="peridot-routines-builder-preview">
+                          <BuilderFlowPreview
+                            regimen={regimen}
+                            regimenIndex={regimenIndex}
+                            activeTaskIndex={activeTaskIndex}
+                            onSelectTask={setActiveTaskIndex}
+                          />
                         </div>
-                        <p className="mt-3 text-sm text-white/55">Pick a preset tint or tap `Custom` to open the color wheel.</p>
+                        <p className="peridot-routines-builder-edit-note">Click a task tag in the preview to edit it. Add tasks to extend the stack.</p>
+                        <Button type="button" variant="ghost" size="sm" onClick={() => addTaskToRegimen(regimenIndex)} className="peridot-routines-builder-action mt-4 h-10 px-4 !text-[#ffdf33] [&_svg]:!text-[#ffdf33]"><Plus className="mr-2 h-4 w-4 !text-[#ffdf33]" />Add Task</Button>
                       </div>
-                      <div className="md:col-span-2">
-                        <label className="mb-3 block text-sm font-medium text-white/90">Days Of Week</label>
-                        <div className="flex flex-wrap gap-2">{weekdays.map((day) => { const selected = regimen.recurrenceDays.includes(day); return <button key={day} type="button" onClick={() => toggleRegimenDay(regimenIndex, day)} className={`px-3 py-2 text-sm ${selected ? 'peridot-chip-active' : 'peridot-chip'}`}>{selected ? `✓ ${formatWeekday(day)}` : formatWeekday(day)}</button> })}</div>
-                      </div>
-                      {regimen.recurrenceDays.length > 0 ? (
-                        <div className="md:col-span-2 peridot-panel-deep p-4 sm:p-5">
-                          <div className="mb-4">
-                            <h6 className="text-sm font-semibold text-white">Times By Day</h6>
-                            <p className="mt-1 text-sm leading-6 text-white/60">Each selected day can have its own time, and the calendar will place the flow block there automatically.</p>
+                      <div className="space-y-6">
+                        <div className="peridot-routines-builder-edit">
+                          <div className="peridot-routines-builder-edit-label">Flow Fields</div>
+                          <div className="grid gap-5 md:grid-cols-2">
+                            <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Flow Title</label><Input value={regimen.title} onChange={(event) => updateRegimen(regimenIndex, { title: event.target.value })} className="peridot-control h-11" /></div>
+                            <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Flow Description</label><Textarea value={regimen.description} onChange={(event) => updateRegimen(regimenIndex, { description: event.target.value })} className="peridot-control min-h-[110px]" rows={3} /></div>
+                            <div><label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Repeat</label><select value={regimen.recurrenceType} onChange={(event) => updateRegimen(regimenIndex, { recurrenceType: event.target.value, cadence: cadenceFromRepeat(event.target.value) })} className="peridot-control h-11 w-full px-3 outline-none">{recurrenceOptions.map((option) => <option key={option} value={option}>{formatLabel(option)}</option>)}</select></div>
+                            <div className="md:col-span-2">
+                              <label className="mb-3 block text-sm font-medium text-[#ffdf33]/90">Days Of Week</label>
+                              <div className="flex flex-wrap gap-2">{weekdays.map((day) => { const selected = regimen.recurrenceDays.includes(day); return <button key={day} type="button" onClick={() => toggleRegimenDay(regimenIndex, day)} className={`px-3 py-2 text-sm ${selected ? 'peridot-chip-active' : 'peridot-chip'}`}>{formatWeekday(day)}</button> })}</div>
+                            </div>
                           </div>
-                          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                            {regimen.recurrenceDays.map((day) => (
-                              <div key={day}>
-                                <label className="mb-2 block text-sm font-medium text-white/90">{formatWeekday(day)}</label>
-                                <Input type="time" value={regimen.recurrenceTimes[day] || '09:00'} onChange={(event) => updateRegimenTime(regimenIndex, day, event.target.value)} className="peridot-control h-11" />
+                        </div>
+                        {regimen.recurrenceDays.length > 0 ? (
+                          <div className="peridot-routines-builder-edit">
+                            <div className="peridot-routines-builder-edit-label">Schedule</div>
+                            <p className="peridot-routines-builder-edit-note">Set the time for each selected day. The calendar will place this flow there automatically.</p>
+                            <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                              {regimen.recurrenceDays.map((day) => (
+                                <div key={day}>
+                                  <label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">{formatWeekday(day)}</label>
+                                  <Input type="time" value={regimen.recurrenceTimes[day] || '09:00'} onChange={(event) => updateRegimenTime(regimenIndex, day, event.target.value)} className="peridot-control h-11" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+                        {activeTask ? (
+                          <div className="peridot-routines-builder-edit">
+                            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                              <div className="min-w-0 flex-1">
+                                <div className="peridot-routines-builder-edit-label">Task {activeTaskIndex + 1}</div>
+                                <p className="mt-2 text-sm text-[#ffdf33]/55">{activeTask.title.trim() || 'Give this task a title, notes, and reference media.'}</p>
                               </div>
-                            ))}
+                              {regimen.tasks.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeTaskFromRegimen(regimenIndex, activeTaskIndex)} className="peridot-routines-builder-action h-10 px-4 !text-[#ffdf33] [&_svg]:!text-[#ffdf33]"><X className="mr-2 h-4 w-4 !text-[#ffdf33]" />Remove Task</Button> : null}
+                            </div>
+                            <div className="grid gap-5 md:grid-cols-2">
+                              <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Task Title</label><Input value={activeTask.title} onChange={(event) => updateTask(regimenIndex, activeTaskIndex, { title: event.target.value })} className="peridot-control h-11" /></div>
+                              <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Task Description</label><Textarea value={activeTask.description} onChange={(event) => updateTask(regimenIndex, activeTaskIndex, { description: event.target.value })} className="peridot-control min-h-[120px]" rows={4} /></div>
+                              <div className="md:col-span-2 peridot-routines-builder-edit"><div className="peridot-routines-builder-edit-label">Reference Media</div><p className="peridot-routines-builder-edit-note">Paste a YouTube, image, or supporting link for this task.</p><div className="mt-4 grid gap-5 md:grid-cols-2"><div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Reference URL</label><Input value={activeTask.referenceUrl} onChange={(event) => updateTask(regimenIndex, activeTaskIndex, { referenceUrl: event.target.value })} className="peridot-control h-11" /></div><div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-[#ffdf33]/90">Reference Label</label><Input value={activeTask.referenceLabel} onChange={(event) => updateTask(regimenIndex, activeTaskIndex, { referenceLabel: event.target.value })} className="peridot-control h-11" /></div></div>{activeTask.referenceUrl.trim() ? <div className="mt-5"><ReferencePreview url={activeTask.referenceUrl} label={activeTask.referenceLabel} /></div> : null}</div>
+                            </div>
                           </div>
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="peridot-panel-deep mt-6 space-y-5 p-4 sm:p-5">
-                      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                        <div>
-                          <h5 className="text-sm font-semibold uppercase tracking-wide text-white/80">Tasks</h5>
-                          <p className="mt-1 text-sm leading-6 text-white/60">Select a task to edit it. The rest stay compact so you can move through the flow faster.</p>
-                        </div>
-                        <Button type="button" variant="ghost" size="sm" onClick={() => addTaskToRegimen(regimenIndex)} className="h-9 w-full rounded-xl border border-emerald-200/30 bg-[#243126] px-3 !text-[#f7faef] hover:bg-[#2b392d] hover:!text-[#f7faef] [&_svg]:!text-[#f7faef] sm:w-auto"><Plus className="mr-2 h-3 w-3 !text-[#f7faef]" />Add Task</Button>
+                        ) : null}
                       </div>
-                      {regimen.tasks.map((task, taskIndex) => (
-                        <div key={taskIndex} className="flex items-stretch gap-3">
-                          <div className="peridot-panel-soft flex-1 p-4 transition-colors sm:p-5" style={{ borderColor: tintRgba(tintMeta.value, taskIndex === activeTaskIndex ? 0.3 : 0.2), background: `linear-gradient(180deg, ${tintRgba(tintMeta.value, taskIndex === activeTaskIndex ? 0.2 : 0.12)}, ${tintRgba(tintMeta.value, taskIndex === activeTaskIndex ? 0.1 : 0.06)})` }}>
-                          <div className="mb-4 flex items-start justify-between gap-3">
-                            <button type="button" onClick={() => setActiveTaskIndex(taskIndex)} className="min-w-0 flex-1 text-left">
-                              <h6 className="text-sm font-semibold text-white">Task {taskIndex + 1}</h6>
-                              <p className="mt-1 text-sm text-white/55">{task.title.trim() || 'Select this task to add details and reference media.'}</p>
-                            </button>
-                          </div>
-                          {taskIndex === activeTaskIndex ? <div className="grid gap-5 md:grid-cols-2">
-                            <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Task Title</label><Input value={task.title} onChange={(event) => updateTask(regimenIndex, taskIndex, { title: event.target.value })} className="peridot-control h-11" /></div>
-                            <div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Task Description</label><Textarea value={task.description} onChange={(event) => updateTask(regimenIndex, taskIndex, { description: event.target.value })} className="peridot-control min-h-[120px]" rows={4} /></div>
-                            <div className="md:col-span-2 peridot-panel-deep p-4 sm:p-5"><div className="mb-4"><h6 className="text-sm font-semibold text-white">Reference Media</h6><p className="mt-1 text-sm leading-6 text-white/60">YouTube, image, or any supporting link.</p></div><div className="grid gap-5 md:grid-cols-2"><div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Reference URL</label><Input value={task.referenceUrl} onChange={(event) => updateTask(regimenIndex, taskIndex, { referenceUrl: event.target.value })} className="peridot-control h-11" /></div><div className="md:col-span-2"><label className="mb-2 block text-sm font-medium text-white/90">Reference Label</label><Input value={task.referenceLabel} onChange={(event) => updateTask(regimenIndex, taskIndex, { referenceLabel: event.target.value })} className="peridot-control h-11" /></div></div>{task.referenceUrl.trim() ? <div className="mt-5"><ReferencePreview url={task.referenceUrl} label={task.referenceLabel} /></div> : null}</div>
-                          </div> : null}
-                          </div>
-                          {regimen.tasks.length > 1 ? <Button type="button" variant="ghost" size="sm" onClick={() => removeTaskFromRegimen(regimenIndex, taskIndex)} className="self-stretch rounded-xl border p-0 !text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:!text-white [&_svg]:!text-white" style={{ width: '2.9rem', minHeight: taskIndex === activeTaskIndex ? '100%' : 'auto', borderColor: tintRgba(tintMeta.value, 0.24), backgroundColor: tintRgba(tintMeta.value, 0.14) }}><span className="flex h-full min-h-[4.5rem] items-center justify-center"><X className="h-4 w-4 !text-white" /></span></Button> : null}
-                        </div>
-                      ))}
                     </div>
                     </>) : null}
                   </div>
                   )
-                })}
+                }) : null}
               </div>
-              <div className="flex flex-col-reverse gap-3 border-t border-[#21342b] px-4 py-4 sm:flex-row sm:justify-end sm:px-8"><Button type="button" variant="ghost" onClick={closeBuilder} className="h-11 rounded-xl border border-emerald-200/30 bg-[#243126] px-4 !text-[#f7faef] hover:bg-[#2b392d] hover:!text-[#f7faef] [&_svg]:!text-[#f7faef]">Cancel</Button><Button type="submit" disabled={isSubmitting} className="h-11 rounded-xl border border-emerald-300/20 bg-emerald-300 px-4 font-semibold text-[#162113] hover:bg-emerald-200">{isSubmitting ? (editingRoutineId ? 'Saving...' : 'Creating...') : (editingRoutineId ? 'Save Routine' : 'Create Routine')}</Button></div>
+              <div className="flex flex-col-reverse gap-3 border-t border-[rgba(102,255,153,0.14)] px-4 py-4 sm:flex-row sm:justify-end sm:px-8"><Button type="button" variant="ghost" onClick={closeBuilder} className="zune-button h-11 px-4 !text-[#ffdf33] hover:!text-[#ffdf33] [&_svg]:!text-[#ffdf33]">Cancel</Button><Button type="submit" disabled={isSubmitting} className="peridot-accent-button h-11 px-4 font-semibold">{isSubmitting ? (editingRoutineId ? 'Saving...' : 'Creating...') : (editingRoutineId ? 'Save Routine' : 'Create Routine')}</Button></div>
             </form>
           </section>
         ) : null}
         {!showCreateForm ? (
         <>
-        <div className="order-1 mb-6 grid grid-cols-2 gap-2.5 xl:grid-cols-4">
-          <div className="peridot-panel-soft min-h-[3.9rem] px-4 py-3 sm:min-h-[4.2rem] sm:px-5">
-            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-3">
-              <span className="peridot-stat-label text-xs text-white/45">Total Routines</span>
-              <div className="peridot-stat-value text-2xl font-semibold leading-none text-white sm:text-[2rem]">{routines.length}</div>
-            </div>
-          </div>
-          <div className="peridot-panel-soft min-h-[3.9rem] px-4 py-3 sm:min-h-[4.2rem] sm:px-5">
-            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-3">
-              <span className="peridot-stat-label text-xs text-white/45">Active Routines</span>
-              <div className="peridot-stat-value text-2xl font-semibold leading-none text-white sm:text-[2rem]">{activeRoutines}</div>
-            </div>
-          </div>
-          <div className="peridot-panel-soft min-h-[3.9rem] px-4 py-3 sm:min-h-[4.2rem] sm:px-5">
-            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-3">
-              <span className="peridot-stat-label text-xs text-white/45">Flows</span>
-              <div className="peridot-stat-value text-2xl font-semibold leading-none text-white sm:text-[2rem]">{totalRegimens}</div>
-            </div>
-          </div>
-          <div className="peridot-panel-soft min-h-[3.9rem] px-4 py-3 sm:min-h-[4.2rem] sm:px-5">
-            <div className="grid h-full grid-cols-[1fr_auto] items-center gap-3">
-              <span className="peridot-stat-label text-xs text-white/45">Total Tasks</span>
-              <div className="peridot-stat-value text-2xl font-semibold leading-none text-white sm:text-[2rem]">{totalTasks}</div>
-            </div>
-          </div>
-        </div>
-
-        <div className="order-2 mb-6">
-          <Button onClick={openCreateRoutine} className="h-11 w-full justify-center rounded-2xl border border-emerald-300/25 bg-emerald-300 px-5 font-semibold text-emerald-950 shadow-[0_12px_36px_rgba(110,231,183,0.18)] hover:bg-emerald-200 sm:w-auto"><Plus className="mr-2 h-5 w-5" />Create Routine</Button>
-        </div>
-
         <div className="order-4">
         {isLoading ? (
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-12 text-center text-white/65">
+          <div className="peridot-panel p-12 text-center text-[#ffdf33]/65">
             Loading routines...
           </div>
         ) : error ? (
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-12 text-center">
-            <p className="mb-6 text-white/65">{error}</p>
-            <Button onClick={() => void loadWorkspace()} className="h-11 rounded-2xl border border-white/10 bg-white/10 px-5 text-white hover:bg-white/15">
+          <div className="peridot-panel p-12 text-center">
+            <p className="mb-6 text-[#ffdf33]/65">{error}</p>
+            <Button onClick={() => void loadWorkspace()} className="peridot-routines-builder-action h-11 px-5 text-[#ffdf33]">
               Try Again
             </Button>
           </div>
-        ) : routines.length === 0 ? (
-          <div className="rounded-[28px] border border-dashed border-emerald-300/20 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-12 text-center">
-            <p className="mb-6 text-white/65">Create your first routine, then add flows and tasks inside it.</p>
-            <Button onClick={openCreateRoutine} className="h-11 rounded-2xl border border-emerald-300/25 bg-emerald-300 px-5 font-semibold text-emerald-950 hover:bg-emerald-200">
+        ) : visibleRoutines.length === 0 ? (
+          <div className="peridot-panel p-12 text-center">
+            <p className="mb-6 text-[#ffdf33]/65">Create your first routine, then shape the flows directly with the preview builder.</p>
+            <Button onClick={openCreateRoutine} className="peridot-accent-button h-11 px-5 font-semibold">
               <Plus className="mr-2 h-5 w-5" />
               Create Routine
             </Button>
           </div>
         ) : (
-          <div className="space-y-4">
-            {routines.map((routine) => (
-              <div key={routine.id} className="overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
-                <div className="border-b border-white/10 bg-white/5 px-4 py-4 sm:px-6 sm:py-5">
-                  <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center">
-                        <button
-                          type="button"
-                          onClick={() => setCollapsedRoutines((current) => ({ ...current, [routine.id]: !current[routine.id] }))}
-                          className="rounded-2xl border border-white/10 bg-white/5 p-2 text-white transition hover:bg-white/10"
-                          aria-label={collapsedRoutines[routine.id] ? `Expand ${routine.title}` : `Collapse ${routine.title}`}
-                        >
-                          {collapsedRoutines[routine.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
-                        </button>
-                      </div>
-                      <h4 className="peridot-display mt-2.5 min-w-0 text-[1.28rem] font-semibold leading-[1.02] tracking-tight text-white sm:text-2xl">
-                        {routine.title}
-                      </h4>
-                      <span className="peridot-meta mt-2 inline-flex rounded-full border border-emerald-300/20 bg-emerald-300/10 px-3.5 py-1.5 text-[10px] leading-none text-emerald-100/85">
-                        {formatLabel(routine.category)}
-                      </span>
-                    </div>
-                    
-                    <div className="grid gap-2.5 xl:w-[26rem]">
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-center">
-                          <div className="peridot-meta text-[10px] text-white/45">Flows</div>
-                          <div className="peridot-display mt-1.5 text-[1.35rem] leading-none text-white">{routine.regimens.length}</div>
-                        </div>
-                        <div className="rounded-2xl border border-white/10 bg-black/15 px-4 py-3 text-center">
-                          <div className="peridot-meta text-[10px] text-white/45">Tasks</div>
-                          <div className="peridot-display mt-1.5 text-[1.35rem] leading-none text-white">{countTasks(routine.regimens)}</div>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-2.5">
-                        <Button type="button" variant="ghost" onClick={() => openEditRoutine(routine)} className="h-10 rounded-2xl border border-white/10 bg-white/5 px-2 text-white hover:bg-white/10">
-                          <Pencil className="mr-1.5 h-4 w-4 shrink-0" />
-                          Edit
-                        </Button>
-                        <Button type="button" variant="ghost" onClick={() => void duplicateRoutine(routine)} disabled={duplicatingRoutineId === routine.id} className="h-10 rounded-2xl border border-white/10 bg-white/5 px-2 text-white hover:bg-white/10">
-                          <Copy className="mr-1.5 h-4 w-4 shrink-0" />
-                          {duplicatingRoutineId === routine.id ? 'Duplicating...' : 'Duplicate'}
-                        </Button>
-                        <Button type="button" variant="ghost" onClick={() => void deleteRoutine(routine.id)} disabled={deletingRoutineId === routine.id} className="h-10 rounded-2xl border border-red-400/20 bg-red-400/10 px-2 text-red-100 hover:bg-red-400/15">
-                          <Trash2 className="mr-1.5 h-4 w-4 shrink-0" />
-                          {deletingRoutineId === routine.id ? 'Deleting...' : 'Delete'}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {!collapsedRoutines[routine.id] ? (
-                  <div className="space-y-4 p-4 sm:p-6">
-                    {routine.regimens.map((regimen) => {
-                      const tintMeta = getRegimenTintMeta(regimen.colorTint)
-
-                      return (
-                      <div key={regimen.id} className="overflow-hidden rounded-[26px] border" style={{ borderColor: tintRgba(tintMeta.value, 0.3), background: `linear-gradient(180deg, ${tintRgba(tintMeta.value, 0.16)}, ${tintRgba(tintMeta.value, 0.07)})` }}>
-                        <button
-                          type="button"
-                          onClick={() => setCollapsedRegimens((current) => ({ ...current, [regimen.id]: !current[regimen.id] }))}
-                          className="flex w-full items-start justify-between gap-4 border-b px-5 py-4 text-left"
-                          style={{ borderColor: tintRgba(tintMeta.value, 0.24), backgroundColor: tintRgba(tintMeta.value, 0.12) }}
-                        >
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-start gap-3">
-                              <span className="mt-1 h-3 w-3 shrink-0 rounded-full ring-2 ring-black/10" style={{ backgroundColor: tintMeta.value }} />
-                              <div className="min-w-0">
-                                <h5 className="text-lg font-semibold text-white">{regimen.title}</h5>
-                                <div className="mt-3 flex flex-wrap items-center gap-2.5">
-                                  <span className="rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.18em]" style={{ borderColor: tintRgba(tintMeta.value, 0.28), backgroundColor: tintRgba(tintMeta.value, 0.22), color: '#13200f' }}>
-                                    {formatLabel(regimen.cadence)}
-                                  </span>
-                                  <span
-                                    className="rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.18em]"
-                                    style={{
-                                      borderColor: tintRgba(tintMeta.value, 0.3),
-                                      backgroundColor: tintRgba(tintMeta.value, 0.16),
-                                      color: '#22341b',
-                                    }}
-                                  >
-                                    {regimen.recurrenceType && regimen.recurrenceType !== 'NONE'
-                                      ? `${formatLabel(regimen.recurrenceType)}${regimen.recurrenceDays ? ` · ${regimen.recurrenceDays.split(',').filter(Boolean).map(formatWeekday).join(', ')}` : ''}`
-                                      : 'No Repeat'}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <span className="rounded-2xl border p-2" style={{ borderColor: tintRgba(tintMeta.value, 0.28), backgroundColor: tintRgba(tintMeta.value, 0.18) }}>
-                            {collapsedRegimens[regimen.id] ? <ChevronDown className="h-4 w-4 text-white/70" /> : <ChevronUp className="h-4 w-4 text-white/70" />}
-                          </span>
-                        </button>
-
-                        {!collapsedRegimens[regimen.id] ? (
-                          <div className="space-y-4 p-5">
-                            {regimen.description ? <p className="text-white/55">{regimen.description}</p> : null}
-                            {regimen.tasks.map((task) => (
-                              <div key={task.id} className="rounded-[22px] border p-4" style={{ borderColor: tintRgba(tintMeta.value, 0.22), background: `linear-gradient(180deg, ${tintRgba(tintMeta.value, 0.12)}, ${tintRgba(tintMeta.value, 0.06)})` }}>
-                                <div className="flex flex-col gap-3">
-                                  <div className="max-w-2xl">
-                                    <h6 className="text-base font-semibold text-white">{task.title}</h6>
-                                    <p className="mt-2 text-sm leading-6 text-white/60">{task.description || 'No task description yet.'}</p>
-                                  </div>
-                                </div>
-                                {task.referenceUrl ? <div><ReferencePreview url={task.referenceUrl} label={task.referenceLabel} /></div> : null}
-                              </div>
-                            ))}
-                          </div>
-                        ) : null}
-                      </div>
-                    )})}
-                  </div>
-                ) : null}
+          <div className="peridot-routines-live-shell">
+            <section className="peridot-routines-canvas">
+              <div className="peridot-routines-routine-strip">
+                {visibleRoutines.map((routine) => (
+                  <button
+                    key={routine.id}
+                    type="button"
+                    onClick={() => selectRoutine(routine)}
+                    className={`peridot-routines-routine-button${activeRoutine?.id === routine.id ? ' is-selected' : ''}`}
+                  >
+                    [{routine.title}]
+                  </button>
+                ))}
               </div>
-            ))}
+              {activeRoutine ? (
+                <>
+                  <div className="peridot-routines-canvas-header">
+                    <div className="peridot-routines-canvas-header-main">
+                      <div className="peridot-routines-canvas-title">
+                        {(editingRoutineId === activeRoutine.id ? formData.name : activeRoutine.title) || activeRoutine.title}
+                      </div>
+                      <RoutineCommandDeck
+                        className="peridot-routine-command-deck--header"
+                        onEdit={() => openEditRoutine(activeRoutine)}
+                        onDuplicate={() => void duplicateRoutine(activeRoutine)}
+                        onDelete={() => void deleteRoutine(activeRoutine.id)}
+                        isDuplicating={duplicatingRoutineId === activeRoutine.id}
+                        isDeleting={deletingRoutineId === activeRoutine.id}
+                      />
+                    </div>
+                  </div>
+                </>
+              ) : null}
+              <div className="peridot-routines-flow-grid">
+                {activeRoutine ? (
+                  (editingRoutineId === activeRoutine.id ? formData.regimens : routineToDraft(activeRoutine).regimens)
+                    .map((regimen, regimenIndex) => ({ regimen, regimenIndex }))
+                    .sort((a, b) => {
+                      if (a.regimenIndex === activeRegimenIndex) return -1
+                      if (b.regimenIndex === activeRegimenIndex) return 1
+                      return a.regimenIndex - b.regimenIndex
+                    })
+                    .map(({ regimen, regimenIndex }) => {
+                  const isSelected = editingRoutineId === activeRoutine.id && activeRegimenIndex === regimenIndex
+                  return (
+                    <div
+                      key={`${activeRoutine.id}-${regimenIndex}`}
+                      className={`peridot-routines-flow-cell${isSelected ? ' is-selected' : ''}`}
+                    >
+                      {isSelected ? renderLiveDetailPanel(
+                        'peridot-routines-editor peridot-routines-editor--inline',
+                        liveInlineDetailPanelRef,
+                      ) : null}
+                      <BuilderFlowPreview
+                        regimen={regimen}
+                        regimenIndex={regimenIndex}
+                        activeTaskIndex={isSelected ? activeTaskIndex : -1}
+                        onSelectTask={(taskIndex) => selectFlowTask(activeRoutine, regimenIndex, taskIndex)}
+                        onSelectFlow={() => selectFlowCell(activeRoutine, regimenIndex)}
+                        isEditingFlow={isSelected && activeTaskIndex < 0}
+                        showDays
+                      />
+                    </div>
+                  )
+                })) : null}
+              </div>
+            </section>
+
+            {renderLiveDetailPanel('peridot-routines-editor peridot-routines-editor--desktop')}
           </div>
         )}
         </div>
@@ -793,6 +1446,16 @@ export default function RoutinesPage() {
         ) : null}
         </div>
       </div>
-    </div>
+    </PeridotPageChrome>
   )
 }
+
+export default function RoutinesPage() {
+  return (
+    <Suspense fallback={null}>
+      <RoutinesPageContent />
+    </Suspense>
+  )
+}
+
+

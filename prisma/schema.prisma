@@ -17,7 +17,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  routines Routine[]
+  routines   Routine[]
+  inboxTasks InboxTask[]
 
   @@map("users")
 }
@@ -104,4 +105,20 @@ model TaskCompletion {
   @@index([userId, completedAt])
   @@index([regimenId, date])
   @@map("task_completions")
+}
+
+model InboxTask {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  completedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, completedAt])
+  @@map("inbox_tasks")
 }

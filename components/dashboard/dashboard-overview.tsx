@@ -2,26 +2,23 @@
 
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { getRegimenTintMeta, tintRgba } from '@/lib/regimen-tints'
 import {
-  fetchAnalytics,
   fetchCompletions,
   fetchWorkspace,
   subscribeToWorkspaceChanges,
 } from '@/lib/workspace-client'
-import type { AnalyticsSummary } from '@/lib/workspace-types'
 
 type Task = {
   id: string
+  title: string
 }
 
 type Regimen = {
   id: string
   title: string
-  colorTint: string | null
   recurrenceType: string | null
   recurrenceDays: string | null
+  recurrenceTimes: string | null
   tasks: Task[]
 }
 
@@ -31,7 +28,45 @@ type Routine = {
   regimens: Regimen[]
 }
 
+type FlowPreview = {
+  id: string
+  regimenId: string
+  title: string
+  startTime: string
+  sortMinutes: number
+  complete: boolean
+}
+
+type TodayTaskIndicator = {
+  id: string
+  taskId: string
+  regimenId: string
+  title: string
+  sortMinutes: number
+  sequence: number
+  completed: boolean
+}
+
 const weekdayMap = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
+const navLinks = [
+  { label: 'BOARD', href: '/tasks' },
+  { label: 'ROUTINES', href: '/routines' },
+  { label: 'CALENDAR', href: '/calendar' },
+  { label: 'ANALYTICS', href: '/analytics' },
+  { label: 'SETTINGS', href: '/settings' },
+]
+
+function cleanLabel(value: string | null | undefined) {
+  if (!value) return ''
+
+  return value
+    .replace(/^#{1,6}\s*/gm, '')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
+    .replace(/^\s*[-*]+\s*/gm, '')
+    .trim()
+}
 
 function isoDate(date: Date) {
   const year = date.getFullYear()
@@ -40,25 +75,190 @@ function isoDate(date: Date) {
   return `${year}-${month}-${day}`
 }
 
-function runsToday(regimen: Regimen) {
-  const today = weekdayMap[new Date().getDay()]
-  const days = regimen.recurrenceDays?.split(',').map((day) => day.trim()).filter(Boolean) ?? []
-  if (days.length === 0) return regimen.recurrenceType === 'NONE' || !regimen.recurrenceType
-  return days.includes(today)
+function parseRecurrenceTimes(value: string | null) {
+  if (!value) return {}
+
+  try {
+    const parsed = JSON.parse(value)
+    return typeof parsed === 'object' && parsed ? (parsed as Record<string, string>) : {}
+  } catch {
+    return {}
+  }
 }
 
-function clampRatio(value: number) {
-  if (!Number.isFinite(value)) return 0
-  return Math.max(0, Math.min(1, value))
+function regimenRunsToday(regimen: Regimen, date: Date) {
+  const recurrenceType = regimen.recurrenceType || 'NONE'
+  const recurrenceDays = regimen.recurrenceDays?.split(',').map((day) => day.trim()).filter(Boolean) ?? []
+  const weekday = weekdayMap[date.getDay()]
+
+  if (recurrenceType === 'MONTHLY') return date.getDate() === 1
+  if (recurrenceDays.length > 0) return recurrenceDays.includes(weekday)
+  return recurrenceType === 'NONE'
+}
+
+function timeSortValue(value: string) {
+  const [hoursText, minutesText] = value.split(':')
+  const hours = Number(hoursText)
+  const minutes = Number(minutesText ?? '0')
+
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) return 540
+  return hours * 60 + minutes
+}
+
+function timeLabel(value: string) {
+  const [hoursText, minutesText] = value.split(':')
+  const hours = Number(hoursText)
+  const minutes = minutesText || '00'
+
+  if (Number.isNaN(hours)) return value
+  if (hours === 0) return `12:${minutes} AM`
+  if (hours < 12) return `${hours}:${minutes} AM`
+  if (hours === 12) return `12:${minutes} PM`
+  return `${hours - 12}:${minutes} PM`
+}
+
+function buildTodayFlows(routines: Routine[], date: Date, completedTaskKeys: Record<string, boolean>) {
+  const weekday = weekdayMap[date.getDay()]
+
+  return routines
+    .flatMap((routine) =>
+      routine.regimens.flatMap((regimen) => {
+        if (!regimenRunsToday(regimen, date)) return []
+
+        const recurrenceTimes = parseRecurrenceTimes(regimen.recurrenceTimes)
+        const startTime = recurrenceTimes[weekday] || '09:00'
+        const complete = regimen.tasks.length > 0 && regimen.tasks.every(
+          (task) => completedTaskKeys[`${regimen.id}:${task.id}`] === true,
+        )
+
+        return [
+          {
+            id: `${routine.id}-${regimen.id}`,
+            regimenId: regimen.id,
+            title: cleanLabel(regimen.title) || cleanLabel(routine.title) || 'Routine Name',
+            startTime,
+            sortMinutes: timeSortValue(startTime),
+            complete,
+          },
+        ]
+      }),
+    )
+    .sort((left, right) => {
+      if (left.sortMinutes !== right.sortMinutes) return left.sortMinutes - right.sortMinutes
+      return left.title.localeCompare(right.title)
+    })
+}
+
+function buildTodayTaskStats(routines: Routine[], date: Date, completedTaskKeys: Record<string, boolean>) {
+  let total = 0
+  let completed = 0
+
+  for (const routine of routines) {
+    for (const regimen of routine.regimens) {
+      if (!regimenRunsToday(regimen, date)) continue
+
+      total += regimen.tasks.length
+      for (const task of regimen.tasks) {
+        if (completedTaskKeys[`${regimen.id}:${task.id}`] === true) {
+          completed += 1
+        }
+      }
+    }
+  }
+
+  return {
+    total,
+    completed,
+    open: Math.max(total - completed, 0),
+  }
+}
+
+function buildTodayTaskIndicators(routines: Routine[], date: Date, completedTaskKeys: Record<string, boolean>) {
+  const indicators: TodayTaskIndicator[] = []
+  const weekday = weekdayMap[date.getDay()]
+  let sequence = 0
+
+  for (const routine of routines) {
+    for (const regimen of routine.regimens) {
+      if (!regimenRunsToday(regimen, date)) continue
+
+      const recurrenceTimes = parseRecurrenceTimes(regimen.recurrenceTimes)
+      const startTime = recurrenceTimes[weekday] || '09:00'
+
+      for (const task of regimen.tasks) {
+        indicators.push({
+          id: `${regimen.id}:${task.id}`,
+          taskId: task.id,
+          regimenId: regimen.id,
+          title: cleanLabel(task.title) || 'Untitled Task',
+          sortMinutes: timeSortValue(startTime),
+          sequence,
+          completed: completedTaskKeys[`${regimen.id}:${task.id}`] === true,
+        })
+        sequence += 1
+      }
+    }
+  }
+
+  return indicators.sort((left, right) => {
+    if (left.sortMinutes !== right.sortMinutes) return left.sortMinutes - right.sortMinutes
+    return left.sequence - right.sequence
+  })
+}
+
+function tagAngle(width: number) {
+  return -(Math.atan2(48, width) * 180) / Math.PI
+}
+
+function FlowCluster({ flow }: { flow: FlowPreview }) {
+  const tagWidth = Math.max(170, Math.min(340, 150 + flow.title.length * 7))
+  const textX = tagWidth / 2
+  const angle = tagAngle(tagWidth)
+  const routineY = 62
+  const timeLineWidth = 118
+  const viewWidth = 118 + tagWidth + 28
+
+  return (
+    <Link
+      href={`/calendar?date=${isoDate(new Date())}&regimen=${flow.regimenId}`}
+      className="peridot-dashboard-cluster"
+      style={{ width: `${viewWidth}px` }}
+    >
+      <svg className="peridot-dashboard-cluster-svg" viewBox={`0 0 ${viewWidth} 150`}>
+        <text x="6" y="118" className="peridot-dashboard-time-label">{timeLabel(flow.startTime)}</text>
+        <rect x="0" y="126" width={timeLineWidth} height="3" fill="#66ff99" />
+
+        <g transform={`translate(118 ${routineY})`}>
+          <polygon points={`0,48 ${tagWidth},0 ${tagWidth},32 0,80`} fill={flow.complete ? '#66ff99' : '#bd0000'} />
+          <text
+            x={textX}
+            y="40"
+            className={flow.complete ? 'peridot-dashboard-tag-text is-complete' : 'peridot-dashboard-tag-text'}
+            transform={`rotate(${angle} ${textX} 40)`}
+          >
+            {flow.title.toUpperCase()}
+          </text>
+        </g>
+      </svg>
+    </Link>
+  )
 }
 
 export function DashboardOverview() {
   const [routines, setRoutines] = useState<Routine[]>([])
-  const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null)
   const [completedTaskKeys, setCompletedTaskKeys] = useState<Record<string, boolean>>({})
   const [username, setUsername] = useState('')
+  const [currentTime, setCurrentTime] = useState(() => new Date())
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+
+    return () => window.clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     async function loadDashboard() {
@@ -67,9 +267,8 @@ export function DashboardOverview() {
 
       try {
         const todayIso = isoDate(new Date())
-        const [workspace, analyticsResult, completions] = await Promise.all([
+        const [workspace, completions] = await Promise.all([
           fetchWorkspace(),
-          fetchAnalytics(),
           fetchCompletions(todayIso),
         ])
 
@@ -78,9 +277,8 @@ export function DashboardOverview() {
         setCompletedTaskKeys(
           Object.fromEntries(completions.map((item) => [`${item.regimenId}:${item.taskId}`, true])),
         )
-        setAnalytics(analyticsResult)
       } catch (loadError) {
-        setError(loadError instanceof Error ? loadError.message : 'Failed to load routines')
+        setError(loadError instanceof Error ? loadError.message : 'Failed to load dashboard')
       } finally {
         setIsLoading(false)
       }
@@ -93,179 +291,138 @@ export function DashboardOverview() {
     })
   }, [])
 
-  const displayName = username || 'there'
-  const completedToday = useMemo(() => Object.keys(completedTaskKeys).length, [completedTaskKeys])
-  const activeRoutineCount = useMemo(() => routines.filter((routine) => routine.regimens.length > 0).length, [routines])
-  const totalRegimens = useMemo(() => routines.reduce((sum, routine) => sum + routine.regimens.length, 0), [routines])
-  const todayRegimens = useMemo(
-    () =>
-      routines.flatMap((routine) =>
-        routine.regimens.filter(runsToday).map((regimen) => {
-          const remainingTaskCount = regimen.tasks.filter((task) => completedTaskKeys[`${regimen.id}:${task.id}`] !== true).length
-          return {
-            id: regimen.id,
-            title: regimen.title,
-            routineTitle: routine.title,
-            colorTint: regimen.colorTint,
-            taskCount: regimen.tasks.length,
-            remainingTaskCount,
-          }
-        }),
-      ),
+  const todayFlows = useMemo(
+    () => buildTodayFlows(routines, new Date(), completedTaskKeys),
     [completedTaskKeys, routines],
   )
-  const remainingTasksToday = useMemo(() => todayRegimens.reduce((sum, regimen) => sum + regimen.remainingTaskCount, 0), [todayRegimens])
-  const totalTasksToday = useMemo(() => todayRegimens.reduce((sum, regimen) => sum + regimen.taskCount, 0), [todayRegimens])
-  const completedShare = totalTasksToday > 0 ? completedToday / totalTasksToday : 0
-  const remainingShare = totalTasksToday > 0 ? remainingTasksToday / totalTasksToday : 0
-  const summaryStats = [
-    {
-      label: 'Active Routines',
-      value: activeRoutineCount,
-      detail: totalRegimens === 1 ? '1 flow built' : `${totalRegimens} flows built`,
-      ratio: clampRatio(activeRoutineCount / Math.max(routines.length || 1, 1)),
-      tone: 'rgba(32, 42, 18, 0.92)',
-    },
-    {
-      label: 'Flows Today',
-      value: todayRegimens.length,
-      detail: totalTasksToday === 1 ? '1 task scheduled' : `${totalTasksToday} tasks scheduled`,
-      ratio: clampRatio(todayRegimens.length / Math.max(totalRegimens || 1, 1)),
-      tone: 'rgba(45, 56, 24, 0.92)',
-    },
-    {
-      label: 'Remaining',
-      value: remainingTasksToday,
-      detail: remainingTasksToday === 0 ? 'All clear' : 'still open',
-      ratio: remainingTasksToday === 0 ? 0 : clampRatio(remainingShare),
-      tone: 'rgba(58, 66, 28, 0.92)',
-    },
-    {
-      label: 'Completed',
-      value: completedToday,
-      detail: totalTasksToday === 0 ? 'No tasks today' : remainingTasksToday === 0 ? 'Day closed clean' : `${remainingTasksToday} still open`,
-      ratio: clampRatio(completedShare),
-      tone: 'rgba(72, 82, 34, 0.92)',
-    },
-  ]
+  const flowPreviews = todayFlows
+  const displayName = (username || 'User Name').toUpperCase()
+  const currentDateLabel = currentTime
+    .toLocaleString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    })
+    .toUpperCase()
+  const activeFlowsToday = todayFlows.length
+  const todayTaskStats = useMemo(
+    () => buildTodayTaskStats(routines, new Date(), completedTaskKeys),
+    [completedTaskKeys, routines],
+  )
+  const todayTaskIndicators = useMemo(
+    () => buildTodayTaskIndicators(routines, new Date(), completedTaskKeys),
+    [completedTaskKeys, routines],
+  )
+  const completedTasks = todayTaskStats.completed
+  const allTodayTasksComplete = todayTaskStats.total > 0 && todayTaskStats.open === 0
+  const todayIso = isoDate(new Date())
 
   return (
-    <div className="lg:pl-80">
-      <div className="peridot-app-page peridot-shell peridot-page-gutter py-6 sm:py-8">
-        <div className="peridot-page-frame peridot-overview-grid">
-          <section className="peridot-panel peridot-tactical-card mb-8 overflow-hidden">
-            <div className="grid gap-6 px-6 py-7 sm:px-8 sm:py-8 xl:grid-cols-[1.2fr_0.8fr]">
-              <div className="max-w-2xl">
-                <h2 className="peridot-title-wrap peridot-display text-3xl font-semibold tracking-tight text-white sm:text-[3.5rem]">Welcome back, {displayName}.</h2>
+    <div className="peridot-dashboard-page">
+      <div className="peridot-dashboard-frame">
+        <div className="peridot-dashboard-main">
+          <div className="peridot-dashboard-grid">
+            <section className="peridot-dashboard-left">
+              <div className="peridot-dashboard-identity">
+                <div className="peridot-dashboard-identity-name">
+                  {isLoading ? 'LOADING...' : displayName}
+                </div>
+                <div className="peridot-dashboard-identity-meta">{currentDateLabel}</div>
               </div>
 
-              <section className="peridot-stat-board">
-                <div className="peridot-stat-rule" />
-                <div className="peridot-summary-grid mt-5">
-                  {summaryStats.map((stat) => {
-                    return (
-                      <div
-                        key={stat.label}
-                        className="peridot-compact-card rounded-[1rem] border"
-                        style={{
-                          borderColor: 'rgba(159, 204, 59, 0.18)',
-                          background:
-                            'linear-gradient(180deg, rgba(255,255,255,0.18), rgba(232,247,161,0.12)), linear-gradient(135deg, rgba(255,255,255,0.16), rgba(207,234,122,0.08))',
-                        }}
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="min-w-0 pr-2">
-                            <div className="peridot-meta text-[10px] text-[#7d8d4d]">{stat.label}</div>
-                            <div className="peridot-display mt-3 text-[2.3rem] leading-none text-[#1d2710]">
-                              {isLoading ? '...' : stat.value}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="mt-4 overflow-hidden rounded-full" style={{ backgroundColor: 'rgba(31, 42, 16, 0.12)' }}>
-                          <div
-                            className="h-2.5 rounded-full"
-                            style={{
-                              width: `${Math.max(8, Math.round(stat.ratio * 100))}%`,
-                              background: `linear-gradient(90deg, ${stat.tone}, rgba(159, 204, 59, 0.86))`,
-                            }}
-                          />
-                        </div>
-                        <div className="mt-3 px-1 text-[11px] uppercase tracking-[0.16em] text-[#6d7f3d]">{stat.detail}</div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </section>
-            </div>
-          </section>
+              <nav className="peridot-dashboard-nav">
+                {navLinks.map((item) => (
+                  <Link key={item.href} href={item.href} className="peridot-dashboard-nav-link">
+                    [{item.label}]
+                  </Link>
+                ))}
+              </nav>
 
-          <section className="grid gap-4 xl:grid-cols-[1.18fr_0.82fr]">
-            <div className="peridot-panel peridot-tactical-card p-6 sm:p-7">
-              <div className="mb-5">
-                <div className="peridot-section-label peridot-meta text-xs text-white/45">Today</div>
-                <h3 className="peridot-panel-heading peridot-display mt-2 text-2xl font-semibold text-white">Scheduled flows</h3>
+              {error ? <div className="peridot-danger-note rounded-[0.55rem] px-4 py-3 text-sm">{error}</div> : null}
+            </section>
+
+            <section className="peridot-dashboard-right">
+              <div className="peridot-dashboard-flows-title">FLOWS</div>
+
+              <div className="peridot-dashboard-flows">
+                {flowPreviews.length > 0 ? (
+                  flowPreviews.map((flow) => <FlowCluster key={flow.id} flow={flow} />)
+                ) : (
+                  <div className="peridot-dashboard-empty">
+                    {isLoading ? 'LOADING FLOWS...' : 'NO FLOWS SCHEDULED TODAY'}
+                  </div>
+                )}
               </div>
+            </section>
+          </div>
 
-              {isLoading ? (
-                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] px-5 py-10 text-center text-white/50">Loading your workspace...</div>
-              ) : error ? (
-                <div className="rounded-[1.4rem] border border-white/10 bg-white/[0.03] px-5 py-10 text-center text-white/50">{error}</div>
-              ) : todayRegimens.length === 0 ? (
-                <div className="rounded-[1.4rem] border border-dashed border-white/10 bg-white/[0.03] px-5 py-10 text-center text-white/50">
-                  No flows are scheduled for today yet.
-                </div>
-              ) : (
-                <div className="grid gap-7 lg:grid-cols-2">
-                  {todayRegimens.map((regimen) => {
-                    const tint = getRegimenTintMeta(regimen.colorTint).value
-                    const scheduleHref = `/calendar?date=${isoDate(new Date())}&regimen=${regimen.id}`
-
-                    return (
-                      <Link
-                        key={regimen.id}
-                        href={scheduleHref}
-                        className="peridot-cinematic group block overflow-hidden rounded-[1.15rem] border px-5 py-6 no-underline"
-                        style={{
-                          borderColor: tintRgba(tint, 0.44),
-                          background: `linear-gradient(180deg, ${tintRgba(tint, 0.34)}, ${tintRgba(tint, 0.22)})`,
-                          boxShadow: `inset 0 0 0 1px ${tintRgba(tint, 0.12)}, 0 14px 28px ${tintRgba(tint, 0.16)}`,
-                        }}
-                      >
-                        <div className="min-w-0 space-y-4 text-center">
-                          <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] leading-[1.8] text-[#4a621f] no-underline">Scheduled now</div>
-                          <div className="break-words pt-1 text-[1rem] font-semibold leading-[1.22] text-[#17200e] no-underline transition group-hover:translate-y-0.5 sm:text-[1.05rem]">
-                            {regimen.title}
-                          </div>
-                          <div className="break-words text-[0.88rem] leading-[1.35] text-[#39531e] no-underline">{regimen.routineTitle}</div>
-                        </div>
-                        <div className="mt-8 grid grid-cols-1 gap-4 pb-3 min-[360px]:grid-cols-2">
-                          <div className="rounded-[0.8rem] border px-3.5 py-4 text-center" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: tintRgba(tint, 0.12) }}>
-                            <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Tasks</div>
-                            <div className="mt-2 px-0.5 pb-0.5 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.taskCount}</div>
-                          </div>
-                          <div className="rounded-[0.8rem] border px-3.5 py-4 text-center" style={{ borderColor: tintRgba(tint, 0.24), backgroundColor: tintRgba(tint, 0.12) }}>
-                            <div className="text-[0.66rem] font-semibold uppercase tracking-[0.18em] text-[#4a621f] no-underline">Left</div>
-                            <div className="mt-2 px-0.5 pb-0.5 text-[1.2rem] font-semibold leading-[1.12] text-[#17200e]">{regimen.remainingTaskCount}</div>
-                          </div>
-                        </div>
-                      </Link>
-                    )
-                  })}
-                </div>
-              )}
-
-              <div className="mt-14 grid grid-cols-2 gap-3">
-                <Button asChild className="peridot-display h-9 rounded-xl border border-emerald-300/25 bg-emerald-300 px-3 text-[0.8rem] font-semibold text-emerald-950 hover:bg-emerald-200 sm:h-10 sm:px-4 sm:text-sm">
-                  <a href="/routines">Open Routines</a>
-                </Button>
-                <Button variant="ghost" asChild className="peridot-display h-9 rounded-xl border border-white/10 bg-white/5 px-3 text-[0.8rem] text-white hover:bg-white/10 sm:h-10 sm:px-4 sm:text-sm">
-                  <a href="/calendar">Open Calendar</a>
-                </Button>
+          <div className="peridot-dashboard-metrics">
+            <div className="peridot-dashboard-metric peridot-dashboard-metric--routines">
+              <div className="peridot-dashboard-metric-meta">
+                <Link href="/routines" className="peridot-dashboard-metric-label-link">
+                  <div className="peridot-dashboard-metric-label">ACTIVE ROUTINES</div>
+                </Link>
+                <div className="peridot-dashboard-metric-count">ACTIVE TODAY {activeFlowsToday}</div>
+              </div>
+              <div className="peridot-dashboard-bars peridot-dashboard-bars--routines">
+                {flowPreviews.length > 0 ? (
+                  flowPreviews.map((flow) => (
+                    <Link
+                      key={flow.id}
+                      href={`/calendar?date=${todayIso}&regimen=${flow.regimenId}`}
+                      className={flow.complete
+                        ? 'peridot-dashboard-bar is-green is-task-link'
+                        : 'peridot-dashboard-bar is-red is-task-link'}
+                      title={flow.title}
+                    >
+                      <span className="peridot-dashboard-bar-label">{flow.title.toUpperCase()}</span>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="peridot-dashboard-empty peridot-dashboard-empty--metric">
+                    {isLoading ? 'LOADING ROUTINES...' : 'NO ROUTINES SCHEDULED TODAY'}
+                  </div>
+                )}
               </div>
             </div>
-          </section>
+
+            <div className="peridot-dashboard-metric peridot-dashboard-metric--tasks">
+              <div className="peridot-dashboard-metric-meta">
+                <Link href="/calendar" className="peridot-dashboard-metric-label-link">
+                  <div className="peridot-dashboard-metric-label">TASKS</div>
+                </Link>
+                <div className={allTodayTasksComplete ? 'peridot-dashboard-alert is-complete' : 'peridot-dashboard-alert'}>
+                  COMPLETED TODAY {completedTasks}
+                </div>
+              </div>
+              <div className="peridot-dashboard-bars peridot-dashboard-bars--tasks">
+                {todayTaskIndicators.length > 0 ? (
+                  todayTaskIndicators.map((task) => (
+                    <Link
+                      key={task.id}
+                      href={`/calendar?date=${todayIso}&regimen=${task.regimenId}&task=${task.taskId}`}
+                      className={task.completed
+                        ? 'peridot-dashboard-bar is-green is-task-link'
+                        : 'peridot-dashboard-bar is-red is-blinking is-task-link'}
+                      title={task.title}
+                    >
+                      <span className="peridot-dashboard-bar-label">{task.title.toUpperCase()}</span>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="peridot-dashboard-empty peridot-dashboard-empty--metric">
+                    {isLoading ? 'LOADING TASKS...' : 'NO TASKS SCHEDULED TODAY'}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   )
 }
+

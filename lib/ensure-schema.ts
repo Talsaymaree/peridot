@@ -77,6 +77,29 @@ export async function ensureAppSchema() {
       `)
 
       await prisma.$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "inbox_tasks" (
+          "id" TEXT NOT NULL PRIMARY KEY,
+          "title" TEXT NOT NULL,
+          "description" TEXT,
+          "completedAt" DATETIME,
+          "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          "userId" TEXT NOT NULL,
+          CONSTRAINT "inbox_tasks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+        )
+      `)
+
+      await prisma.$executeRawUnsafe(`
+        CREATE INDEX IF NOT EXISTS "inbox_tasks_userId_createdAt_idx"
+        ON "inbox_tasks"("userId", "createdAt")
+      `)
+
+      await prisma.$executeRawUnsafe(`
+        CREATE INDEX IF NOT EXISTS "inbox_tasks_userId_completedAt_idx"
+        ON "inbox_tasks"("userId", "completedAt")
+      `)
+
+      await prisma.$executeRawUnsafe(`
         CREATE TABLE IF NOT EXISTS "task_completions" (
           "id" TEXT NOT NULL PRIMARY KEY,
           "date" TEXT NOT NULL,

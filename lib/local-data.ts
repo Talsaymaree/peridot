@@ -73,6 +73,16 @@ export type AnalyticsSummary = {
     label: string
     total: number
   }>
+  flowSeries: Array<{
+    date: string
+    label: string
+    total: number
+  }>
+  routineSeries: Array<{
+    date: string
+    label: string
+    total: number
+  }>
   topRegimens: Array<{
     regimenId: string
     regimenTitle: string
@@ -1059,13 +1069,16 @@ export function getLocalAnalyticsSummary(workspace = readLocalWorkspace()): Anal
   const todayIso = localIsoDate(today)
   const seriesStartIso = localIsoDate(addDays(today, -6))
   const dailyTotals = new Map<string, number>()
+  const flowDailyTotals = new Map<string, Set<string>>()
+  const routineDailyTotals = new Map<string, Set<string>>()
   const regimenStats = new Map<string, { regimenId: string; regimenTitle: string; routineTitle: string; completedCount: number; lastCompletedAt: string | null }>()
-  const regimenLookup = new Map<string, { regimenTitle: string; routineTitle: string }>()
+  const regimenLookup = new Map<string, { regimenTitle: string; routineId: string; routineTitle: string }>()
 
   for (const routine of workspace.routines) {
     for (const regimen of routine.regimens) {
       regimenLookup.set(regimen.id, {
         regimenTitle: regimen.title,
+        routineId: routine.id,
         routineTitle: routine.title,
       })
     }
@@ -1078,6 +1091,16 @@ export function getLocalAnalyticsSummary(workspace = readLocalWorkspace()): Anal
     if (!labels) {
       continue
     }
+
+    if (!flowDailyTotals.has(completion.date)) {
+      flowDailyTotals.set(completion.date, new Set())
+    }
+    flowDailyTotals.get(completion.date)?.add(completion.regimenId)
+
+    if (!routineDailyTotals.has(completion.date)) {
+      routineDailyTotals.set(completion.date, new Set())
+    }
+    routineDailyTotals.get(completion.date)?.add(labels.routineId)
 
     const current = regimenStats.get(completion.regimenId)
 
@@ -1107,6 +1130,24 @@ export function getLocalAnalyticsSummary(workspace = readLocalWorkspace()): Anal
       total: dailyTotals.get(dateIso) ?? 0,
     }
   })
+  const flowSeries = Array.from({ length: 7 }, (_, index) => {
+    const date = addDays(today, index - 6)
+    const dateIso = localIsoDate(date)
+    return {
+      date: dateIso,
+      label: seriesLabelFormatter.format(date),
+      total: flowDailyTotals.get(dateIso)?.size ?? 0,
+    }
+  })
+  const routineSeries = Array.from({ length: 7 }, (_, index) => {
+    const date = addDays(today, index - 6)
+    const dateIso = localIsoDate(date)
+    return {
+      date: dateIso,
+      label: seriesLabelFormatter.format(date),
+      total: routineDailyTotals.get(dateIso)?.size ?? 0,
+    }
+  })
 
   const streakDates = Array.from(new Set(workspace.completions.map((completion) => completion.date))).sort((left, right) => right.localeCompare(left))
   const topRegimens = Array.from(regimenStats.values())
@@ -1128,6 +1169,8 @@ export function getLocalAnalyticsSummary(workspace = readLocalWorkspace()): Anal
       currentStreak: buildCurrentStreak(streakDates, todayIso),
     },
     series,
+    flowSeries,
+    routineSeries,
     topRegimens,
   }
 }

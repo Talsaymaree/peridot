@@ -1,151 +1,49 @@
 'use client'
 
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { ChevronDown, ChevronLeft, ChevronRight, ExternalLink, ImageIcon, Plus, Video } from 'lucide-react'
-import { darkenTint, getRegimenTint, tintRgba } from '@/lib/regimen-tints'
+import { Fragment, Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
+import { PeridotPageChrome } from '@/components/layout/peridot-page-chrome'
 import {
   fetchCompletions,
   fetchWorkspace,
   saveTaskCompletion,
   subscribeToWorkspaceChanges,
 } from '@/lib/workspace-client'
+import type { CompletionItem, RoutineRecord, TaskRecord } from '@/lib/workspace-types'
 
-type Task = {
-  id: string
-  title: string
-  description: string | null
-  status?: string | null
-  referenceUrl?: string | null
-}
-
-type Regimen = {
-  id: string
-  title: string
-  description: string | null
-  cadence: string
-  colorTint: string | null
-  recurrenceType: string | null
-  recurrenceDays: string | null
-  recurrenceTimes: string | null
-  tasks: Task[]
-}
-
-type Routine = {
-  id: string
-  title: string
-  regimens: Regimen[]
-}
+type ScheduleTask = TaskRecord
 
 type ScheduleEntry = {
   id: string
   regimenId: string
+  routineId: string
   routineTitle: string
   title: string
   detail: string
-  taskCount: number
-  tasks: Task[]
+  tasks: ScheduleTask[]
   startTime: string
-  hourIndex: number
+  sortMinutes: number
 }
 
-type CompletionItem = {
-  regimenId: string
-  taskId: string
-  completedAt: string
+type SelectedTaskRef = {
+  entryId: string
+  taskId: string | null
 }
 
-type RegimenLayer = {
-  id: string
-  title: string
-  routineTitle: string
-  tint: string
-  color: {
-    dot: string
-    chipBg: string
-    chipText: string
-    border: string
-    bg: string
-    softBg: string
-    completeBg: string
-    completeBorder: string
-    accent: string
-    accentGlow: string
-    layerBg: string
-    accentText: string
-    accentSoft: string
-    taskBg: string
-    taskDoneBg: string
-    taskPanelBg: string
-  }
-}
-
-const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const weekdayMap = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
-const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-const monthLabelFormatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' })
-const dayLabelFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
-const hourSlots = Array.from({ length: 24 }, (_, hour) => {
-  if (hour === 0) return '12 AM'
-  if (hour < 12) return `${hour} AM`
-  if (hour === 12) return '12 PM'
-  return `${hour - 12} PM`
-})
-const hourHeight = 40
-function makeRegimenTheme(colorTint: string | null | undefined) {
-  const tint = getRegimenTint(colorTint)
-  const darkerTint = darkenTint(tint, 0.24)
-  return {
-    dot: tint,
-    chipBg: `linear-gradient(135deg, ${tintRgba(tint, 0.92)}, ${tintRgba(darkerTint, 0.94)})`,
-    chipText: '#FEFFF7',
-    border: tintRgba(tint, 0.88),
-    bg: `linear-gradient(135deg, ${tintRgba(tint, 0.64)}, ${tintRgba(darkerTint, 0.42)})`,
-    softBg: `linear-gradient(160deg, ${tintRgba(tint, 0.78)}, ${tintRgba(darkerTint, 0.52)})`,
-    completeBg: `linear-gradient(135deg, ${tintRgba(darkerTint, 0.82)}, ${tintRgba(tint, 0.56)})`,
-    completeBorder: tintRgba(darkerTint, 0.92),
-    accent: tint,
-    accentGlow: tintRgba(tint, 0.34),
-    layerBg: `linear-gradient(135deg, ${tintRgba(tint, 0.44)}, ${tintRgba(darkerTint, 0.28)})`,
-    accentText: '#30451B',
-    accentSoft: tintRgba(darkerTint, 0.14),
-    taskBg: `linear-gradient(180deg, ${tintRgba(tint, 0.14)}, ${tintRgba(darkerTint, 0.1)})`,
-    taskDoneBg: `linear-gradient(180deg, ${tintRgba(tint, 0.22)}, ${tintRgba(darkerTint, 0.18)})`,
-    taskPanelBg: tintRgba(darkerTint, 0.08),
-  }
-}
-
-const fallbackRegimenTheme = makeRegimenTheme(null)
-
-function progressPillTheme(completed: number, total: number) {
-  if (total > 0 && completed === total) {
-    return {
-      bg: 'rgba(92, 146, 38, 0.82)',
-      border: 'rgba(181, 227, 122, 0.68)',
-      text: '#F6FFE7',
-    }
-  }
-
-  if (completed > 0) {
-    return {
-      bg: 'rgba(189, 132, 26, 0.84)',
-      border: 'rgba(255, 221, 126, 0.68)',
-      text: '#FFF8DD',
-    }
-  }
-
-  return {
-    bg: 'rgba(165, 58, 40, 0.84)',
-    border: 'rgba(246, 152, 127, 0.62)',
-    text: '#FFE8E1',
-  }
-}
+const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' })
+const dayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
 function addDays(date: Date, amount: number) {
   const next = new Date(date)
   next.setDate(next.getDate() + amount)
   return next
+}
+
+function monthStart(date: Date) {
+  return new Date(date.getFullYear(), date.getMonth(), 1)
 }
 
 function isoDate(date: Date) {
@@ -155,51 +53,52 @@ function isoDate(date: Date) {
   return `${year}-${month}-${day}`
 }
 
+function parseIsoDate(value: string | null) {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null
+
+  const [yearText, monthText, dayText] = value.split('-')
+  const year = Number(yearText)
+  const month = Number(monthText)
+  const day = Number(dayText)
+
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return null
+
+  const parsed = new Date(year, month - 1, day)
+  if (
+    parsed.getFullYear() !== year ||
+    parsed.getMonth() !== month - 1 ||
+    parsed.getDate() !== day
+  ) {
+    return null
+  }
+
+  return parsed
+}
+
 function buildMonthGrid(date: Date) {
-  const year = date.getFullYear()
-  const month = date.getMonth()
-  const firstDay = new Date(year, month, 1)
-  const lastDay = new Date(year, month + 1, 0)
-  const leading = firstDay.getDay()
-  const trailing = 6 - lastDay.getDay()
+  const start = monthStart(date)
+  const end = new Date(start.getFullYear(), start.getMonth() + 1, 0)
+  const leading = start.getDay()
+  const trailing = 6 - end.getDay()
   const cells: Date[] = []
 
-  for (let index = leading; index > 0; index -= 1) cells.push(addDays(firstDay, -index))
-  for (let day = 1; day <= lastDay.getDate(); day += 1) cells.push(new Date(year, month, day))
-  for (let index = 1; index <= trailing; index += 1) cells.push(addDays(lastDay, index))
+  for (let index = leading; index > 0; index -= 1) {
+    cells.push(addDays(start, -index))
+  }
+
+  for (let day = 1; day <= end.getDate(); day += 1) {
+    cells.push(new Date(start.getFullYear(), start.getMonth(), day))
+  }
+
+  for (let index = 1; index <= trailing; index += 1) {
+    cells.push(addDays(end, index))
+  }
 
   return cells
 }
 
-function buildYearOptions(centerYear: number) {
-  return Array.from({ length: 11 }, (_, index) => centerYear - 5 + index)
-}
-
-function parseRecurrenceTimes(value: string | null) {
-  if (!value) return {}
-  try {
-    const parsed = JSON.parse(value)
-    return typeof parsed === 'object' && parsed ? parsed as Record<string, string> : {}
-  } catch {
-    return {}
-  }
-}
-
-function timeLabel(value: string) {
-  const [hoursText, minutesText] = value.split(':')
-  const hours = Number(hoursText)
-  const minutes = minutesText || '00'
-  if (Number.isNaN(hours)) return value
-  if (hours === 0) return `12:${minutes} AM`
-  if (hours < 12) return `${hours}:${minutes} AM`
-  if (hours === 12) return `12:${minutes} PM`
-  return `${hours - 12}:${minutes} PM`
-}
-
-function hourIndexFromTime(value: string) {
-  const [hoursText] = value.split(':')
-  const hours = Number(hoursText)
-  return Number.isNaN(hours) ? 9 : Math.min(Math.max(hours, 0), 23)
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value))
 }
 
 function cleanRichText(value: string | null | undefined) {
@@ -214,41 +113,6 @@ function cleanRichText(value: string | null | undefined) {
     .trim()
 }
 
-function getMediaType(url: string | null | undefined) {
-  if (!url) return null
-  const lower = url.toLowerCase()
-  if (
-    lower.includes('youtube.com/watch') ||
-    lower.includes('youtu.be/') ||
-    lower.includes('youtube.com/embed/') ||
-    lower.includes('youtube.com/shorts/')
-  ) return 'youtube'
-  if (/\.(png|jpe?g|gif|webp|avif|svg)(\?.*)?$/.test(lower)) return 'image'
-  return 'link'
-}
-
-function getYoutubeEmbedUrl(url: string) {
-  const id = getYoutubeVideoId(url)
-  return id ? `https://www.youtube.com/embed/${id}` : null
-}
-
-function getYoutubeVideoId(url: string) {
-  try {
-    const parsed = new URL(url)
-    if (parsed.hostname.includes('youtu.be')) {
-      return parsed.pathname.split('/').filter(Boolean)[0] ?? null
-    }
-    if (parsed.pathname.includes('/shorts/')) {
-      return parsed.pathname.split('/shorts/')[1]?.split('/')[0] ?? null
-    }
-    if (parsed.searchParams.get('v')) return parsed.searchParams.get('v')
-    if (parsed.pathname.includes('/embed/')) return parsed.pathname.split('/embed/')[1]?.split('/')[0] ?? null
-  } catch {
-    return null
-  }
-  return null
-}
-
 function descriptionLines(value: string | null | undefined) {
   return cleanRichText(value)
     .split('\n')
@@ -256,69 +120,85 @@ function descriptionLines(value: string | null | undefined) {
     .filter(Boolean)
 }
 
-function estimateTaskCardHeight(task: Task) {
-  const lineCount = descriptionLines(task.description).length
-  const descriptionHeight = lineCount > 0 ? 72 + lineCount * 28 : 0
-  const mediaType = getMediaType(task.referenceUrl)
-  const mediaHeight =
-    mediaType === 'youtube' ? 560
-      : mediaType === 'image' ? 320
-        : mediaType === 'link' ? 76
-          : 0
-
-  return 96 + descriptionHeight + mediaHeight
+function parseRecurrenceTimes(value: string | null) {
+  if (!value) return {}
+  try {
+    const parsed = JSON.parse(value)
+    return typeof parsed === 'object' && parsed ? parsed as Record<string, string> : {}
+  } catch {
+    return {}
+  }
 }
 
-function estimateExpandedEntryHeight(entry: ScheduleEntry) {
-  const taskHeights = entry.tasks.reduce((sum, task) => sum + estimateTaskCardHeight(task), 0)
-  const gaps = Math.max(entry.tasks.length - 1, 0) * 12
-  return Math.max(220, 148 + taskHeights + gaps)
-}
-
-function entryTopOffset(entry: ScheduleEntry, index: number) {
-  return entry.hourIndex * hourHeight + 8 + index * 12
-}
-
-function regimenRunsOnDate(regimen: Regimen, date: Date) {
+function regimenRunsOnDate(regimen: RoutineRecord['regimens'][number], date: Date) {
   const recurrenceType = regimen.recurrenceType || 'NONE'
   const recurrenceDays = regimen.recurrenceDays?.split(',').map((day) => day.trim()).filter(Boolean) ?? []
   const weekday = weekdayMap[date.getDay()]
+  const dateIso = isoDate(date)
 
+  if (recurrenceType === 'ONCE') return recurrenceDays.includes(dateIso)
   if (recurrenceType === 'MONTHLY') return date.getDate() === 1
   if (recurrenceDays.length > 0) return recurrenceDays.includes(weekday)
   return recurrenceType === 'NONE'
 }
 
-function buildEntries(routines: Routine[], date: Date) {
-  return routines.flatMap((routine) =>
-    routine.regimens.flatMap((regimen) => {
-      if (!regimenRunsOnDate(regimen, date)) return []
-      const weekday = weekdayMap[date.getDay()]
-      const times = parseRecurrenceTimes(regimen.recurrenceTimes)
-      const startTime = times[weekday] || '09:00'
-      return [{
-        id: `${routine.id}-${regimen.id}-${isoDate(date)}`,
-        regimenId: regimen.id,
-        routineTitle: cleanRichText(routine.title),
-        title: cleanRichText(regimen.title),
-        detail: cleanRichText(regimen.description) || `${cleanRichText(routine.title)} flow`,
-        taskCount: regimen.tasks.length,
-        tasks: regimen.tasks.map((task) => ({
-          ...task,
-          title: cleanRichText(task.title),
-          description: cleanRichText(task.description),
-        })),
-        startTime,
-        hourIndex: hourIndexFromTime(startTime),
-      }]
-    }),
-  )
+function timeLabel(value: string) {
+  const [hoursText, minutesText] = value.split(':')
+  const hours = Number(hoursText)
+  const minutes = minutesText || '00'
+
+  if (Number.isNaN(hours)) return value
+  if (hours === 0) return `12:${minutes} AM`
+  if (hours < 12) return `${hours}:${minutes} AM`
+  if (hours === 12) return `12:${minutes} PM`
+  return `${hours - 12}:${minutes} PM`
 }
 
-function dayRegimenIds(routines: Routine[], date: Date) {
-  return routines.flatMap((routine) =>
-    routine.regimens.flatMap((regimen) => (regimenRunsOnDate(regimen, date) ? [regimen.id] : [])),
-  )
+function timeSortValue(value: string) {
+  const [hoursText, minutesText] = value.split(':')
+  const hours = Number(hoursText)
+  const minutes = Number(minutesText ?? '0')
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) return 540
+  return hours * 60 + minutes
+}
+
+function buildEntries(routines: RoutineRecord[], date: Date) {
+  const weekday = weekdayMap[date.getDay()]
+  const dateIso = isoDate(date)
+
+  return routines
+    .flatMap((routine) =>
+      routine.regimens.flatMap((regimen) => {
+        if (!regimenRunsOnDate(regimen, date)) return []
+
+        const recurrenceTimes = parseRecurrenceTimes(regimen.recurrenceTimes)
+        const startTime = recurrenceTimes[dateIso] || recurrenceTimes[weekday] || Object.values(recurrenceTimes)[0] || '09:00'
+
+        return [
+          {
+            id: `${routine.id}-${regimen.id}-${isoDate(date)}`,
+            regimenId: regimen.id,
+            routineId: routine.id,
+            routineTitle: cleanRichText(routine.title),
+            title: cleanRichText(regimen.title),
+            detail: cleanRichText(regimen.description) || cleanRichText(routine.description) || '',
+            tasks: regimen.tasks.map((task) => ({
+              ...task,
+              title: cleanRichText(task.title),
+              description: cleanRichText(task.description),
+            })),
+            startTime,
+            sortMinutes: timeSortValue(startTime),
+          },
+        ]
+      }),
+    )
+    .sort((left, right) => {
+      if (left.sortMinutes !== right.sortMinutes) {
+        return left.sortMinutes - right.sortMinutes
+      }
+      return left.title.localeCompare(right.title)
+    })
 }
 
 function completionKey(dateIso: string, regimenId: string, taskId: string) {
@@ -341,7 +221,62 @@ function applyCompletionItems(current: Record<string, boolean>, dateIso: string,
   return next
 }
 
-function TaskReference({ task }: { task: Task }) {
+function formatBracketDate(date: Date) {
+  return dayFormatter.format(date).toUpperCase()
+}
+
+function getMediaType(url: string | null | undefined) {
+  if (!url) return null
+  const lower = url.toLowerCase()
+
+  if (
+    lower.includes('youtube.com/watch') ||
+    lower.includes('youtu.be/') ||
+    lower.includes('youtube.com/embed/') ||
+    lower.includes('youtube.com/shorts/')
+  ) {
+    return 'youtube'
+  }
+
+  if (/\.(png|jpe?g|gif|webp|avif|svg)(\?.*)?$/.test(lower)) {
+    return 'image'
+  }
+
+  return 'link'
+}
+
+function getYoutubeVideoId(url: string) {
+  try {
+    const parsed = new URL(url)
+
+    if (parsed.hostname.includes('youtu.be')) {
+      return parsed.pathname.split('/').filter(Boolean)[0] ?? null
+    }
+
+    if (parsed.pathname.includes('/shorts/')) {
+      return parsed.pathname.split('/shorts/')[1]?.split('/')[0] ?? null
+    }
+
+    if (parsed.searchParams.get('v')) {
+      return parsed.searchParams.get('v')
+    }
+
+    if (parsed.pathname.includes('/embed/')) {
+      return parsed.pathname.split('/embed/')[1]?.split('/')[0] ?? null
+    }
+  } catch {
+    return null
+  }
+
+  return null
+}
+
+function getYoutubeEmbedUrl(url: string) {
+  const id = getYoutubeVideoId(url)
+  return id ? `https://www.youtube.com/embed/${id}` : null
+}
+
+function TaskReference({ task }: { task: ScheduleTask }) {
   const mediaType = getMediaType(task.referenceUrl)
 
   if (!task.referenceUrl || !mediaType) return null
@@ -351,13 +286,27 @@ function TaskReference({ task }: { task: Task }) {
     if (!embedUrl) return null
 
     return (
-      <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/25 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
-        <div className="peridot-embed-frame w-full overflow-hidden bg-black">
+      <div className="peridot-live-video-card">
+        <div className="peridot-live-video-hud">
+          <div className="peridot-live-video-kicker">REFERENCE VIDEO</div>
+          <a
+            href={task.referenceUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="peridot-live-video-link"
+          >
+            WATCH SOURCE
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        </div>
+        <div className="peridot-live-video-frame">
           <iframe
             src={`${embedUrl}?rel=0`}
-            title={task.title}
+            title={task.referenceLabel || task.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
           />
         </div>
       </div>
@@ -366,9 +315,9 @@ function TaskReference({ task }: { task: Task }) {
 
   if (mediaType === 'image') {
     return (
-      <div className="mt-4 overflow-hidden rounded-2xl border border-white/10 bg-black/25 shadow-[0_18px_45px_rgba(0,0,0,0.22)]">
+      <div className="peridot-live-reference-card">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={task.referenceUrl} alt={task.title} className="max-h-[24rem] w-full object-cover" />
+        <img src={task.referenceUrl} alt={task.referenceLabel || task.title} className="peridot-live-reference-image" />
       </div>
     )
   }
@@ -378,60 +327,165 @@ function TaskReference({ task }: { task: Task }) {
       href={task.referenceUrl}
       target="_blank"
       rel="noreferrer"
-      className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-sm text-white/88 hover:bg-black/25"
+      className="peridot-live-link-card"
     >
-      <span className="flex items-center gap-2">
-        <ExternalLink className="h-4 w-4 text-white/50" />
-        Open reference
-      </span>
-      <span className="text-xs uppercase tracking-[0.16em] text-white/40">Link</span>
+      <span>Open reference</span>
+      <ExternalLink className="h-4 w-4" />
     </a>
+  )
+}
+
+function tagAngle(width: number) {
+  return -(Math.atan2(48, width) * 180) / Math.PI
+}
+
+function RoutineCluster({
+  entry,
+  isFlowSelected,
+  selectedTaskId,
+  completedTasks,
+  onSelectFlow,
+  onToggleFlow,
+  onSelectTask,
+  onToggleTask,
+}: {
+  entry: ScheduleEntry
+  isFlowSelected: boolean
+  selectedTaskId: string | null
+  completedTasks: Record<string, boolean>
+  onSelectFlow: (ref: SelectedTaskRef) => void
+  onToggleFlow: (entry: ScheduleEntry, completed: boolean) => void
+  onSelectTask: (ref: SelectedTaskRef) => void
+  onToggleTask: (regimenId: string, taskId: string) => void
+}) {
+  const routineNaturalWidth = clamp(150 + entry.title.length * 7, 170, 340)
+  const taskNaturalWidths = entry.tasks.map((task) => clamp(138 + task.title.length * 6, 160, 340))
+  const sharedTagWidth = Math.max(routineNaturalWidth, ...taskNaturalWidths, 170)
+  const widestTag = sharedTagWidth
+  const timeLineWidth = 118
+  const routineY = 62
+  const taskStartY = 126
+  const taskStep = 62
+  const viewWidth = 118 + widestTag + 28
+  const viewHeight = Math.max(248, taskStartY + Math.max(entry.tasks.length - 1, 0) * taskStep + 122)
+  const routineTextX = sharedTagWidth / 2
+  const routineAngle = tagAngle(sharedTagWidth)
+  const verticalX = 118 + sharedTagWidth - 14
+  const verticalStartY = 88
+  const verticalEndY = taskStartY + Math.max(entry.tasks.length - 1, 0) * taskStep + 34
+  const routineComplete = entry.tasks.length > 0 && entry.tasks.every((task) => completedTasks[task.id] === true)
+  const routineClassName = [
+    'peridot-live-tag',
+    'is-routine',
+    routineComplete ? 'is-complete' : '',
+    isFlowSelected ? 'is-selected' : '',
+  ].filter(Boolean).join(' ')
+
+  return (
+    <div className="peridot-live-cluster-shell" style={{ width: `${viewWidth}px` }}>
+      <svg className="peridot-live-cluster-svg" viewBox={`0 0 ${viewWidth} ${viewHeight}`}>
+        <text x="6" y="118" className="peridot-live-time-value peridot-live-time-label">{timeLabel(entry.startTime)}</text>
+        <rect x="0" y="126" width={timeLineWidth} height="3" fill="#66ff99" />
+        <line x1={verticalX} y1={verticalStartY} x2={verticalX} y2={verticalEndY} stroke="#66ff99" strokeWidth="3" />
+
+        <g
+          transform={`translate(118 ${routineY})`}
+          className="peridot-live-cluster-hit"
+          role="button"
+          tabIndex={0}
+          onClick={() => onSelectFlow({ entryId: entry.id, taskId: null })}
+          onDoubleClick={() => onToggleFlow(entry, !routineComplete)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              onSelectFlow({ entryId: entry.id, taskId: null })
+            }
+          }}
+        >
+          <polygon
+            points={`0,48 ${sharedTagWidth},0 ${sharedTagWidth},32 0,80`}
+            className={routineClassName}
+          />
+          <text
+            x={routineTextX}
+            y="40"
+            className={routineComplete ? 'peridot-static-cluster-routine is-complete' : 'peridot-static-cluster-routine'}
+            transform={`rotate(${routineAngle} ${routineTextX} 40)`}
+          >
+            {entry.title}
+          </text>
+        </g>
+
+        {entry.tasks.map((task, index) => {
+          const taskWidth = sharedTagWidth
+          const taskTextX = sharedTagWidth / 2
+          const taskAngle = tagAngle(sharedTagWidth)
+          const selected = selectedTaskId === task.id
+          const completed = completedTasks[task.id] === true
+
+          return (
+            <g
+              key={task.id}
+              transform={`translate(118 ${taskStartY + index * taskStep})`}
+              className="peridot-live-cluster-hit"
+              role="button"
+              tabIndex={0}
+              onClick={() => onSelectTask({ entryId: entry.id, taskId: task.id })}
+              onDoubleClick={() => onToggleTask(entry.regimenId, task.id)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault()
+                  onSelectTask({ entryId: entry.id, taskId: task.id })
+                }
+              }}
+            >
+              <polygon
+                points={`0,48 ${taskWidth},0 ${taskWidth},32 0,80`}
+                className={completed ? 'peridot-live-tag is-complete' : selected ? 'peridot-live-tag is-selected' : 'peridot-live-tag'}
+              />
+              <text
+                x={taskTextX}
+                y="40"
+                className={completed ? 'peridot-static-cluster-task is-complete' : 'peridot-static-cluster-task'}
+                transform={`rotate(${taskAngle} ${taskTextX} 40)`}
+              >
+                {task.title}
+              </text>
+            </g>
+          )
+        })}
+      </svg>
+    </div>
   )
 }
 
 function CalendarPageContent() {
   const searchParams = useSearchParams()
-  const requestedDate = searchParams.get('date')
-  const targetRegimenId = searchParams.get('regimen')
-  const initialDate = useMemo(() => {
-    if (!requestedDate) return new Date()
-    const parsed = new Date(`${requestedDate}T12:00:00`)
-    return Number.isNaN(parsed.getTime()) ? new Date() : parsed
-  }, [requestedDate])
-  const [currentDate, setCurrentDate] = useState(initialDate)
-  const [routines, setRoutines] = useState<Routine[]>([])
+  const urlSelectionKey = searchParams.toString()
+  const requestedDate = useMemo(() => parseIsoDate(searchParams.get('date')), [urlSelectionKey])
+  const requestedRegimenId = useMemo(() => searchParams.get('regimen'), [urlSelectionKey])
+  const requestedTaskId = useMemo(() => searchParams.get('task'), [urlSelectionKey])
+  const [currentDate, setCurrentDate] = useState(() => requestedDate ?? new Date())
+  const [visibleMonth, setVisibleMonth] = useState(() => monthStart(requestedDate ?? new Date()))
+  const [routines, setRoutines] = useState<RoutineRecord[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [completionError, setCompletionError] = useState<string | null>(null)
-  const [visibleRegimens, setVisibleRegimens] = useState<Record<string, boolean>>({})
-  const [showMobileLayers, setShowMobileLayers] = useState(false)
-  const [showMonthPicker, setShowMonthPicker] = useState(false)
-  const [expandedEntries, setExpandedEntries] = useState<Record<string, boolean>>({})
   const [completedTasks, setCompletedTasks] = useState<Record<string, boolean>>({})
-  const dayScrollRef = useRef<HTMLDivElement | null>(null)
-  const lastAutoScrollDateRef = useRef<string | null>(null)
+  const [selectedTaskRef, setSelectedTaskRef] = useState<SelectedTaskRef | null>(null)
+  const [hasAppliedUrlSelection, setHasAppliedUrlSelection] = useState(false)
+  const [showControls, setShowControls] = useState(false)
+  const [hiddenRegimenIds, setHiddenRegimenIds] = useState<Record<string, boolean>>({})
+  const inlineDetailPanelRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
-    setCurrentDate(initialDate)
-  }, [initialDate])
-
-  useEffect(() => {
-    async function loadRoutines() {
+    async function loadWorkspaceData() {
       setIsLoading(true)
       setError(null)
+
       try {
         const workspace = await fetchWorkspace()
         setRoutines(workspace.routines)
-        setVisibleRegimens((current) => {
-          const next = { ...current }
-          for (const routine of workspace.routines as Routine[]) {
-            for (const regimen of routine.regimens) {
-              if (!(regimen.id in next)) next[regimen.id] = true
-            }
-          }
-          if (targetRegimenId) next[targetRegimenId] = true
-          return next
-        })
       } catch (loadError) {
         setError(loadError instanceof Error ? loadError.message : 'Failed to load routines')
       } finally {
@@ -439,21 +493,23 @@ function CalendarPageContent() {
       }
     }
 
-    void loadRoutines()
+    void loadWorkspaceData()
+
     return subscribeToWorkspaceChanges((reason) => {
       if (reason === 'completion-updated') {
         return
       }
 
-      void loadRoutines()
+      void loadWorkspaceData()
     })
-  }, [targetRegimenId])
+  }, [])
 
   useEffect(() => {
     const dateIso = isoDate(currentDate)
 
     async function loadCompletions() {
       setCompletionError(null)
+
       try {
         const items = await fetchCompletions(dateIso)
         setCompletedTasks((current) => applyCompletionItems(current, dateIso, items))
@@ -463,96 +519,183 @@ function CalendarPageContent() {
     }
 
     void loadCompletions()
+
     return subscribeToWorkspaceChanges(() => {
       void loadCompletions()
     })
   }, [currentDate])
 
+  useEffect(() => {
+    setVisibleMonth(monthStart(currentDate))
+  }, [currentDate])
+
   const currentIso = isoDate(currentDate)
   const todayIso = isoDate(new Date())
-  const miniMonthGrid = useMemo(() => buildMonthGrid(currentDate), [currentDate])
-  const yearOptions = useMemo(() => buildYearOptions(currentDate.getFullYear()), [currentDate])
-  const filteredRoutines = useMemo(
-    () => routines.map((routine) => ({ ...routine, regimens: routine.regimens.filter((regimen) => visibleRegimens[regimen.id] !== false) })).filter((routine) => routine.regimens.length > 0),
-    [routines, visibleRegimens],
+  const entries = useMemo(() => buildEntries(routines, currentDate), [routines, currentDate])
+  const flowToggles = useMemo(
+    () => entries.map((entry) => ({ regimenId: entry.regimenId, title: entry.title })),
+    [entries],
   )
-  const entryMap = useMemo(() => {
-    const map: Record<string, ScheduleEntry[]> = {}
-    for (const date of miniMonthGrid) {
-      map[isoDate(date)] = buildEntries(filteredRoutines, date)
-    }
-    return map
-  }, [filteredRoutines, miniMonthGrid])
-  const dayEntries = entryMap[currentIso] ?? []
-  const highlightedEntryId = useMemo(
-    () => (targetRegimenId ? dayEntries.find((entry) => entry.regimenId === targetRegimenId)?.id ?? null : null),
-    [dayEntries, targetRegimenId],
+  const visibleEntries = useMemo(
+    () => entries.filter((entry) => hiddenRegimenIds[entry.regimenId] !== true),
+    [entries, hiddenRegimenIds],
   )
-  const regimenLayers = useMemo<RegimenLayer[]>(
-    () =>
-      routines.flatMap((routine) =>
-        routine.regimens.map((regimen) => ({
-          id: regimen.id,
-          title: cleanRichText(regimen.title),
-          routineTitle: cleanRichText(routine.title),
-          tint: getRegimenTint(regimen.colorTint),
-          color: makeRegimenTheme(regimen.colorTint),
-        })),
-      ),
-    [routines],
-  )
-  const regimenColorMap = useMemo(
-    () => Object.fromEntries(regimenLayers.map((layer) => [layer.id, layer.color])),
-    [regimenLayers],
-  )
-  const currentDayRegimenIdSet = useMemo(
-    () => new Set(dayRegimenIds(routines, currentDate)),
-    [routines, currentDate],
-  )
-  const currentDayRegimenLayers = useMemo(
-    () => regimenLayers.filter((layer) => currentDayRegimenIdSet.has(layer.id)),
-    [regimenLayers, currentDayRegimenIdSet],
-  )
-  const miniCalendarMarkers = useMemo(() => {
-    const markers: Record<string, string[]> = {}
-    for (const date of miniMonthGrid) {
-      markers[isoDate(date)] = Array.from(new Set(dayRegimenIds(routines, date)))
-    }
-    return markers
-  }, [routines, miniMonthGrid])
-  const desktopTimelineHeight = useMemo(
-    () =>
-      dayEntries.reduce((maxHeight, entry, index) => {
-        const expanded = expandedEntries[entry.id] !== false
-        const blockHeight = expanded ? estimateExpandedEntryHeight(entry) : 126
-        return Math.max(maxHeight, entryTopOffset(entry, index) + blockHeight + 16)
-      }, hourSlots.length * hourHeight),
-    [dayEntries, expandedEntries],
-  )
+  const visibleMonthCells = useMemo(() => buildMonthGrid(visibleMonth), [visibleMonth])
+  const completionLookup = useMemo(() => {
+    const lookup: Record<string, boolean> = {}
 
-  const statusBlock = isLoading ? (
-    <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-5 py-10 text-center text-white/50">Loading scheduled items...</div>
-  ) : error ? (
-    <div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-5 py-10 text-center text-white/50">{error}</div>
-  ) : null
+    for (const entry of entries) {
+      for (const task of entry.tasks) {
+        lookup[task.id] = completedTasks[completionKey(currentIso, entry.regimenId, task.id)] === true
+      }
+    }
+
+    return lookup
+  }, [completedTasks, currentIso, entries])
 
   useEffect(() => {
-    if (!dayScrollRef.current || dayEntries.length === 0) return
-    if (lastAutoScrollDateRef.current === currentIso) return
+    setHasAppliedUrlSelection(false)
+  }, [urlSelectionKey])
 
-    lastAutoScrollDateRef.current = currentIso
-    const firstHour = Math.min(...dayEntries.map((entry) => entry.hourIndex))
-    const target = Math.max(firstHour * hourHeight - hourHeight * 2, 0)
-    const frame = window.requestAnimationFrame(() => {
-      dayScrollRef.current?.scrollTo({ top: target, behavior: 'smooth' })
+  useEffect(() => {
+    if (hasAppliedUrlSelection) return
+
+    if (requestedDate && currentIso !== isoDate(requestedDate)) {
+      setCurrentDate(requestedDate)
+      setVisibleMonth(monthStart(requestedDate))
+      return
+    }
+
+    if (!requestedRegimenId && !requestedTaskId) {
+      setHasAppliedUrlSelection(true)
+      return
+    }
+
+    if (entries.length === 0) {
+      if (!isLoading) {
+        setHasAppliedUrlSelection(true)
+      }
+      return
+    }
+
+    const matchingEntry = entries.find((entry) => (
+      (requestedRegimenId ? entry.regimenId === requestedRegimenId : true) &&
+      (requestedTaskId ? entry.tasks.some((task) => task.id === requestedTaskId) : true)
+    )) ?? null
+
+    if (matchingEntry) {
+      const matchingTask = requestedTaskId
+        ? matchingEntry.tasks.find((task) => task.id === requestedTaskId) ?? null
+        : null
+
+      setSelectedTaskRef({
+        entryId: matchingEntry.id,
+        taskId: matchingTask?.id ?? null,
+      })
+    }
+
+    setHasAppliedUrlSelection(true)
+  }, [
+    currentIso,
+    entries,
+    hasAppliedUrlSelection,
+    isLoading,
+    requestedDate,
+    requestedRegimenId,
+    requestedTaskId,
+  ])
+
+  useEffect(() => {
+    if (visibleEntries.length === 0) {
+      setSelectedTaskRef(null)
+      return
+    }
+
+    if (!selectedTaskRef) {
+      return
+    }
+
+    const selectedStillExists = visibleEntries.some((entry) => (
+      entry.id === selectedTaskRef.entryId && (
+        selectedTaskRef.taskId === null || entry.tasks.some((task) => task.id === selectedTaskRef.taskId)
+      )
+    ))
+
+    if (!selectedStillExists) {
+      setSelectedTaskRef(null)
+    }
+  }, [selectedTaskRef, visibleEntries])
+
+  const selectedEntry = useMemo(
+    () => visibleEntries.find((entry) => entry.id === selectedTaskRef?.entryId) ?? null,
+    [selectedTaskRef, visibleEntries],
+  )
+  const selectedTask = useMemo(
+    () => (selectedTaskRef?.taskId ? selectedEntry?.tasks.find((task) => task.id === selectedTaskRef.taskId) ?? null : null),
+    [selectedEntry, selectedTaskRef],
+  )
+
+  useEffect(() => {
+    if (!selectedTaskRef || typeof window === 'undefined') return
+    if (!window.matchMedia('(max-width: 767px)').matches) return
+
+    const detailPanel = inlineDetailPanelRef.current
+    if (!detailPanel) return
+
+    const animationFrame = window.requestAnimationFrame(() => {
+      detailPanel.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
     })
-    return () => window.cancelAnimationFrame(frame)
-  }, [currentIso, dayEntries])
 
-  useEffect(() => {
-    if (!highlightedEntryId) return
-    setExpandedEntries((current) => ({ ...current, [highlightedEntryId]: true }))
-  }, [highlightedEntryId])
+    return () => window.cancelAnimationFrame(animationFrame)
+  }, [selectedTaskRef])
+
+  async function setFlowCompletion(entry: ScheduleEntry, completed: boolean) {
+    const keys = entry.tasks.map((task) => completionKey(currentIso, entry.regimenId, task.id))
+
+    setCompletionError(null)
+    setCompletedTasks((current) => {
+      const next = { ...current }
+
+      entry.tasks.forEach((task, index) => {
+        const key = keys[index]
+        if (completed) {
+          next[key] = true
+        } else {
+          delete next[key]
+        }
+      })
+
+      return next
+    })
+
+    try {
+      await Promise.all(entry.tasks.map((task) => saveTaskCompletion({
+        date: currentIso,
+        regimenId: entry.regimenId,
+        taskId: task.id,
+        completed,
+      })))
+    } catch (saveError) {
+      setCompletedTasks((current) => {
+        const next = { ...current }
+
+        entry.tasks.forEach((task, index) => {
+          const key = keys[index]
+          if (completed) {
+            delete next[key]
+          } else {
+            next[key] = true
+          }
+        })
+
+        return next
+      })
+      setCompletionError(saveError instanceof Error ? saveError.message : 'Failed to save task completion')
+    }
+  }
 
   async function toggleTaskCompletion(regimenId: string, taskId: string) {
     const key = completionKey(currentIso, regimenId, taskId)
@@ -572,16 +715,12 @@ function CalendarPageContent() {
     })
 
     try {
-      const saved = await saveTaskCompletion({
+      await saveTaskCompletion({
         date: currentIso,
         regimenId,
         taskId,
         completed: nextCompleted,
       })
-
-      if (!saved) {
-        throw new Error('Failed to save task completion')
-      }
     } catch (saveError) {
       setCompletedTasks((current) => {
         const next = { ...current }
@@ -598,570 +737,250 @@ function CalendarPageContent() {
     }
   }
 
-  function isTaskComplete(regimenId: string, taskId: string) {
-    return completedTasks[completionKey(currentIso, regimenId, taskId)] === true
+  const selectedEntryCompleteCount = selectedEntry
+    ? selectedEntry.tasks.filter((task) => completionLookup[task.id] === true).length
+    : 0
+
+  function renderDetailPanel(className: string) {
+    const detailPanelRef = className.includes('peridot-live-detail-panel--inline') ? inlineDetailPanelRef : undefined
+
+    return (
+      <section ref={detailPanelRef} className={className}>
+        <div className="peridot-live-detail-meta">{selectedTask ? 'TASK DETAIL' : selectedEntry ? 'FLOW DETAIL' : 'TASK DETAIL'}</div>
+
+        {selectedEntry ? (
+          <div className="peridot-live-detail-content">
+            <div className="peridot-live-detail-header">
+              <div>
+                <div className="peridot-live-detail-time">{timeLabel(selectedEntry.startTime)}</div>
+                <h2 className="peridot-live-detail-title">{selectedTask ? selectedTask.title : selectedEntry.title}</h2>
+                {!selectedTask ? (
+                  <div className="peridot-live-detail-routine">{selectedEntry.routineTitle}</div>
+                ) : null}
+              </div>
+
+              <button
+                type="button"
+                className={`peridot-live-complete-button${selectedTask ? (completionLookup[selectedTask.id] ? ' is-complete' : '') : (selectedEntryCompleteCount === selectedEntry.tasks.length ? ' is-complete' : '')}`}
+                onClick={() => (
+                  selectedTask
+                    ? toggleTaskCompletion(selectedEntry.regimenId, selectedTask.id)
+                    : setFlowCompletion(selectedEntry, selectedEntryCompleteCount !== selectedEntry.tasks.length)
+                )}
+              >
+                {selectedTask
+                  ? (completionLookup[selectedTask.id] ? 'Completed' : 'Mark Complete')
+                  : (selectedEntryCompleteCount === selectedEntry.tasks.length ? 'Completed' : 'Mark Complete')}
+              </button>
+            </div>
+
+            {selectedTask ? <TaskReference task={selectedTask} /> : null}
+
+            {!selectedTask && selectedEntry.detail ? (
+              <p className="peridot-live-entry-description">{selectedEntry.detail}</p>
+            ) : null}
+
+            {selectedTask ? (
+              descriptionLines(selectedTask.description).length > 0 ? (
+                <div className="peridot-live-copy-block">
+                  {descriptionLines(selectedTask.description).map((line, index) => (
+                    <p key={`${selectedTask.id}-line-${index}`}>{line}</p>
+                  ))}
+                </div>
+              ) : (
+                <div className="peridot-live-copy-block is-empty">No task notes yet.</div>
+              )
+            ) : (
+              <div className="peridot-live-copy-block">
+                <p>{selectedEntry.tasks.length} tasks in this flow.</p>
+                <p>{selectedEntryCompleteCount}/{selectedEntry.tasks.length} completed.</p>
+              </div>
+            )}
+
+            <div className="peridot-live-detail-footer">
+              {selectedEntryCompleteCount}/{selectedEntry.tasks.length} tasks completed
+            </div>
+          </div>
+        ) : (
+          <div className="peridot-live-detail-empty">Select a task to see notes and media here.</div>
+        )}
+
+        {completionError ? (
+          <div className="peridot-live-error">{completionError}</div>
+        ) : null}
+      </section>
+    )
   }
 
-  function completedCount(entry: ScheduleEntry) {
-    return entry.tasks.filter((task) => isTaskComplete(entry.regimenId, task.id)).length
-  }
+  function toggleFlowVisibility(regimenId: string) {
+    setHiddenRegimenIds((current) => {
+      const next = { ...current }
 
-  function updateMonth(monthIndex: number) {
-    setCurrentDate(new Date(currentDate.getFullYear(), monthIndex, 1))
-    setShowMonthPicker(false)
-  }
+      if (next[regimenId]) {
+        delete next[regimenId]
+      } else {
+        next[regimenId] = true
+      }
 
-  function updateYear(year: number) {
-    setCurrentDate(new Date(year, currentDate.getMonth(), 1))
-    setShowMonthPicker(false)
+      return next
+    })
   }
 
   return (
-    <div className="lg:pl-80">
-      <div className="peridot-app-page peridot-shell peridot-page-gutter py-4 sm:py-6">
-        <div className="peridot-page-frame">
-          <div className="grid gap-4 lg:grid-cols-[280px_minmax(0,1fr)] xl:gap-6">
-            <aside className="peridot-panel hidden overflow-hidden lg:block">
-              <div className="border-b border-white/10 px-5 py-4">
-                <Button type="button" asChild className="peridot-display h-10 w-full justify-start rounded-xl border border-white/10 bg-white/5 px-4 text-white hover:bg-white/10">
-                  <a href="/routines">
-                    <Plus className="mr-2 h-4 w-4" />
-                    Create flow
-                  </a>
-                </Button>
-              </div>
-              <div className="space-y-6 p-5">
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => setShowMonthPicker((current) => !current)}
-                    className="peridot-meta mb-3 flex items-center gap-2 text-xs text-white/45 hover:text-white/75"
-                  >
-                    {monthLabelFormatter.format(currentDate)}
-                    <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showMonthPicker ? 'rotate-180' : ''}`} />
-                  </button>
-                  {showMonthPicker ? (
-                    <div className="mb-4 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
-                      <div className="mb-3 grid grid-cols-3 gap-2">
-                        {monthNames.map((monthName, monthIndex) => (
-                          <button
-                            key={`desktop-month-${monthName}`}
-                            type="button"
-                            onClick={() => updateMonth(monthIndex)}
-                            className={monthIndex === currentDate.getMonth() ? 'peridot-meta rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'peridot-meta rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
-                          >
-                            {monthName.slice(0, 3)}
-                          </button>
-                        ))}
-                      </div>
-                      <div>
-                        <div className="peridot-meta mb-2 text-[11px] text-white/35">Year</div>
-                        <div className="grid grid-cols-3 gap-2">
-                          {yearOptions.map((year) => (
-                            <button
-                              key={`desktop-year-${year}`}
-                              type="button"
-                              onClick={() => updateYear(year)}
-                              className={year === currentDate.getFullYear() ? 'peridot-meta rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'peridot-meta rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
-                            >
-                              {year}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
-                  <div className="peridot-meta grid grid-cols-7 gap-1 text-center text-[11px] text-white/35">
-                    {dayNames.map((day) => <div key={`mini-${day}`}>{day.slice(0, 1)}</div>)}
-                      {miniMonthGrid.map((date) => {
-                        const dateIso = isoDate(date)
-                        const selected = dateIso === currentIso
-                        const isToday = dateIso === todayIso
-                        const markerIds = miniCalendarMarkers[dateIso] ?? []
-                        const hasEntries = markerIds.length > 0
-                        return (
-                          <button
-                            key={`mini-date-${dateIso}`}
-                            type="button"
-                            onClick={() => setCurrentDate(date)}
-                            className={selected ? 'relative flex h-11 w-11 items-center justify-center rounded-full bg-white text-sm font-semibold text-[#0f1512]' : hasEntries ? 'relative flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-sm font-semibold text-white hover:bg-white/[0.1]' : isToday ? 'relative flex h-11 w-11 items-center justify-center rounded-full border border-emerald-300/30 text-sm font-semibold text-emerald-200' : 'relative flex h-11 w-11 items-center justify-center rounded-full text-sm text-white/70 hover:bg-white/5'}
-                          >
-                            <span className={`${hasEntries ? '-translate-y-1' : ''}`}>{date.getDate()}</span>
-                            {hasEntries ? (
-                              <span className="pointer-events-none absolute bottom-1.5 left-1/2 flex -translate-x-1/2 items-center gap-1">
-                                {markerIds.slice(0, 3).map((regimenId) => (
-                                  <span key={`desktop-marker-${dateIso}-${regimenId}`} className="h-1.5 w-1.5 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.35)]" style={{ backgroundColor: regimenColorMap[regimenId]?.dot ?? '#ffffff' }} />
-                                ))}
-                              </span>
-                            ) : null}
-                          </button>
-                        )
-                      })}
-                  </div>
-                </div>
+    <PeridotPageChrome>
+      <main className="peridot-static-calendar-page">
+        <div className="peridot-static-calendar-frame">
+          <div className="peridot-static-calendar-label">CALENDAR</div>
 
-                <div>
-                  <div className="mb-3 text-xs uppercase tracking-[0.18em] text-white/45">Flow Layers</div>
-                  <div className="space-y-2">
-                    {currentDayRegimenLayers.length === 0 ? <div className="rounded-xl border border-dashed border-white/10 px-3 py-4 text-sm text-white/45">No flows scheduled for this day.</div> : null}
-                    {currentDayRegimenLayers.map((layer) => {
-                      const checked = visibleRegimens[layer.id] !== false
-                      return (
-                        <label
-                          key={layer.id}
-                          className="flex items-center gap-3 rounded-xl border px-3 py-3 text-sm text-white"
-                          style={{
-                            borderColor: layer.color.border,
-                            background: checked ? layer.color.softBg : layer.color.bg,
-                            boxShadow: `inset 3px 0 0 ${layer.color.accent}, 0 14px 30px ${layer.color.accentGlow}`,
-                          }}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => setVisibleRegimens((current) => ({ ...current, [layer.id]: !checked }))}
-                            className="h-4 w-4 rounded border-white/20 bg-transparent accent-emerald-300"
-                          />
-                          <span className="h-3 w-3 rounded-full" style={{ backgroundColor: layer.color.dot }} />
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate font-medium">{layer.title}</span>
-                            <span className="block truncate text-xs text-white/45">{layer.routineTitle}</span>
-                          </span>
-                        </label>
-                      )
-                    })}
-                  </div>
-                </div>
-              </div>
-            </aside>
-
-            <section className="peridot-panel overflow-hidden">
-              <div className="border-b border-white/10 bg-white/[0.02] px-2.5 py-3 sm:px-6">
-                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                  <div className="space-y-3 md:space-y-0">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <Button type="button" onClick={() => setCurrentDate(new Date())} className="peridot-display h-10 rounded-xl border border-white/10 bg-white/5 px-4 text-sm text-white hover:bg-white/10">
-                        Today
-                      </Button>
-                      <Button type="button" variant="ghost" size="icon" onClick={() => setCurrentDate((current) => addDays(current, -1))} className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 text-white hover:bg-white/10">
-                        <ChevronLeft className="h-4 w-4" />
-                      </Button>
-                      <Button type="button" variant="ghost" size="icon" onClick={() => setCurrentDate((current) => addDays(current, 1))} className="h-10 w-10 rounded-xl border border-white/10 bg-white/5 text-white hover:bg-white/10">
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <h2 className="peridot-display text-lg font-semibold text-white md:text-2xl">{dayLabelFormatter.format(currentDate)}</h2>
-                  </div>
-
-                  <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-                    <Button type="button" onClick={() => setShowMobileLayers((current) => !current)} className="peridot-display h-9 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-[0.8rem] text-white hover:bg-white/10 sm:h-10 sm:w-auto sm:px-4 sm:text-sm lg:hidden">
-                      {showMobileLayers ? 'Hide Flows' : 'Show Flows'}
-                    </Button>
-                    <Button type="button" asChild className="peridot-display inline-flex h-9 w-full rounded-xl border border-emerald-300/25 bg-emerald-300 px-3 text-[0.8rem] font-semibold text-emerald-950 hover:bg-emerald-200 sm:h-10 sm:w-auto sm:px-4 sm:text-sm">
-                      <a href="/routines">
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Routine
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-1.5 sm:p-4">
-                {showMobileLayers ? (
-                  <div className="mb-3 space-y-3 lg:hidden">
-                    <div className="overflow-hidden rounded-[1.2rem] border border-white/10">
-                      <div className="border-b border-white/10 bg-white/[0.03] px-3 py-2.5">
-                        <button
-                          type="button"
-                          onClick={() => setShowMonthPicker((current) => !current)}
-                          className="peridot-meta flex items-center gap-2 text-xs text-white/45 hover:text-white/75"
-                        >
-                          {monthLabelFormatter.format(currentDate)}
-                          <ChevronDown className={`h-3.5 w-3.5 transition-transform ${showMonthPicker ? 'rotate-180' : ''}`} />
-                        </button>
-                      </div>
-                      {showMonthPicker ? (
-                        <div className="border-b border-white/10 bg-white/[0.03] p-1.5">
-                          <div className="mb-3 grid grid-cols-3 gap-2">
-                            {monthNames.map((monthName, monthIndex) => (
-                              <button
-                                key={`mobile-month-${monthName}`}
-                                type="button"
-                                onClick={() => updateMonth(monthIndex)}
-                                className={monthIndex === currentDate.getMonth() ? 'peridot-meta rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'peridot-meta rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
-                              >
-                                {monthName.slice(0, 3)}
-                              </button>
-                            ))}
-                          </div>
-                          <div className="grid grid-cols-3 gap-2">
-                            {yearOptions.map((year) => (
-                              <button
-                                key={`mobile-year-${year}`}
-                                type="button"
-                                onClick={() => updateYear(year)}
-                                className={year === currentDate.getFullYear() ? 'peridot-meta rounded-xl border border-emerald-200/70 bg-emerald-300/30 px-2 py-2 text-[11px] font-semibold text-white' : 'peridot-meta rounded-xl border border-white/10 bg-black/15 px-2 py-2 text-[11px] text-white/70 hover:bg-black/25'}
-                              >
-                                {year}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-                      <div className="peridot-meta grid grid-cols-7 gap-1 p-1.5 text-center text-[11px] text-white/35">
-                        {dayNames.map((day) => <div key={`mobile-mini-${day}`}>{day.slice(0, 1)}</div>)}
-                        {miniMonthGrid.map((date) => {
-                          const dateIso = isoDate(date)
-                          const selected = dateIso === currentIso
-                          const isToday = dateIso === todayIso
-                          const markerIds = miniCalendarMarkers[dateIso] ?? []
-                          const hasEntries = markerIds.length > 0
-                          return (
-                            <button
-                              key={`mobile-mini-date-${dateIso}`}
-                              type="button"
-                              onClick={() => setCurrentDate(date)}
-                              className={selected ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-white text-sm font-semibold text-[#0f1512]' : hasEntries ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/[0.06] text-sm font-semibold text-white hover:bg-white/[0.1]' : isToday ? 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-emerald-300/30 text-sm font-semibold text-emerald-200' : 'relative mx-auto flex h-11 w-11 items-center justify-center rounded-full text-sm text-white/70 hover:bg-white/5'}
-                            >
-                              <span className={`${hasEntries ? '-translate-y-1' : ''}`}>{date.getDate()}</span>
-                              {hasEntries ? (
-                                <span className="pointer-events-none absolute bottom-1.5 left-1/2 flex -translate-x-1/2 items-center gap-1">
-                                  {markerIds.slice(0, 3).map((regimenId) => (
-                                    <span key={`mobile-marker-${dateIso}-${regimenId}`} className="h-1.5 w-1.5 rounded-full shadow-[0_0_0_1px_rgba(255,255,255,0.35)]" style={{ backgroundColor: regimenColorMap[regimenId]?.dot ?? '#ffffff' }} />
-                                  ))}
-                                </span>
-                              ) : null}
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </div>
-
-                    <div className="overflow-hidden rounded-[1.2rem] border border-white/10">
-                      <div className="border-b border-white/10 bg-white/[0.03] px-3 py-2.5 text-xs uppercase tracking-[0.18em] text-white/45">
-                        Flow Layers
-                      </div>
-                      <div className="space-y-2 p-1.5">
-                        {currentDayRegimenLayers.length === 0 ? <div className="rounded-xl border border-dashed border-white/10 px-3 py-4 text-sm text-white/45">No flows scheduled for this day.</div> : null}
-                        {currentDayRegimenLayers.map((layer) => {
-                          const checked = visibleRegimens[layer.id] !== false
-                          return (
-                            <label
-                              key={`mobile-layer-${layer.id}`}
-                              className="flex items-center gap-3 rounded-xl border px-2.5 py-2.5 text-sm text-white"
-                              style={{
-                                borderColor: layer.color.border,
-                                background: checked ? layer.color.softBg : layer.color.bg,
-                                boxShadow: `inset 3px 0 0 ${layer.color.accent}, 0 14px 30px ${layer.color.accentGlow}`,
-                              }}
-                            >
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => setVisibleRegimens((current) => ({ ...current, [layer.id]: !checked }))}
-                                className="h-4 w-4 rounded border-white/20 bg-transparent accent-emerald-300"
-                              />
-                              <span className="h-3 w-3 rounded-full" style={{ backgroundColor: layer.color.dot }} />
-                              <span className="min-w-0 flex-1">
-                                <span className="block truncate font-medium">{layer.title}</span>
-                                <span className="block truncate text-xs text-white/45">{layer.routineTitle}</span>
-                              </span>
-                            </label>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
-
-                {statusBlock}
-
-                {completionError ? (
-                  <div className="rounded-[1.2rem] border border-amber-200/20 bg-amber-300/10 px-4 py-3 text-sm text-amber-100">
-                    {completionError}
-                  </div>
-                ) : null}
-
-                {!statusBlock ? (
-                  <div className="space-y-4">
-                    <div className="overflow-hidden rounded-[1.2rem] border border-white/10 md:hidden">
-                      <div className="max-h-[70vh] overflow-y-auto">
-                        {hourSlots.map((slot, slotIndex) => {
-                          const slotEntries = dayEntries.filter((entry) => entry.hourIndex === slotIndex)
-                          return (
-                            <div key={`mobile-slot-${slot}`} className="grid grid-cols-[44px_1fr] border-b border-white/5 last:border-b-0 sm:grid-cols-[64px_1fr]">
-                              <div className="peridot-meta border-r border-white/10 bg-white/[0.02] px-1 py-2 text-right text-[10px] font-medium text-white/45 sm:px-2 sm:py-3 sm:text-[11px]">
-                                {slot}
-                              </div>
-                              <div className="min-h-[34px] bg-[#141a17] px-1.5 py-1.5 sm:min-h-[56px] sm:px-3 sm:py-2.5">
-                                {slotEntries.length === 0 ? null : (
-                                  <div className="space-y-3">
-                                    {slotEntries.map((entry) => {
-                                      const expanded = expandedEntries[entry.id] !== false
-                                      const isTargeted = highlightedEntryId === entry.id
-                                      const color = regimenColorMap[entry.regimenId] ?? fallbackRegimenTheme
-                                      const completeCount = completedCount(entry)
-                                      const regimenDone = completeCount === entry.tasks.length && entry.tasks.length > 0
-                                      const progressTheme = progressPillTheme(completeCount, entry.tasks.length)
-                                      return (
-                                        <div
-                                          key={`mobile-${entry.id}`}
-                                          className="overflow-hidden rounded-[1rem] border"
-                                          style={{
-                                            borderColor: regimenDone ? color.completeBorder : color.border,
-                                            background: expanded ? color.softBg : regimenDone ? color.completeBg : color.bg,
-                                            boxShadow: isTargeted
-                                              ? `0 0 0 2px ${tintRgba(color.accent, 0.92)}, 0 18px 40px ${color.accentGlow}`
-                                              : `0 18px 40px ${color.accentGlow}`,
-                                          }}
-                                        >
-                                          <button
-                                            type="button"
-                                            onClick={() => setExpandedEntries((current) => ({ ...current, [entry.id]: !expanded }))}
-                                            className="flex w-full items-start justify-between gap-3 px-2.5 py-2.5 text-left sm:px-4 sm:py-4"
-                                            style={{
-                                              background: color.softBg,
-                                              boxShadow: `inset 3px 0 0 ${color.accent}`,
-                                            }}
-                                          >
-                                            <div className="min-w-0 flex-1">
-                                              <div className="mb-2 flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-                                                <span
-                                                  className="rounded-full px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]"
-                                                  style={{
-                                                    background: color.chipBg,
-                                                    color: color.chipText,
-                                                    boxShadow: `0 10px 24px ${color.accentGlow}`,
-                                                  }}
-                                                >
-                                                  {timeLabel(entry.startTime)}
-                                                </span>
-                                                <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em] sm:ml-auto" style={{ backgroundColor: progressTheme.bg, borderColor: progressTheme.border, color: progressTheme.text }}>
-                                                  {completeCount}/{entry.tasks.length} tasks
-                                                </span>
-                                              </div>
-                                              <div className="flex items-center gap-2">
-                                                <div className="text-base font-semibold text-[#18200f]">{entry.title}</div>
-                                              </div>
-                                              <div className="mt-1 text-sm font-medium" style={{ color: color.accentText }}>{entry.routineTitle}</div>
-                                              {entry.detail ? <div className="mt-3 text-sm leading-6 text-[#31421d]">{entry.detail}</div> : null}
-                                              {regimenDone ? <div className="mt-3 inline-flex rounded-full border px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(color.accent, 0.34), backgroundColor: color.accentSoft, color: color.accentText }}>Flow complete for today.</div> : null}
-                                            </div>
-                                            <ChevronDown className={`mt-1 h-5 w-5 shrink-0 text-[#32441d] transition-transform ${expanded ? 'rotate-180' : ''}`} />
-                                          </button>
-
-                                          {expanded ? (
-                                            <div
-                                              className="space-y-3 border-t border-white/10 px-2.5 py-2.5 sm:px-4 sm:py-4"
-                                              style={{ backgroundColor: tintRgba(color.accent, 0.14) }}
-                                            >
-                                              {entry.tasks.map((task) => {
-                                                const done = isTaskComplete(entry.regimenId, task.id)
-                                                return (
-                                                  <div
-                                                    key={task.id}
-                                                    className="rounded-2xl border p-4"
-                                                    style={{
-                                                      borderColor: done ? tintRgba(color.accent, 0.42) : tintRgba(color.accent, 0.28),
-                                                      background: done ? color.taskDoneBg : color.taskBg,
-                                                      boxShadow: `0 14px 28px ${tintRgba(color.accent, 0.14)}`,
-                                                    }}
-                                                  >
-                                                    <div className="flex items-start gap-3">
-                                                      <input
-                                                        type="checkbox"
-                                                        checked={done}
-                                                        onChange={() => toggleTaskCompletion(entry.regimenId, task.id)}
-                                                        className="mt-1 h-4 w-4 shrink-0 rounded border-white/20 bg-transparent accent-emerald-300"
-                                                      />
-                                                      <div className={`min-w-0 flex-1 text-base font-semibold leading-6 ${done ? 'text-[#587040] line-through' : 'text-[#18200f]'}`}>{task.title}</div>
-                                                    </div>
-                                                    {!done && task.description ? (
-                                                      <div
-                                                        className="mt-3 rounded-xl border px-3 py-3"
-                                                        style={{
-                                                          borderColor: tintRgba(color.accent, 0.18),
-                                                          backgroundColor: color.taskPanelBg,
-                                                        }}
-                                                      >
-                                                        <div className="mb-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: color.accentText }}>Instructions</div>
-                                                        <div className="space-y-2">
-                                                          {descriptionLines(task.description).map((line, index) => (
-                                                            <p key={`${task.id}-mobile-line-${index}`} className="text-[15px] leading-7 text-[#31421d]">
-                                                              {line}
-                                                            </p>
-                                                          ))}
-                                                        </div>
-                                                      </div>
-                                                    ) : null}
-                                                    {!done ? <TaskReference task={task} /> : null}
-                                                  </div>
-                                                )
-                                              })}
-                                            </div>
-                                          ) : null}
-                                        </div>
-                                      )
-                                    })}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-
-                    <div ref={dayScrollRef} className="hidden max-h-[72vh] overflow-y-auto rounded-[1.2rem] border border-white/10 md:block">
-                      <div className="grid grid-cols-[78px_1fr]">
-                        <div className="border-r border-white/10 bg-white/[0.015]">
-                          {hourSlots.map((slot) => (
-                            <div key={slot} className="peridot-meta flex items-start justify-end border-b border-white/5 pr-3 pt-1 text-[11px] text-white/35" style={{ height: `${hourHeight}px` }}>
-                              {slot}
-                            </div>
-                          ))}
-                        </div>
-                        <div className="relative" style={{ minHeight: `${desktopTimelineHeight}px` }}>
-                          {hourSlots.map((slot) => (
-                            <div key={slot} className="border-b border-white/5 bg-[#141a17]" style={{ height: `${hourHeight}px` }} />
-                          ))}
-                          {dayEntries.length > 0 ? (
-                            <div className="absolute inset-0 p-4">
-                              {dayEntries.map((entry, index) => {
-                                const expanded = expandedEntries[entry.id] !== false
-                                const isTargeted = highlightedEntryId === entry.id
-                                const color = regimenColorMap[entry.regimenId] ?? fallbackRegimenTheme
-                                const completeCount = completedCount(entry)
-                                const regimenDone = completeCount === entry.tasks.length && entry.tasks.length > 0
-                                const progressTheme = progressPillTheme(completeCount, entry.tasks.length)
-                                const blockHeight = expanded ? estimateExpandedEntryHeight(entry) : 126
-                                return (
-                                  <div
-                                    key={entry.id}
-                                    className="absolute left-4 right-4 overflow-hidden rounded-2xl border"
-                                    style={{
-                                      top: `${entryTopOffset(entry, index)}px`,
-                                      minHeight: `${blockHeight}px`,
-                                      borderColor: regimenDone ? color.completeBorder : color.border,
-                                      background: expanded ? color.softBg : regimenDone ? color.completeBg : color.bg,
-                                      boxShadow: isTargeted
-                                        ? `0 0 0 2px ${tintRgba(color.accent, 0.92)}, 0 20px 45px ${color.accentGlow}`
-                                        : `0 20px 45px ${color.accentGlow}`,
-                                    }}
-                                  >
-                                    <div
-                                      className="border-l-4 px-5 py-4"
-                                      style={{
-                                        borderLeftColor: color.accent,
-                                        background: color.softBg,
-                                      }}
-                                    >
-                                      <div className="flex items-start justify-between gap-4">
-                                        <div className="min-w-0 flex-1">
-                                          <div className="flex flex-wrap items-center gap-3">
-                                            <div className="inline-flex items-center gap-2">
-                                              <div className="text-base font-semibold text-[#18200f]">{entry.title}</div>
-                                            </div>
-                                            <span
-                                              className="rounded-full px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]"
-                                              style={{
-                                                background: color.chipBg,
-                                                color: color.chipText,
-                                                boxShadow: `0 10px 24px ${color.accentGlow}`,
-                                              }}
-                                            >
-                                              {timeLabel(entry.startTime)}
-                                            </span>
-                                            <span className="ml-2 rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ backgroundColor: progressTheme.bg, borderColor: progressTheme.border, color: progressTheme.text }}>
-                                              {completeCount}/{entry.tasks.length} done
-                                            </span>
-                                            {regimenDone ? <span className="rounded-full border px-2.5 py-1 text-[11px] uppercase tracking-[0.16em]" style={{ borderColor: tintRgba(color.accent, 0.34), backgroundColor: color.accentSoft, color: color.accentText }}>Complete</span> : null}
-                                          </div>
-                                          <div className="mt-1 text-sm font-medium" style={{ color: color.accentText }}>{entry.routineTitle}</div>
-                                          {entry.detail ? <div className="mt-3 max-w-3xl text-sm leading-6 text-[#31421d]">{entry.detail}</div> : null}
-                                        </div>
-                                        <Button
-                                          type="button"
-                                          variant="ghost"
-                                          onClick={() => setExpandedEntries((current) => ({ ...current, [entry.id]: !expanded }))}
-                                          className="h-9 rounded-xl border border-black/10 bg-black/10 px-3 text-[#18200f] hover:bg-black/15"
-                                        >
-                                          {expanded ? 'Collapse' : 'Expand'}
-                                        </Button>
-                                      </div>
-
-                                      {expanded ? (
-                                        <div className="mt-4 grid gap-3" style={{ backgroundColor: tintRgba(color.accent, 0.14) }}>
-                                          {entry.tasks.map((task) => {
-                                            const done = isTaskComplete(entry.regimenId, task.id)
-                                            return (
-                                              <div
-                                                key={task.id}
-                                                className="rounded-2xl border p-5"
-                                                style={{
-                                                  borderColor: done ? tintRgba(color.accent, 0.42) : tintRgba(color.accent, 0.28),
-                                                  background: done ? color.taskDoneBg : color.taskBg,
-                                                  boxShadow: `0 16px 30px ${tintRgba(color.accent, 0.14)}`,
-                                                }}
-                                              >
-                                                <div className="flex items-start gap-3">
-                                                  <input
-                                                    type="checkbox"
-                                                    checked={done}
-                                                    onChange={() => toggleTaskCompletion(entry.regimenId, task.id)}
-                                                    className="mt-1 h-4 w-4 shrink-0 rounded border-white/20 bg-transparent accent-emerald-300"
-                                                  />
-                                                  <div className={`min-w-0 flex-1 text-base font-semibold leading-7 ${done ? 'text-[#587040] line-through' : 'text-[#18200f]'}`}>{task.title}</div>
-                                                </div>
-                                                {!done && task.description ? (
-                                                  <div
-                                                    className="mt-3 rounded-xl border px-4 py-3"
-                                                    style={{
-                                                      borderColor: tintRgba(color.accent, 0.18),
-                                                      backgroundColor: color.taskPanelBg,
-                                                    }}
-                                                  >
-                                                    <div className="mb-2 text-[11px] uppercase tracking-[0.18em]" style={{ color: color.accentText }}>Instructions</div>
-                                                    <div className="space-y-2">
-                                                      {descriptionLines(task.description).map((line, index) => (
-                                                        <p key={`${task.id}-desktop-line-${index}`} className="text-[15px] leading-7 text-[#31421d]">
-                                                          {line}
-                                                        </p>
-                                                      ))}
-                                                    </div>
-                                                  </div>
-                                                ) : null}
-                                                {!done ? <TaskReference task={task} /> : null}
-                                              </div>
-                                            )
-                                          })}
-                                        </div>
-                                      ) : null}
-                                    </div>
-                                  </div>
-                                )
-                              })}
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-            </section>
-          </div>
+        <div className="peridot-static-calendar-ui">
+          <button
+            type="button"
+            className="peridot-live-inline-button"
+            onClick={() => setShowControls((current) => !current)}
+          >
+            [{formatBracketDate(currentDate)}]
+          </button>
+          <button
+            type="button"
+            className="peridot-live-inline-button"
+            onClick={() => setShowControls((current) => !current)}
+          >
+            [{showControls ? 'HIDE MINI CAL' : 'SHOW MINI CAL'}]
+          </button>
+          <Link href="/routines" className="peridot-live-inline-link">
+            + ADD ROUTINE +
+          </Link>
         </div>
-      </div>
-    </div>
+
+        {showControls ? (
+          <div className="peridot-live-controls-panel">
+            <div className="peridot-live-controls-header">
+              <button
+                type="button"
+                className="peridot-live-control-icon"
+                onClick={() => {
+                  const today = new Date()
+                  setCurrentDate(today)
+                  setVisibleMonth(monthStart(today))
+                }}
+              >
+                TODAY
+              </button>
+              <div className="peridot-live-controls-nav">
+                <button
+                  type="button"
+                  className="peridot-live-control-icon"
+                  onClick={() => setVisibleMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1))}
+                  aria-label="Previous month"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </button>
+                <button
+                  type="button"
+                  className="peridot-live-control-icon"
+                  onClick={() => setVisibleMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1))}
+                  aria-label="Next month"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="peridot-live-controls-month">{monthFormatter.format(visibleMonth).toUpperCase()}</div>
+            </div>
+
+            <div className="peridot-live-calendar-mini">
+              {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((label, index) => (
+                <div key={`${label}-${index}`} className="peridot-live-mini-weekday">{label}</div>
+              ))}
+
+              {visibleMonthCells.map((date) => {
+                const dateIso = isoDate(date)
+                const isActive = dateIso === currentIso
+                const isToday = dateIso === todayIso
+                const isOutsideMonth = date.getMonth() !== visibleMonth.getMonth()
+
+                return (
+                  <button
+                    key={dateIso}
+                    type="button"
+                    onClick={() => {
+                      setCurrentDate(date)
+                      setShowControls(false)
+                    }}
+                    className={`peridot-live-mini-day${isActive ? ' is-active' : ''}${isToday ? ' is-today' : ''}${isOutsideMonth ? ' is-outside' : ''}`}
+                  >
+                    {date.getDate()}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ) : null}
+
+        {flowToggles.length > 0 ? (
+          <div className="peridot-live-flow-toggles">
+            <div className="peridot-live-flow-toggles-label">Flows</div>
+            <div className="peridot-live-flow-toggles-list">
+              {flowToggles.map((flow) => {
+                const isHidden = hiddenRegimenIds[flow.regimenId] === true
+
+                return (
+                  <button
+                    key={flow.regimenId}
+                    type="button"
+                    onClick={() => toggleFlowVisibility(flow.regimenId)}
+                    className={`peridot-live-flow-toggle${isHidden ? ' is-hidden' : ' is-active'}`}
+                  >
+                    [{flow.title || 'UNTITLED FLOW'}]
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ) : null}
+
+        <div className="peridot-live-stage">
+          {isLoading ? (
+            <div className="peridot-live-status">Loading scheduled routines...</div>
+          ) : error ? (
+            <div className="peridot-live-status">{error}</div>
+          ) : entries.length === 0 ? (
+            <div className="peridot-live-status">No routines scheduled for this day yet.</div>
+          ) : visibleEntries.length === 0 ? (
+            <div className="peridot-live-status">All flows are hidden. Toggle one back on above.</div>
+          ) : (
+            <div className="peridot-live-cluster-board">
+              {visibleEntries.map((entry) => (
+                <Fragment key={entry.id}>
+                  {selectedEntry?.id === entry.id ? renderDetailPanel('peridot-live-detail-panel peridot-live-detail-panel--inline') : null}
+                  <RoutineCluster
+                    entry={entry}
+                    isFlowSelected={selectedTaskRef?.entryId === entry.id && selectedTaskRef.taskId === null}
+                    selectedTaskId={selectedTaskRef?.entryId === entry.id ? selectedTaskRef.taskId : null}
+                    completedTasks={completionLookup}
+                    onSelectFlow={setSelectedTaskRef}
+                    onToggleFlow={setFlowCompletion}
+                    onSelectTask={setSelectedTaskRef}
+                    onToggleTask={toggleTaskCompletion}
+                  />
+                </Fragment>
+              ))}
+            </div>
+          )}
+
+          {renderDetailPanel('peridot-live-detail-panel peridot-live-detail-panel--desktop')}
+        </div>
+
+        </div>
+      </main>
+    </PeridotPageChrome>
   )
 }
 
 export default function CalendarPage() {
   return (
-    <Suspense fallback={<div className="lg:pl-80"><div className="peridot-app-page peridot-shell peridot-page-gutter py-6 sm:py-8"><div className="peridot-page-frame"><div className="rounded-[1.2rem] border border-white/10 bg-white/[0.03] px-5 py-10 text-center text-white/50">Loading calendar...</div></div></div></div>}>
+    <Suspense fallback={null}>
       <CalendarPageContent />
     </Suspense>
   )
 }
+

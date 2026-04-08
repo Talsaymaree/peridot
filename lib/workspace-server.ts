@@ -3,6 +3,7 @@ import { getRegimenTint } from '@/lib/regimen-tints'
 import { ensureTaskCompletionStorage } from '@/lib/task-completions'
 import type {
   CompletionRecord,
+  InboxTaskRecord,
   LocalWorkspace,
   RoutineInput,
   RoutineRecord,
@@ -58,6 +59,15 @@ type CompletionRow = {
   regimenId: string
   taskId: string
   completedAt: Date | string
+}
+
+type InboxTaskRow = {
+  id: string
+  title: string
+  description: string | null
+  completedAt: Date | string | null
+  createdAt: Date | string
+  updatedAt: Date | string
 }
 
 type BackupEnvelope = {
@@ -296,13 +306,32 @@ export async function fetchRoutineTree(userId: string, routineId?: string) {
   return routineId ? result[0] : result
 }
 
+export async function fetchInboxTasks(userId: string): Promise<InboxTaskRecord[]> {
+  const tasks = await prisma.$queryRaw<InboxTaskRow[]>`
+    SELECT "id", "title", "description", "completedAt", "createdAt", "updatedAt"
+    FROM "inbox_tasks"
+    WHERE "userId" = ${userId}
+    ORDER BY CASE WHEN "completedAt" IS NULL THEN 0 ELSE 1 END ASC, "createdAt" DESC
+  `
+
+  return tasks.map((task) => ({
+    id: task.id,
+    title: task.title,
+    description: task.description,
+    completedAt: task.completedAt ? toIsoString(task.completedAt) : null,
+    createdAt: toIsoString(task.createdAt),
+    updatedAt: toIsoString(task.updatedAt),
+  }))
+}
+
 export async function getWorkspaceSnapshot(userId: string): Promise<WorkspaceSnapshot> {
-  const [user, routines] = await Promise.all([
+  const [user, routines, inboxTasks] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: { name: true },
     }),
     fetchRoutineTree(userId),
+    fetchInboxTasks(userId),
   ])
 
   return {
@@ -310,6 +339,7 @@ export async function getWorkspaceSnapshot(userId: string): Promise<WorkspaceSna
       username: user?.name?.trim() || '',
     },
     routines: routines as RoutineRecord[],
+    inboxTasks,
   }
 }
 
@@ -334,6 +364,7 @@ export async function getWorkspaceBackup(userId: string) {
       version: 1 as const,
       profile: snapshot.profile,
       routines: snapshot.routines,
+      inboxTasks: snapshot.inboxTasks,
       completions: completions.map((completion) => ({
         date: completion.date,
         regimenId: completion.regimenId,
@@ -381,6 +412,25 @@ function sanitizeTask(value: unknown) {
     referenceUrl: asNullableString(record?.referenceUrl),
     referenceLabel: asNullableString(record?.referenceLabel),
     referenceType: asNullableString(record?.referenceType),
+    createdAt,
+    updatedAt: toIsoString(record?.updatedAt, createdAt),
+  }
+}
+
+function sanitizeInboxTask(value: unknown) {
+  const record = asRecord(value)
+  const createdAt = toIsoString(record?.createdAt)
+  const title = asString(record?.title).trim()
+
+  if (!title) {
+    return null
+  }
+
+  return {
+    id: asString(record?.id, crypto.randomUUID()),
+    title,
+    description: asNullableString(record?.description),
+    completedAt: asNullableString(record?.completedAt),
     createdAt,
     updatedAt: toIsoString(record?.updatedAt, createdAt),
   }
@@ -460,6 +510,9 @@ export function sanitizeWorkspaceImport(value: unknown): LocalWorkspace {
   const routines = asArray(record?.routines)
     .map((routine) => sanitizeRoutine(routine))
     .filter((routine): routine is RoutineRecord => Boolean(routine))
+  const inboxTasks = asArray(record?.inboxTasks)
+    .map((task) => sanitizeInboxTask(task))
+    .filter((task): task is InboxTaskRecord => Boolean(task))
 
   return {
     version: 1,
@@ -467,6 +520,7 @@ export function sanitizeWorkspaceImport(value: unknown): LocalWorkspace {
       username: asString(asRecord(record?.profile)?.username).trim(),
     },
     routines,
+    inboxTasks,
     completions: asArray(record?.completions)
       .map((completion) => sanitizeCompletion(completion, routines))
       .filter((completion): completion is CompletionRecord => Boolean(completion)),
@@ -500,6 +554,11 @@ export async function replaceWorkspaceFromBackup(userId: string, payload: unknow
       where: { userId },
     })
 
+    await tx.$executeRaw`
+      DELETE FROM "inbox_tasks"
+      WHERE "userId" = ${userId}
+    `
+
     for (const routine of workspace.routines) {
       await tx.$executeRaw`
         INSERT INTO "routines" ("id", "title", "description", "category", "isActive", "createdAt", "updatedAt", "userId")
@@ -519,6 +578,13 @@ export async function replaceWorkspaceFromBackup(userId: string, payload: unknow
           `
         }
       }
+    }
+
+    for (const task of workspace.inboxTasks) {
+      await tx.$executeRaw`
+        INSERT INTO "inbox_tasks" ("id", "title", "description", "completedAt", "createdAt", "updatedAt", "userId")
+        VALUES (${task.id}, ${task.title}, ${task.description}, ${task.completedAt ? new Date(task.completedAt) : null}, ${new Date(task.createdAt)}, ${new Date(task.updatedAt)}, ${userId})
+      `
     }
 
     for (const completion of workspace.completions) {

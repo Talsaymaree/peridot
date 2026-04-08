@@ -56,7 +56,7 @@ export function AuthSessionControls({ mobile = false }: AuthSessionControlsProps
 
   if (!supabaseReady) {
     return (
-      <div className={mobile ? 'rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-white/58' : 'rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs uppercase tracking-[0.16em] text-white/45'}>
+      <div className={mobile ? 'rounded-xl border border-[#33b7db]/10 bg-[#33b7db]/[0.03] px-4 py-3 text-sm text-[#ffdf33]/58' : 'rounded-xl border border-[#33b7db]/10 bg-[#33b7db]/[0.03] px-4 py-3 text-xs uppercase tracking-[0.16em] text-[#ffdf33]/45'}>
         Guest workspace
       </div>
     )
@@ -68,7 +68,7 @@ export function AuthSessionControls({ mobile = false }: AuthSessionControlsProps
         <Button asChild variant="ghost" size="sm" className="zune-button h-10 px-4">
           <Link href="/login">Sign in</Link>
         </Button>
-        <Button asChild size="sm" className="h-10 rounded-xl border border-emerald-300/20 bg-emerald-300 px-4 font-semibold text-emerald-950 hover:bg-emerald-200">
+        <Button asChild size="sm" className="peridot-accent-button h-10 rounded-xl px-4 font-semibold">
           <Link href="/signup">Sign up</Link>
         </Button>
       </div>
@@ -77,9 +77,9 @@ export function AuthSessionControls({ mobile = false }: AuthSessionControlsProps
 
   return (
     <div className={mobile ? 'space-y-3' : 'space-y-3'}>
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-        <div className="text-[11px] uppercase tracking-[0.16em] text-white/35">Signed in</div>
-        <div className="mt-1 truncate text-sm text-white/82">{user.email || 'Peridot user'}</div>
+      <div className="rounded-xl border border-[#33b7db]/10 bg-[#33b7db]/[0.03] px-4 py-3">
+        <div className="text-[11px] uppercase tracking-[0.16em] text-[#ffdf33]/35">Signed in</div>
+        <div className="mt-1 truncate text-sm text-[#ffdf33]/82">{user.email || 'Peridot user'}</div>
       </div>
       <Button
         type="button"
@@ -94,3 +94,4 @@ export function AuthSessionControls({ mobile = false }: AuthSessionControlsProps
     </div>
   )
 }
+

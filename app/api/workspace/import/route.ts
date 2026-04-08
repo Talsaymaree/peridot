@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       profile: workspace.profile,
       routines: workspace.routines,
+      inboxTasks: workspace.inboxTasks,
       completions: workspace.completions,
     })
   } catch (error) {

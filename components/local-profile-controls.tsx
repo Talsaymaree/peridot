@@ -201,24 +201,24 @@ export function LocalProfileControls({ mobile = false }: LocalProfileControlsPro
 
   return (
     <div className="space-y-3">
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-        <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-white/35">
+      <div className="rounded-xl border border-[#33b7db]/10 bg-[#33b7db]/[0.03] px-4 py-3">
+        <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-[#ffdf33]/35">
           <UserRound className="h-3.5 w-3.5" />
           Local Profiles
         </div>
 
         <div className="mt-3 space-y-3">
           <div>
-            <label className="mb-2 block text-xs uppercase tracking-[0.16em] text-white/35">
+            <label className="mb-2 block text-xs uppercase tracking-[0.16em] text-[#ffdf33]/35">
               Active Profile
             </label>
             <select
               value={activeProfileId}
               onChange={(event) => handleSwitchProfile(event.target.value)}
-              className="h-10 w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 text-sm text-white outline-none"
+              className="h-10 w-full rounded-xl border border-[#33b7db]/16 bg-[#33b7db]/8 px-3 text-sm text-[#ffdf33] outline-none"
             >
               {profiles.map((profile) => (
-                <option key={profile.id} value={profile.id} className="bg-[#0d1512] text-white">
+                <option key={profile.id} value={profile.id} className="bg-[#000000] text-[#ffdf33]">
                   {profile.name}
                 </option>
               ))}
@@ -230,12 +230,12 @@ export function LocalProfileControls({ mobile = false }: LocalProfileControlsPro
               value={newProfileName}
               onChange={(event) => setNewProfileName(event.target.value)}
               placeholder="New profile name"
-              className="h-10 rounded-xl border-white/10 bg-white/[0.04] text-white placeholder:text-white/35"
+              className="h-10 rounded-xl border-[#33b7db]/10 bg-[#33b7db]/[0.04] text-[#ffdf33] placeholder:text-[#ffdf33]/35"
             />
             <Button
               type="button"
               onClick={handleCreateProfile}
-              className="h-10 rounded-xl border border-emerald-300/20 bg-emerald-300 px-4 font-semibold text-emerald-950 hover:bg-emerald-200"
+              className="peridot-accent-button h-10 rounded-xl px-4 font-semibold"
             >
               <Plus className="mr-2 h-4 w-4" />
               Create profile
@@ -243,27 +243,27 @@ export function LocalProfileControls({ mobile = false }: LocalProfileControlsPro
           </div>
         </div>
 
-        <div className="mt-3 text-xs leading-5 text-white/42">
+        <div className="mt-3 text-xs leading-5 text-[#ffdf33]/42">
           {profiles.length} local profile{profiles.length === 1 ? '' : 's'} stored in this browser.
         </div>
       </div>
 
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-        <div className="text-[11px] uppercase tracking-[0.16em] text-white/35">Active Profile Name</div>
+      <div className="rounded-xl border border-[#33b7db]/10 bg-[#33b7db]/[0.03] px-4 py-3">
+        <div className="text-[11px] uppercase tracking-[0.16em] text-[#ffdf33]/35">Active Profile Name</div>
 
         <div className="mt-3 space-y-3">
           <Input
             value={draftName}
             onChange={(event) => setDraftName(event.target.value)}
             placeholder="Rename active profile"
-            className="h-10 rounded-xl border-white/10 bg-white/[0.04] text-white placeholder:text-white/35"
+            className="h-10 rounded-xl border-[#33b7db]/10 bg-[#33b7db]/[0.04] text-[#ffdf33] placeholder:text-[#ffdf33]/35"
           />
 
           <div className={mobile ? 'grid gap-2' : 'flex gap-2'}>
             <Button
               type="button"
               onClick={handleSaveName}
-              className="h-10 rounded-xl border border-emerald-300/20 bg-emerald-300 px-4 font-semibold text-emerald-950 hover:bg-emerald-200"
+              className="peridot-accent-button h-10 rounded-xl px-4 font-semibold"
             >
               Save name
             </Button>
@@ -281,7 +281,7 @@ export function LocalProfileControls({ mobile = false }: LocalProfileControlsPro
           </div>
         </div>
 
-        <div className="mt-3 text-xs leading-5 text-white/42">
+        <div className="mt-3 text-xs leading-5 text-[#ffdf33]/42">
           Each local profile keeps its own routines, calendar history, and analytics.
         </div>
       </div>
@@ -324,7 +324,7 @@ export function LocalProfileControls({ mobile = false }: LocalProfileControlsPro
       </div>
 
       {message ? (
-        <div className="rounded-xl border border-emerald-200/20 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-100">
+        <div className="peridot-success-note rounded-xl px-4 py-3 text-sm">
           {message}
         </div>
       ) : null}
@@ -337,3 +337,5 @@ export function LocalProfileControls({ mobile = false }: LocalProfileControlsPro
     </div>
   )
 }
+
+

@@ -99,8 +99,8 @@ export function LocalWorkspaceControls({ mobile = false }: LocalWorkspaceControl
 
   return (
     <div className={wrapperClassName}>
-      <div className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-        <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-white/35">
+      <div className="rounded-xl border border-[#33b7db]/10 bg-[#33b7db]/[0.03] px-4 py-3">
+        <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-[#ffdf33]/35">
           <UserRound className="h-3.5 w-3.5" />
           Local Workspace
         </div>
@@ -110,13 +110,13 @@ export function LocalWorkspaceControls({ mobile = false }: LocalWorkspaceControl
               value={draftName}
               onChange={(event) => setDraftName(event.target.value)}
               placeholder="Choose a username"
-              className="h-10 rounded-xl border-white/10 bg-white/[0.04] text-white placeholder:text-white/35"
+              className="h-10 rounded-xl border-[#33b7db]/10 bg-[#33b7db]/[0.04] text-[#ffdf33] placeholder:text-[#ffdf33]/35"
             />
             <div className={mobile ? 'grid gap-2' : 'flex gap-2'}>
               <Button
                 type="button"
                 onClick={handleSaveName}
-                className="h-10 rounded-xl border border-emerald-300/20 bg-emerald-300 px-4 font-semibold text-emerald-950 hover:bg-emerald-200"
+                className="peridot-accent-button h-10 rounded-xl px-4 font-semibold"
               >
                 Save name
               </Button>
@@ -139,7 +139,7 @@ export function LocalWorkspaceControls({ mobile = false }: LocalWorkspaceControl
           </div>
         ) : (
           <div className="mt-2">
-            <div className="truncate text-sm text-white/82">{username}</div>
+            <div className="truncate text-sm text-[#ffdf33]/82">{username}</div>
             <button
               type="button"
               onClick={() => {
@@ -148,13 +148,13 @@ export function LocalWorkspaceControls({ mobile = false }: LocalWorkspaceControl
                 setMessage(null)
                 setError(null)
               }}
-              className="mt-2 text-xs uppercase tracking-[0.16em] text-emerald-200 transition hover:text-emerald-100"
+              className="peridot-accent-link mt-2 text-xs uppercase tracking-[0.16em]"
             >
               Change name
             </button>
           </div>
         )}
-        <div className="mt-3 text-xs leading-5 text-white/42">
+        <div className="mt-3 text-xs leading-5 text-[#ffdf33]/42">
           Your routines and history stay in this browser unless you export a backup.
         </div>
       </div>
@@ -188,7 +188,7 @@ export function LocalWorkspaceControls({ mobile = false }: LocalWorkspaceControl
       </div>
 
       {message ? (
-        <div className="rounded-xl border border-emerald-200/20 bg-emerald-300/10 px-4 py-3 text-sm text-emerald-100">
+        <div className="peridot-success-note rounded-xl px-4 py-3 text-sm">
           {message}
         </div>
       ) : null}
@@ -201,3 +201,4 @@ export function LocalWorkspaceControls({ mobile = false }: LocalWorkspaceControl
     </div>
   )
 }
+

@@ -38,6 +38,7 @@ type RegimenAnalyticsRow = {
 type AnalyticsCompletionRow = {
   date: string
   regimenId: string
+  routineId: string
   regimenTitle: string
   routineTitle: string
   completedAt: Date | string | null
@@ -62,6 +63,16 @@ export type AnalyticsSummary = {
     currentStreak: number
   }
   series: Array<{
+    date: string
+    label: string
+    total: number
+  }>
+  flowSeries: Array<{
+    date: string
+    label: string
+    total: number
+  }>
+  routineSeries: Array<{
     date: string
     label: string
     total: number
@@ -269,6 +280,7 @@ export async function getAnalyticsSummary(userId: string): Promise<AnalyticsSumm
     SELECT
       tc."date" AS "date",
       tc."regimenId" AS "regimenId",
+      r."id" AS "routineId",
       g."title" AS "regimenTitle",
       r."title" AS "routineTitle",
       tc."completedAt" AS "completedAt"
@@ -280,11 +292,22 @@ export async function getAnalyticsSummary(userId: string): Promise<AnalyticsSumm
   `
 
   const dailyTotals = new Map<string, number>()
+  const flowDailyTotals = new Map<string, Set<string>>()
+  const routineDailyTotals = new Map<string, Set<string>>()
   const weekdayTotals = new Map<string, number>(weekdayOrder.map((item) => [item.day, 0]))
   const regimenStats = new Map<string, { regimenId: string; regimenTitle: string; routineTitle: string; completedCount: number; lastCompletedAt: string | null }>()
 
   for (const row of completionRows) {
     dailyTotals.set(row.date, (dailyTotals.get(row.date) ?? 0) + 1)
+    if (!flowDailyTotals.has(row.date)) {
+      flowDailyTotals.set(row.date, new Set())
+    }
+    flowDailyTotals.get(row.date)?.add(row.regimenId)
+
+    if (!routineDailyTotals.has(row.date)) {
+      routineDailyTotals.set(row.date, new Set())
+    }
+    routineDailyTotals.get(row.date)?.add(row.routineId)
 
     const completedDate = new Date(`${row.date}T12:00:00`)
     const weekday = weekdayOrder.find((item) => item.jsDay === completedDate.getDay())
@@ -328,6 +351,24 @@ export async function getAnalyticsSummary(userId: string): Promise<AnalyticsSumm
       total: dailyTotals.get(dateIso) ?? 0,
     }
   })
+  const flowSeries = Array.from({ length: totalDays }, (_, index) => {
+    const date = addDays(earliestSeriesDate, index)
+    const dateIso = localIsoDate(date)
+    return {
+      date: dateIso,
+      label: labelFormatter.format(date),
+      total: flowDailyTotals.get(dateIso)?.size ?? 0,
+    }
+  })
+  const routineSeries = Array.from({ length: totalDays }, (_, index) => {
+    const date = addDays(earliestSeriesDate, index)
+    const dateIso = localIsoDate(date)
+    return {
+      date: dateIso,
+      label: labelFormatter.format(date),
+      total: routineDailyTotals.get(dateIso)?.size ?? 0,
+    }
+  })
   const weekdayBreakdown = weekdayOrder.map((item) => ({
     day: item.day,
     label: item.label,
@@ -351,6 +392,8 @@ export async function getAnalyticsSummary(userId: string): Promise<AnalyticsSumm
       currentStreak: buildCurrentStreak(streakDates, todayIso),
     },
     series,
+    flowSeries,
+    routineSeries,
     weekdayBreakdown,
     topRegimens,
   }
