@@ -590,7 +590,8 @@ function RoutinesPageContent() {
   }, [selectedRegimen])
 
   useEffect(() => {
-    if (!selectedRegimen || typeof window === 'undefined') return
+    const hasSelectedRegimen = activeRegimenIndex < formData.regimens.length
+    if (!hasSelectedRegimen || typeof window === 'undefined') return
     if (!window.matchMedia('(max-width: 1023px)').matches) return
 
     if (!hasHandledInlineScrollRef.current) {
@@ -609,7 +610,7 @@ function RoutinesPageContent() {
     })
 
     return () => window.cancelAnimationFrame(animationFrame)
-  }, [activeRegimenIndex, activeTaskIndex, selectedRegimen, showCreateForm])
+  }, [activeRegimenIndex, activeTaskIndex, editingRoutineId, formData.regimens.length, showCreateForm])
   useEffect(() => {
     if (!requestedBuilder || !requestedRoutineId) return
 

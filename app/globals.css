@@ -5421,6 +5421,8 @@
 
   .peridot-live-cluster-hit {
     cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .peridot-live-tag {
@@ -6839,3 +6841,123 @@
 
 
 
+  @media (max-width: 1023px) and (orientation: portrait) {
+    html,
+    body {
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .peridot-page-chrome {
+      height: 100svh;
+      min-height: 100svh;
+      overflow: hidden;
+    }
+
+    .peridot-page-chrome-content {
+      box-sizing: border-box;
+      height: 100svh;
+      min-height: calc(100svh - var(--peridot-page-chrome-bar-height));
+      padding-top: var(--peridot-page-chrome-bar-height);
+      padding-bottom: 0;
+      overflow-y: auto;
+      overflow-x: clip;
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .peridot-page-chrome-bar {
+      top: 0;
+      bottom: auto;
+      padding: 0 0.8rem 0 0.95rem;
+    }
+
+    .peridot-page-chrome-wordmark {
+      font-size: 1.65rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-page-chrome-menu {
+      inset: var(--peridot-page-chrome-bar-height) 0 0;
+      align-items: start;
+      justify-items: stretch;
+      padding: 0.85rem;
+    }
+
+    .peridot-routines-page.peridot-page-gutter {
+      --peridot-page-gutter: 0.35rem;
+    }
+
+    .peridot-routines-page .peridot-stage-shell {
+      gap: 1.25rem;
+      box-sizing: border-box;
+      padding-inline: 1.2rem;
+      overflow-x: clip;
+    }
+
+    .peridot-routines-page .peridot-routines-topline,
+    .peridot-routines-page .peridot-routines-live-shell,
+    .peridot-routines-page .peridot-panel {
+      width: 100%;
+      max-width: none;
+    }
+
+    .peridot-static-calendar-label,
+    .peridot-static-calendar-ui {
+      padding-left: 1.2rem;
+    }
+
+    .peridot-static-calendar-frame {
+      padding-top: 0;
+    }
+
+    .peridot-live-stage {
+      min-height: calc(100svh - 15rem);
+      padding: 1.8rem 1.2rem 7rem;
+    }
+
+    .peridot-live-cluster-board,
+    .peridot-live-cluster-grid {
+      gap: 1.8rem;
+    }
+
+    .peridot-live-cluster-board {
+      padding-right: 0;
+    }
+
+    .peridot-live-controls-panel {
+      width: calc(100% - 2.4rem);
+      margin-left: 1.2rem;
+    }
+
+    .peridot-live-detail-panel--desktop {
+      display: none;
+    }
+
+    .peridot-live-detail-panel--inline {
+      display: block;
+      position: static;
+      width: 100%;
+      max-width: 100%;
+      max-height: none;
+      flex-basis: 100%;
+      margin-top: 0.15rem;
+      padding: 1rem 0 0;
+    }
+
+    .peridot-live-video-hud {
+      flex-wrap: wrap;
+      align-items: start;
+    }
+
+    .peridot-live-video-link {
+      white-space: normal;
+    }
+
+    .peridot-live-detail-header {
+      flex-direction: column;
+    }
+
+    .peridot-static-calendar-ui {
+      font-size: 0.72rem;
+      letter-spacing: 0.22rem;
+    }
+  }

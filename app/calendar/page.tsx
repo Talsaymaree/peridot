@@ -32,9 +32,14 @@ type SelectedTaskRef = {
   taskId: string | null
 }
 
+type SelectionOptions = {
+  suppressMobileScroll?: boolean
+}
+
 const weekdayMap = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']
 const monthFormatter = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' })
 const dayFormatter = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+const compactCalendarMediaQuery = '(max-width: 767px), (max-width: 1023px) and (orientation: portrait)'
 
 function addDays(date: Date, amount: number) {
   const next = new Date(date)
@@ -353,11 +358,13 @@ function RoutineCluster({
   isFlowSelected: boolean
   selectedTaskId: string | null
   completedTasks: Record<string, boolean>
-  onSelectFlow: (ref: SelectedTaskRef) => void
+  onSelectFlow: (ref: SelectedTaskRef, options?: SelectionOptions) => void
   onToggleFlow: (entry: ScheduleEntry, completed: boolean) => void
-  onSelectTask: (ref: SelectedTaskRef) => void
+  onSelectTask: (ref: SelectedTaskRef, options?: SelectionOptions) => void
   onToggleTask: (regimenId: string, taskId: string) => void
 }) {
+  const lastTouchTapRef = useRef<{ key: string; time: number } | null>(null)
+  const ignoreSyntheticClickUntilRef = useRef(0)
   const routineNaturalWidth = clamp(150 + entry.title.length * 7, 170, 340)
   const taskNaturalWidths = entry.tasks.map((task) => clamp(138 + task.title.length * 6, 160, 340))
   const sharedTagWidth = Math.max(routineNaturalWidth, ...taskNaturalWidths, 170)
@@ -381,6 +388,26 @@ function RoutineCluster({
     isFlowSelected ? 'is-selected' : '',
   ].filter(Boolean).join(' ')
 
+  function shouldIgnoreSyntheticClick() {
+    return Date.now() < ignoreSyntheticClickUntilRef.current
+  }
+
+  function handleTouchTap(key: string, onSingleTap: () => void, onDoubleTap: () => void) {
+    const now = Date.now()
+    const previousTap = lastTouchTapRef.current
+
+    ignoreSyntheticClickUntilRef.current = now + 450
+
+    if (previousTap && previousTap.key === key && now - previousTap.time <= 300) {
+      lastTouchTapRef.current = null
+      onDoubleTap()
+      return
+    }
+
+    lastTouchTapRef.current = { key, time: now }
+    onSingleTap()
+  }
+
   return (
     <div className="peridot-live-cluster-shell" style={{ width: `${viewWidth}px` }}>
       <svg className="peridot-live-cluster-svg" viewBox={`0 0 ${viewWidth} ${viewHeight}`}>
@@ -393,8 +420,22 @@ function RoutineCluster({
           className="peridot-live-cluster-hit"
           role="button"
           tabIndex={0}
-          onClick={() => onSelectFlow({ entryId: entry.id, taskId: null })}
-          onDoubleClick={() => onToggleFlow(entry, !routineComplete)}
+          onTouchEnd={(event) => {
+            event.preventDefault()
+            handleTouchTap(
+              `flow:${entry.id}`,
+              () => onSelectFlow({ entryId: entry.id, taskId: null }, { suppressMobileScroll: true }),
+              () => onToggleFlow(entry, !routineComplete),
+            )
+          }}
+          onClick={() => {
+            if (shouldIgnoreSyntheticClick()) return
+            onSelectFlow({ entryId: entry.id, taskId: null })
+          }}
+          onDoubleClick={() => {
+            if (shouldIgnoreSyntheticClick()) return
+            onToggleFlow(entry, !routineComplete)
+          }}
           onKeyDown={(event) => {
             if (event.key === 'Enter' || event.key === ' ') {
               event.preventDefault()
@@ -430,8 +471,22 @@ function RoutineCluster({
               className="peridot-live-cluster-hit"
               role="button"
               tabIndex={0}
-              onClick={() => onSelectTask({ entryId: entry.id, taskId: task.id })}
-              onDoubleClick={() => onToggleTask(entry.regimenId, task.id)}
+              onTouchEnd={(event) => {
+                event.preventDefault()
+                handleTouchTap(
+                  `task:${entry.id}:${task.id}`,
+                  () => onSelectTask({ entryId: entry.id, taskId: task.id }, { suppressMobileScroll: true }),
+                  () => onToggleTask(entry.regimenId, task.id),
+                )
+              }}
+              onClick={() => {
+                if (shouldIgnoreSyntheticClick()) return
+                onSelectTask({ entryId: entry.id, taskId: task.id })
+              }}
+              onDoubleClick={() => {
+                if (shouldIgnoreSyntheticClick()) return
+                onToggleTask(entry.regimenId, task.id)
+              }}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault()
@@ -477,6 +532,7 @@ function CalendarPageContent() {
   const [showControls, setShowControls] = useState(false)
   const [hiddenRegimenIds, setHiddenRegimenIds] = useState<Record<string, boolean>>({})
   const inlineDetailPanelRef = useRef<HTMLElement | null>(null)
+  const skipNextInlineDetailScrollRef = useRef(false)
 
   useEffect(() => {
     async function loadWorkspaceData() {
@@ -635,9 +691,24 @@ function CalendarPageContent() {
     [selectedEntry, selectedTaskRef],
   )
 
+  function setSelectedTaskRefWithContext(ref: SelectedTaskRef, options?: SelectionOptions) {
+    if (options?.suppressMobileScroll) {
+      skipNextInlineDetailScrollRef.current = true
+    }
+
+    setSelectedTaskRef(ref)
+  }
+
   useEffect(() => {
     if (!selectedTaskRef || typeof window === 'undefined') return
-    if (!window.matchMedia('(max-width: 767px)').matches) return
+    if (!window.matchMedia(compactCalendarMediaQuery).matches) {
+      skipNextInlineDetailScrollRef.current = false
+      return
+    }
+    if (skipNextInlineDetailScrollRef.current) {
+      skipNextInlineDetailScrollRef.current = false
+      return
+    }
 
     const detailPanel = inlineDetailPanelRef.current
     if (!detailPanel) return
@@ -957,9 +1028,9 @@ function CalendarPageContent() {
                     isFlowSelected={selectedTaskRef?.entryId === entry.id && selectedTaskRef.taskId === null}
                     selectedTaskId={selectedTaskRef?.entryId === entry.id ? selectedTaskRef.taskId : null}
                     completedTasks={completionLookup}
-                    onSelectFlow={setSelectedTaskRef}
+                    onSelectFlow={setSelectedTaskRefWithContext}
                     onToggleFlow={setFlowCompletion}
-                    onSelectTask={setSelectedTaskRef}
+                    onSelectTask={setSelectedTaskRefWithContext}
                     onToggleTask={toggleTaskCompletion}
                   />
                 </Fragment>
