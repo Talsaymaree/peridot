@@ -672,6 +672,8 @@
     align-self: stretch;
     justify-self: center;
     width: min(100%, var(--analytics-cell-content-width));
+    min-width: 0;
+    box-sizing: border-box;
     display: grid;
     align-content: center;
     gap: 0.16rem;
@@ -1240,6 +1242,297 @@
     }
   }
 
+  @media (min-width: 1024px) and (max-width: 1279px) and (orientation: landscape) {
+    .peridot-tboard-page.peridot-calendar-match-page {
+      padding: 0;
+    }
+
+    .peridot-tboard-page .peridot-calendar-match-frame {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .peridot-tboard-page-shell {
+      --peridot-tboard-landscape-scale: clamp(0.8, calc((100vw - 1rem) / 1380), 0.92);
+      width: calc(100% / var(--peridot-tboard-landscape-scale));
+      min-height: calc((100svh - 0.7rem - 4.5rem) / var(--peridot-tboard-landscape-scale));
+      padding-inline: clamp(1rem, 2.2vw, 2rem);
+      transform: scale(var(--peridot-tboard-landscape-scale));
+      transform-origin: top left;
+      overflow: visible;
+    }
+
+    .peridot-tboard-control-shell {
+      margin-top: -9.5rem;
+    }
+
+    .peridot-tboard-command-band {
+      margin-top: 15.4rem;
+    }
+
+    .peridot-tboard-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.1rem;
+      align-items: start;
+    }
+
+    .peridot-tboard-live-column {
+      --tboard-cell-width: clamp(8rem, 33vw, 9.35rem);
+      --tboard-cell-height: clamp(6.05rem, 24vw, 7.25rem);
+      --tboard-cell-content-width: clamp(5.3rem, 22vw, 6.35rem);
+      --analytics-cell-width: var(--tboard-cell-width);
+      --analytics-cell-height: var(--tboard-cell-height);
+      --analytics-cell-content-width: var(--tboard-cell-content-width);
+      --tboard-open-card-content-pad-start: clamp(0.28rem, calc(var(--analytics-cell-width) * 0.044), 0.42rem);
+      --tboard-open-card-content-pad-end: clamp(0.08rem, calc(var(--analytics-cell-width) * 0.014), 0.14rem);
+      --tboard-live-grid-cell-width: var(--tboard-cell-width);
+      --tboard-live-column-gap: 0.62rem;
+      --tboard-live-center-shift: -0.25;
+      --tboard-open-shell-pad-inline: 0.72rem;
+      --tboard-open-stack-overlap: 3px;
+      --tboard-open-shell-width: calc(var(--analytics-cell-width) + (var(--tboard-open-shell-pad-inline) * 2));
+      --tboard-live-rail-offset: 0.42rem;
+      --tboard-live-rail-drop: calc((var(--tboard-cell-height) + var(--tboard-live-column-gap)) * 0.5);
+      --tboard-open-stage-width: calc((var(--analytics-cell-width) * 3) + (var(--tboard-live-rail-offset) * 2));
+      order: -1;
+      gap: 1.1rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-matrix {
+      display: grid;
+      grid-template-columns: repeat(3, var(--tboard-live-grid-cell-width));
+      justify-content: center;
+      column-gap: 0;
+      row-gap: 0;
+      width: max-content;
+      max-width: none;
+      margin: 0 auto;
+      padding: 0.15rem var(--tboard-live-rail-offset) 0.4rem;
+      align-items: start;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-panel {
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-grid {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(3, var(--analytics-cell-width));
+      justify-content: start;
+      column-gap: 0;
+      row-gap: 0;
+      box-sizing: border-box;
+      width: var(--tboard-open-stage-width);
+      max-width: none;
+      margin: 0 auto;
+      padding: 0.15rem var(--tboard-live-rail-offset) 0.4rem;
+      align-items: start;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-stage {
+      width: var(--tboard-open-stage-width);
+      max-width: none;
+      margin: 0 auto;
+      padding-inline: 0;
+      justify-items: center;
+      transform: none;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-shell {
+      grid-column: 1 / -1;
+      justify-self: center;
+      width: var(--tboard-open-stage-width);
+      max-width: none;
+      margin-top: 0.2rem;
+      margin-bottom: 2.75rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-deck {
+      --routine-command-scale: 1.06;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-command-caption,
+    .peridot-tboard-live-column .peridot-tboard-open-command-meta {
+      grid-column: 1 / -1;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column {
+      display: grid;
+      gap: var(--tboard-live-column-gap);
+      width: 100%;
+      max-width: var(--analytics-cell-width);
+      justify-self: center;
+      align-content: start;
+      justify-items: center;
+      position: relative;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column > .peridot-tboard-open-card + .peridot-tboard-open-card {
+      margin-top: 0;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--left {
+      justify-self: end;
+      transform: translateX(var(--tboard-live-rail-offset));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--center {
+      justify-self: center;
+      margin-top: calc(var(--tboard-live-rail-drop) * var(--tboard-live-center-shift));
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-column--right {
+      justify-self: start;
+      transform: translateX(calc(var(--tboard-live-rail-offset) * -1));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-card {
+      width: var(--analytics-cell-width);
+      min-height: 0;
+      height: var(--analytics-cell-height);
+      overflow: hidden;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-card > .peridot-tboard-open-body {
+      justify-self: stretch;
+      width: auto;
+      padding-inline: var(--tboard-open-card-content-pad-start) var(--tboard-open-card-content-pad-end);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-column {
+      display: grid;
+      gap: var(--tboard-live-column-gap);
+      width: 100%;
+      max-width: var(--tboard-live-grid-cell-width);
+      justify-self: center;
+      align-content: start;
+      justify-items: center;
+      position: relative;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-column--left {
+      justify-self: end;
+      transform: translateX(var(--tboard-live-rail-offset));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-column--center {
+      justify-self: center;
+      margin-top: calc(var(--tboard-live-rail-drop) * var(--tboard-live-center-shift));
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-hive-column--right {
+      justify-self: start;
+      transform: translateX(calc(var(--tboard-live-rail-offset) * -1));
+      margin-top: var(--tboard-live-rail-drop);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell {
+      width: var(--tboard-live-grid-cell-width);
+      max-width: var(--tboard-live-grid-cell-width);
+      min-width: 0;
+      margin-top: 0;
+      overflow: visible;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell-frame {
+      min-height: var(--tboard-cell-height);
+      padding: 0.78rem 0.72rem 0.74rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-frame {
+      height: var(--tboard-cell-height);
+      min-height: var(--tboard-cell-height);
+      display: grid;
+      grid-template-rows: 1fr;
+      align-content: center;
+      gap: 0.2rem;
+      padding: 0.78rem 0.72rem 0.74rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-open-analytics-cell {
+      width: var(--analytics-cell-width);
+      min-height: var(--analytics-cell-height);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-toolbar,
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-actions {
+      position: absolute;
+      left: 0.72rem;
+      right: 0.72rem;
+      width: auto;
+      z-index: 2;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-toolbar {
+      top: 0.62rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-actions {
+      bottom: 0.58rem;
+      gap: 0;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-body {
+      align-self: center;
+      gap: 0.16rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-icon {
+      width: 1.55rem;
+      height: 1.55rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-title {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-tboard-cell-copy {
+      display: none;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-live-inline-button {
+      min-height: 1.2rem;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      justify-content: flex-start;
+      color: rgba(213, 255, 203, 0.88);
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell--open .peridot-live-inline-button:hover {
+      background: transparent;
+      border: 0;
+      color: #effffc;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell-label {
+      font-size: 0.47rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell-title {
+      font-size: 0.82rem;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-cell-copy,
+    .peridot-tboard-live-column .peridot-tboard-cell-meta,
+    .peridot-tboard-live-column .peridot-tboard-cell .peridot-live-inline-button,
+    .peridot-tboard-live-column .peridot-tboard-cell .peridot-live-inline-link {
+      font-size: 0.47rem;
+    }
+  }
+
   .peridot-page-chrome {
     --peridot-page-chrome-bar-height: 58px;
     position: relative;
@@ -1313,6 +1606,10 @@
     align-items: stretch;
     justify-items: stretch;
     padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(12px);
   }
@@ -2191,7 +2488,9 @@
     position: relative;
     isolation: isolate;
     width: 100vw;
+    min-height: 100svh;
     min-height: 100dvh;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     box-shadow: none;
     backdrop-filter: blur(18px) saturate(120%);
     -webkit-backdrop-filter: blur(18px) saturate(120%);
@@ -2235,7 +2534,9 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 0.85rem;
+    overflow-y: auto;
+    padding: 0.85rem 0.85rem calc(env(safe-area-inset-bottom, 0px) + 1.6rem);
+    -webkit-overflow-scrolling: touch;
   }
 
   .peridot-mobile-nav-link {
@@ -2659,7 +2960,7 @@
       width: 100%;
       max-width: none;
       box-sizing: border-box;
-      padding: 0.35rem 1.2rem 0.75rem;
+      padding: 0.35rem 1.2rem calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
     }
 
     .peridot-mobile-command-menu .peridot-routine-command-deck {
@@ -2738,7 +3039,7 @@
   @media (max-width: 420px) {
     .peridot-mobile-command-menu {
       gap: 0.7rem;
-      padding: 0.1rem 0 0.5rem;
+      padding: 0.1rem 0 calc(env(safe-area-inset-bottom, 0px) + 1rem);
     }
 
     .peridot-mobile-command-menu .peridot-routine-command-deck {
@@ -3262,7 +3563,7 @@
     }
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 700px), (max-width: 1023px) and (orientation: portrait) {
     .peridot-settings-shell {
       gap: 1.25rem;
       justify-items: center;
@@ -3466,6 +3767,8 @@
       --analytics-cell-width: var(--tboard-cell-width);
       --analytics-cell-height: var(--tboard-cell-height);
       --analytics-cell-content-width: var(--tboard-cell-content-width);
+      --tboard-open-card-content-pad-start: clamp(0.42rem, calc(var(--analytics-cell-width) * 0.074), 0.56rem);
+      --tboard-open-card-content-pad-end: clamp(0.1rem, calc(var(--analytics-cell-width) * 0.022), 0.18rem);
       --tboard-live-column-gap: calc(var(--tboard-cell-width) * 0.0663);
       --tboard-live-center-shift: -0.25;
       --tboard-open-stage-axis-shift: 0px;
@@ -3612,6 +3915,12 @@
       box-sizing: border-box;
       padding: 0.66rem 0.58rem 0.62rem;
       overflow: hidden;
+    }
+
+    .peridot-tboard-live-column .peridot-tboard-open-card > .peridot-tboard-open-body {
+      justify-self: stretch;
+      width: auto;
+      padding-inline: var(--tboard-open-card-content-pad-start) var(--tboard-open-card-content-pad-end);
     }
 
     .peridot-tboard-live-column .peridot-tboard-open-command-shell {
@@ -6498,6 +6807,150 @@
     }
   }
 
+  @media (min-width: 1024px) and (max-width: 1199px) and (orientation: landscape) {
+    .peridot-dashboard-frame {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .peridot-dashboard-main {
+      --peridot-dashboard-landscape-scale: clamp(0.8, calc((100vw - 1rem) / 1360), 0.92);
+      position: relative;
+      overflow: visible;
+      height: auto;
+      min-height: calc((100svh - 58px) / var(--peridot-dashboard-landscape-scale));
+      padding: 0 0 4.5rem;
+      width: calc(100% / var(--peridot-dashboard-landscape-scale));
+      transform: scale(var(--peridot-dashboard-landscape-scale));
+      transform-origin: top left;
+    }
+
+    .peridot-dashboard-grid {
+      position: relative;
+      display: block;
+      min-height: 770px;
+    }
+
+    .peridot-dashboard-left {
+      position: absolute;
+      top: 86px;
+      left: 100px;
+      width: 500px;
+      gap: 2.55rem;
+    }
+
+    .peridot-dashboard-identity {
+      width: 500px;
+      min-height: 150px;
+      padding: 1rem 1rem 1.05rem 1.35rem;
+    }
+
+    .peridot-dashboard-identity-name {
+      font-size: 5rem;
+    }
+
+    .peridot-dashboard-identity-meta {
+      margin-top: 1.1rem;
+      padding: 0.18rem 0.7rem 0.24rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+    }
+
+    .peridot-dashboard-nav {
+      display: none;
+    }
+
+    .peridot-dashboard-nav-link {
+      font-size: 1.82rem;
+      letter-spacing: 0.18em;
+    }
+
+    .peridot-dashboard-right {
+      position: absolute;
+      top: 236px;
+      left: 57.5%;
+      width: min(760px, calc(100% - 57.5% - 70px));
+      gap: 2.5rem;
+      justify-items: start;
+      padding-top: 0;
+    }
+
+    .peridot-dashboard-flows-title {
+      margin-left: 102px;
+      font-size: 4rem;
+      line-height: 0.8;
+      padding: 0.02rem 1.2rem 0.08rem;
+    }
+
+    .peridot-dashboard-flows {
+      justify-content: flex-start;
+      gap: 2.5rem 4.4rem;
+      margin-left: 92px;
+      min-height: 260px;
+    }
+
+    .peridot-dashboard-metrics {
+      position: absolute;
+      left: 100px;
+      top: 430px;
+      bottom: auto;
+      transform: none;
+      width: max-content;
+      grid-template-columns: 248px 248px;
+      justify-content: center;
+      align-items: start;
+      gap: 8.5rem 4rem;
+      margin-top: 0;
+    }
+
+    .peridot-dashboard-metric {
+      align-self: start;
+      grid-template-rows: auto minmax(0, 1fr);
+      align-content: start;
+      min-height: 24rem;
+    }
+
+    .peridot-dashboard-bars {
+      order: 2;
+      width: min(100%, 14.5rem);
+      justify-self: start;
+      align-content: start;
+      gap: 0.85rem;
+      min-height: 0;
+    }
+
+    .peridot-dashboard-metric-meta {
+      order: 1;
+      width: min(100%, 14.5rem);
+      align-items: flex-start;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 0.42rem;
+    }
+
+    .peridot-dashboard-metric-label {
+      font-size: 0.88rem;
+      letter-spacing: 0.28em;
+    }
+
+    .peridot-dashboard-metric-count,
+    .peridot-dashboard-alert {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+    }
+
+    .peridot-dashboard-bar {
+      height: 1.52rem;
+      width: 100%;
+    }
+
+    .peridot-dashboard-bar.is-task-link {
+      min-height: 2rem;
+      padding: 0.28rem 0.72rem 0.32rem;
+      font-size: 0.68rem;
+    }
+  }
+
   @media (max-width: 767px) {
     html,
     body {
@@ -6505,26 +6958,28 @@
     }
 
     .peridot-page-chrome {
-      height: 100svh;
+      height: 100dvh;
       min-height: 100svh;
       overflow: hidden;
     }
 
     .peridot-page-chrome-content {
       box-sizing: border-box;
-      height: 100svh;
+      height: 100dvh;
       min-height: calc(100svh - var(--peridot-page-chrome-bar-height));
-      padding-top: var(--peridot-page-chrome-bar-height);
-      padding-bottom: 0;
+      padding-top: calc(var(--peridot-page-chrome-bar-height) + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5rem);
       overflow-y: auto;
       overflow-x: clip;
+      -webkit-overflow-scrolling: touch;
       scrollbar-gutter: stable both-edges;
     }
 
     .peridot-page-chrome-bar {
       top: 0;
       bottom: auto;
-      padding: 0 0.8rem 0 0.95rem;
+      height: calc(var(--peridot-page-chrome-bar-height) + env(safe-area-inset-top, 0px));
+      padding: env(safe-area-inset-top, 0px) 0.8rem 0 0.95rem;
     }
 
     .peridot-page-chrome-wordmark {
@@ -6533,7 +6988,8 @@
     }
 
     .peridot-mobile-nav-topbar {
-      padding: 0 0.8rem 0 0.95rem;
+      height: calc(58px + env(safe-area-inset-top, 0px));
+      padding: env(safe-area-inset-top, 0px) 0.8rem 0 0.95rem;
     }
 
     .peridot-mobile-nav-wordmark {
@@ -6542,10 +6998,10 @@
     }
 
     .peridot-page-chrome-menu {
-      inset: var(--peridot-page-chrome-bar-height) 0 0;
+      inset: calc(var(--peridot-page-chrome-bar-height) + env(safe-area-inset-top, 0px)) 0 0;
       align-items: start;
       justify-items: stretch;
-      padding: 0.85rem;
+      padding: 0.85rem 0.85rem calc(env(safe-area-inset-bottom, 0px) + 5rem);
     }
 
     .peridot-page-chrome-menu-panel {
@@ -6848,26 +7304,28 @@
     }
 
     .peridot-page-chrome {
-      height: 100svh;
+      height: 100dvh;
       min-height: 100svh;
       overflow: hidden;
     }
 
     .peridot-page-chrome-content {
       box-sizing: border-box;
-      height: 100svh;
+      height: 100dvh;
       min-height: calc(100svh - var(--peridot-page-chrome-bar-height));
-      padding-top: var(--peridot-page-chrome-bar-height);
-      padding-bottom: 0;
+      padding-top: calc(var(--peridot-page-chrome-bar-height) + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5rem);
       overflow-y: auto;
       overflow-x: clip;
+      -webkit-overflow-scrolling: touch;
       scrollbar-gutter: stable both-edges;
     }
 
     .peridot-page-chrome-bar {
       top: 0;
       bottom: auto;
-      padding: 0 0.8rem 0 0.95rem;
+      height: calc(var(--peridot-page-chrome-bar-height) + env(safe-area-inset-top, 0px));
+      padding: env(safe-area-inset-top, 0px) 0.8rem 0 0.95rem;
     }
 
     .peridot-page-chrome-wordmark {
@@ -6875,11 +7333,21 @@
       letter-spacing: 0.16em;
     }
 
+    .peridot-mobile-nav-topbar {
+      height: calc(58px + env(safe-area-inset-top, 0px));
+      padding: env(safe-area-inset-top, 0px) 0.8rem 0 0.95rem;
+    }
+
+    .peridot-mobile-nav-wordmark {
+      font-size: 1.65rem;
+      letter-spacing: 0.16em;
+    }
+
     .peridot-page-chrome-menu {
-      inset: var(--peridot-page-chrome-bar-height) 0 0;
+      inset: calc(var(--peridot-page-chrome-bar-height) + env(safe-area-inset-top, 0px)) 0 0;
       align-items: start;
       justify-items: stretch;
-      padding: 0.85rem;
+      padding: 0.85rem 0.85rem calc(env(safe-area-inset-bottom, 0px) + 5rem);
     }
 
     .peridot-routines-page.peridot-page-gutter {
